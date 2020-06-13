@@ -1,0 +1,9 @@
+.category_item {
+    font-size: 25;
+    font-weight: bold;
+}
+
+.product-item {
+    width: 300px;
+    float: left;
+}
