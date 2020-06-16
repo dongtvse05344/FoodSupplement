@@ -31,8 +31,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "CategoryDTO.findAll", query = "SELECT c FROM CategoryDTO c ORDER BY c.name"),
     @NamedQuery(name = "CategoryDTO.findById", query = "SELECT c FROM CategoryDTO c WHERE c.id = :id"),
-    @NamedQuery(name = "CategoryDTO.findByName", query = "SELECT c FROM CategoryDTO c WHERE c.name = :name")})
+    @NamedQuery(name = "CategoryDTO.findByName", query = "SELECT c FROM CategoryDTO c WHERE c.name = :name"),
+    @NamedQuery(name = "CategoryDTO.getTotalRows", query = "SELECT Count(c) FROM CategoryDTO c")
+
+})
 public class CategoryDTO implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
+    private Collection<ProductRawDTO> productRawDTOCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -45,13 +51,18 @@ public class CategoryDTO implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
     private Collection<ProductDTO> productDTOCollection;
 
+    public CategoryDTO(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public CategoryDTO() {
     }
 
     public CategoryDTO(Integer id) {
         this.id = id;
     }
-    
+
     public CategoryDTO(String name) {
         this.name = name;
     }
@@ -105,5 +116,14 @@ public class CategoryDTO implements Serializable {
     public String toString() {
         return "dongtv.dto.CategoryDTO[ id=" + id + " ]";
     }
-    
+
+    @XmlTransient
+    public Collection<ProductRawDTO> getProductRawDTOCollection() {
+        return productRawDTOCollection;
+    }
+
+    public void setProductRawDTOCollection(Collection<ProductRawDTO> productRawDTOCollection) {
+        this.productRawDTOCollection = productRawDTOCollection;
+    }
+
 }

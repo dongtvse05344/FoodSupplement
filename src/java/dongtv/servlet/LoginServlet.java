@@ -29,7 +29,7 @@ public class LoginServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             if (ServletUtils.isLogin(session)) {
-                url = Routing.HOME_ADMIN_VIEW;
+                url = Routing.HOME_ADMIN_SERVLET;  
             } else {
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
                     if (userDTO != null) {
                         session.setAttribute("NAME", userDTO.getFullname());
                         session.setAttribute("ISLOGIN", true);
-                        url = Routing.HOME_ADMIN_VIEW;
+                        url = Routing.HOME_ADMIN_SERVLET;
                     } else {
                         request.setAttribute("ERROR", "Invalid username or password");
                     }

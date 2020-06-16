@@ -9,6 +9,9 @@ import dongtv.dao.ProductDao;
 import dongtv.dto.ProductDTO;
 import dongtv.dto.ProductsDTO;
 import dongtv.contanst.Routing;
+import dongtv.dto.VolumeDTO;
+import dongtv.dto.VolumesDTO;
+import dongtv.service.ProductService;
 import dongtv.util.XMLUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,10 +40,26 @@ public class ProductDetailServlet extends HttpServlet {
             id = Integer.parseInt(idString);
 
             //get product
-            ProductDao productDao = ProductDao.getInstance();
-            ProductDTO products = productDao.findById(id);
-            String product_XML = XMLUtils.marrsallMatchToString(products);
+            ProductService productService = new ProductService();
+            ProductDTO product = productService.getProduct(id);
+            String product_XML = XMLUtils.marrsallMatchToString(product);
+            List<VolumeDTO> volumes = productService.getVolumes(product);
+            VolumesDTO volumesDTO = new VolumesDTO();
+            volumesDTO.setVolumeDTOs(volumes);
+            String volumes_XML = XMLUtils.marrsallMatchToString(volumesDTO);
+
+            //lấy sp tương tự
+            List<ProductDTO> products4 = productService.getPage(5);
+            ProductsDTO productsDTO = new ProductsDTO();
+            productsDTO.setProductDTOs(products4);
+            String products_XML = XMLUtils.marrsallMatchToString(productsDTO);
+            
+            request.setAttribute("PRODUCTS", products_XML);
             request.setAttribute("PRODUCT", product_XML);
+            request.setAttribute("VOLUMES", volumes_XML);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

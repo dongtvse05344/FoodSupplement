@@ -5,10 +5,12 @@
  */
 package dongtv.util;
 
+import java.io.File;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -51,11 +53,20 @@ public class XMLUtils implements Serializable {
 //            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             StringWriter sw = new StringWriter();
             marshaller.marshal(obj, sw);
-            return sw.toString();
+            String res =  sw.toString();
+            res = res.replaceAll("xmlns=\".*\"", "");
+            return res;
         } catch (Exception e) {
             e.printStackTrace();
             return "";
         }
 
+    }
+    public static void marshalToFile(Object obj, String filename) throws JAXBException {
+        JAXBContext jc = JAXBContext.newInstance(obj.getClass());
+        Marshaller mar = jc.createMarshaller();
+        mar.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+        mar.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        mar.marshal(obj, new File(filename));
     }
 }

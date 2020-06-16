@@ -5,10 +5,13 @@
 
     <xsl:template match="product">
         <div class="product-item">
-            <img src="{image}"/>
+            <img height="200" src="{image}"/>
+            <br/>
             <a href="ProductDetailServlet?id={id}">
                 <xsl:value-of select="name" />
             </a>
+            <br/>
+            <p>Giá chỉ từ  <span class="success"><xsl:value-of select='format-number(price, "###,###")'/> VNĐ</span></p>
         </div>
     </xsl:template>
 

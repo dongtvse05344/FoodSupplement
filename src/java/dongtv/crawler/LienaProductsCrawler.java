@@ -51,74 +51,11 @@ public class LienaProductsCrawler extends BaseCrawler {
             document = document.replaceAll("\"></a>", "\"></img></a>");
 
             return DOMHandler(document);
-//            String line = "";
-//            String document = "";
-//            boolean isFound = false;
-//            boolean isComment = false;
-//            //make sure we don't have case like this <div><div></div></div>
-//            while ((line = reader.readLine()) != null) {
-//                //check the begin tag
-//                if (!isFound && line.contains()) {
-//                    isFound = true;
-//                }
-//
-//                if (isFound && line.contains("<div class=\"toolbar toolbar-products\"")) {
-//                    break;
-//                }
-//                if (isComment) {
-//                    if (line.indexOf("-->") >= 0) {
-//                        int endComment = line.indexOf("-->");
-//                        StringBuilder sb = new StringBuilder(line);
-//                        sb.replace(0, endComment + 3, "");
-//                        line = sb.toString();
-//                        document += line.trim();
-//                        isComment = false;
-//                    } else {
-//                        continue;
-//                    }
-//                }
-//                if (isFound) {
-//                    if (line.contains("<!--")) {
-//                        StringBuilder sb = new StringBuilder(line);
-//                        int beginComment = line.indexOf("<!--");
-//                        int endComment = line.indexOf("-->");
-//                        if (endComment >= 0) {
-//                            sb.replace(beginComment, endComment + 3, "");
-//                            line = sb.toString();
-//                            document += line.trim();
-//                        } else {
-//                            isComment = true;
-//                        }
-//                    } else {
-//                        if (line.contains("<img")) {
-//                            if (line.contains("/>")) {
-//                                line = line.replace("/>", ">");
-//                            }
-//                            line = line.replace(">", "></img>");
-//                        }
-//                        for (String ignore_text : IGNORE_TEXTS) {
-//                            line = line.replaceAll(ignore_text, "");
-//                        }
-//
-//                        if (line.trim().length() > 0) {
-//                            if (!line.contains("<input")) {
-//                                document += line.trim() + "\n";
-//                            } else {
-//                                document += line.trim() + " ";
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            document = document.replaceAll("\"></a>", "\"></img></a>");
-//            return stAXParserForProducts(document);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(LienaProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(LienaProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
-        } //        catch (XMLStreamException ex) {
-        //            Logger.getLogger(LienaProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
-        //        } 
+        } 
         finally {
             try {
                 if (reader != null) {
@@ -131,71 +68,7 @@ public class LienaProductsCrawler extends BaseCrawler {
         return null;
     }
 
-    public Map<String, ProductDTO> stAXParserForProducts(String document) throws UnsupportedEncodingException, XMLStreamException {
-        document = document.trim();
-        XMLEventReader eventReader = parseStringToXMLEventReader(document);
-        Map<String, ProductDTO> products = new HashMap<String, ProductDTO>();
-        while (eventReader.hasNext()) {
-            XMLEvent event = (XMLEvent) eventReader.next();
-            if (event.isStartElement()) {
-                StartElement startElement = event.asStartElement();
-                String tagName = startElement.getName().getLocalPart();
-                String proimg = "";
-                String proname = "";
-                String proprice = "";
-                String prohref = "";
-                if ("div".equals(tagName)) {
-                    Attribute className = startElement.getAttributeByName(new QName("class"));
-                    if (className != null && className.getValue().contains("product-item-info")) {
-                        while (true) {
-                            boolean isBreak = false;
-                            XMLEvent childEvent = (XMLEvent) eventReader.next();
-                            if (childEvent.isStartElement()) {
-                                StartElement childStartElement = childEvent.asStartElement();
-                                tagName = childStartElement.getName().getLocalPart();
-                                switch (tagName) {
-                                    case "img":
-                                        className = childStartElement.getAttributeByName(new QName("class"));
-                                        if (className != null && className.getValue().contains("product-image-photo")) {
-                                            proimg = childStartElement.getAttributeByName(new QName("data-src")).getValue();
-                                        }
-                                        break;
-                                    case "a":
-                                        className = childStartElement.getAttributeByName(new QName("class"));
-                                        if (className != null && className.getValue().contains("product-item-link")) {
-                                            prohref = childStartElement.getAttributeByName(new QName("href")).getValue();
-                                            childEvent = (XMLEvent) eventReader.next();
-
-                                            proname = childEvent.asCharacters().toString();
-                                        }
-                                        break;
-                                    case "span":
-                                        className = childStartElement.getAttributeByName(new QName("class"));
-                                        if (className != null && className.getValue().equals("price")) {
-                                            childEvent = (XMLEvent) eventReader.next();
-                                            proprice = childEvent.asCharacters().toString();
-                                            isBreak = true;
-                                        }
-                                        break;
-                                }
-                                if (isBreak) {
-                                    break;
-                                }
-                            }
-                        }
-                        ProductDTO dto = new ProductDTO();
-                        dto.setName(proname.trim());
-                        dto.setImage(proimg.trim());
-                        dto.setOriginalLink(prohref.trim());
-                        products.put(prohref, dto);
-                    }
-                }
-            }
-        }
-        return products;
-    }
-
-    public Map<String, ProductDTO> DOMHandler(String documentString) throws XPathExpressionException {
+  public Map<String, ProductDTO> DOMHandler(String documentString) throws XPathExpressionException {
         System.out.println(documentString);
         Map<String, ProductDTO> products = new HashMap<String, ProductDTO>();
         Document document = XMLUtils.parseStringtoDom(documentString);
@@ -220,7 +93,6 @@ public class LienaProductsCrawler extends BaseCrawler {
             expression = ".//span[@class='price']";
             String price = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             price = price.substring(0, price.length() - 2).replace(".", "");
-            System.out.println(price);
             ProductDTO productDTO = new ProductDTO(Integer.parseInt(price), name.trim(), image.trim(), link.trim());
             products.put(link, productDTO);
         }

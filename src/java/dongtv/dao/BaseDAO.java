@@ -45,6 +45,7 @@ public class BaseDAO<T, PK>  implements IGenericDao<T, PK> {
         }
         return null;
     }
+    
     @Override
     public T findById(PK id) {
         EntityManager em = DBUtilities.getEntityManager();

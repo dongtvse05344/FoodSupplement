@@ -36,14 +36,30 @@ public class HomeServlet extends HttpServlet {
             categoriesDTO.setCategoryDTOs(categories);
             String categories_XML = XMLUtils.marrsallMatchToString(categoriesDTO);
             request.setAttribute("CATEGORIES", categories_XML);
-            
+
             //get product
             ProductDao productDao = ProductDao.getInstance();
-            List<ProductDTO> products = productDao.getAll("ProductDTO.findAll");
+            List<ProductDTO> products = productDao.getProductPaging("name", 1, 10);
+            List<ProductDTO> products2 = productDao.getProductPaging("name", 3, 5);
+            List<ProductDTO> products3 = productDao.getProductPaging("name", 4, 5);
+            List<ProductDTO> products4 = productDao.getProductPaging("name", 5, 5);
+
             ProductsDTO productsDTO = new ProductsDTO();
             productsDTO.setProductDTOs(products);
             String product_XML = XMLUtils.marrsallMatchToString(productsDTO);
             request.setAttribute("PRODUCTS", product_XML);
+            
+            productsDTO.setProductDTOs(products2);
+            String product_XML2 = XMLUtils.marrsallMatchToString(productsDTO);
+            request.setAttribute("PRODUCTS2", product_XML2);
+             
+            productsDTO.setProductDTOs(products3);
+            String product_XML3 = XMLUtils.marrsallMatchToString(productsDTO);
+            request.setAttribute("PRODUCTS3", product_XML3);
+            
+            productsDTO.setProductDTOs(products4);
+            String product_XML4 = XMLUtils.marrsallMatchToString(productsDTO);
+            request.setAttribute("PRODUCTS4", product_XML4);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -40,51 +40,10 @@ public class DemxanhProductCrawler extends BaseCrawler {
         System.out.println(url);
         BufferedReader reader = null;
         try {
+            String beginTag = " <div class=\"static_html nd static_html_2 productDes\" style=\"border:none\">";
+            String tag = "div";
             reader = getBufferedReaderForURL(url);
-            String line = "";
-            String document = "";
-            boolean isFound = false;
-            int ulCount = 0;
-
-            //make sure we don't have case like this <ul><ul></ul></ul>
-            while ((line = reader.readLine()) != null) {
-                //check the begin tag
-                if (!isFound && document.length() == 0 && line.contains(" <div class=\"static_html nd static_html_2 productDes\" style=\"border:none\">")) {
-                    isFound = true;
-                }
-                // the first ul contain class, another ul same like this <ul>
-
-                if (isFound && line.contains("<div")) {
-                    ulCount = ulCount + HTMLUtilities.getAllMatches(line, "<div").size();
-                }
-                if (ulCount > 0 && line.contains("</div>")) {
-                    ulCount = ulCount - HTMLUtilities.getAllMatches(line, "</div>").size();
-                    if (ulCount == 0) {
-                        document += line.trim() + "\n";
-                        isFound = false;
-                    }
-                }
-                if (isFound) {
-
-                    for (String ignore_text : IGNORE_TEXTS) {
-                        line = line.replace(ignore_text, "");
-                    }
-//                    line = line.replace("png\">", "png\"></img>");
-
-                    if (line.trim().length() > 0) {
-                        document += line.trim();
-                    }
-                }
-            }
-            document = document.replaceAll("<input.*?>", "");
-            document = document.replaceAll("<br.*?>", "");
-            document = document.replaceAll("<!--.*?-->", "");
-
-            document = document.replaceAll("<style.*?</style>", "");
-            document = document.replaceAll("<script.*?</script>", "");
-
-            document = document.replaceAll("&", "và");
-
+            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
             return stAXParserForProduct(document);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(DemxanhProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
@@ -125,8 +84,9 @@ public class DemxanhProductCrawler extends BaseCrawler {
         products.put(DemxanhThread.DESCRIPTION_TAG, des);
         return products;
     }
-    
+
     public List<VolumeDTO> getProductVolume(String url) {
+        System.out.println(url);
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
@@ -144,7 +104,7 @@ public class DemxanhProductCrawler extends BaseCrawler {
             List<String> string_prices = HTMLUtilities.getAllMatches(volumes, ".sale_price\":\"[0-9]*\"");
             List<VolumeDTO> volumeDTOs = new ArrayList<>();
             List<Double> prices = new ArrayList<>();
-            for (String price : string_prices) { 
+            for (String price : string_prices) {
                 price = price.substring(14, price.length() - 1);
                 prices.add(Double.parseDouble(price));
             }

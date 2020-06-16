@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ProductDTO.findById", query = "SELECT p FROM ProductDTO p WHERE p.id = :id"),
     @NamedQuery(name = "ProductDTO.findByName", query = "SELECT p FROM ProductDTO p WHERE p.name = :name"),
     @NamedQuery(name = "ProductDTO.findByCategoryId", query = "SELECT p FROM ProductDTO p WHERE p.categoryId = :categoryId"),
+    @NamedQuery(name = "ProductDTO.getTotalRows", query = "SELECT Count(p) FROM ProductDTO p"), 
 })
 public class ProductDTO implements Serializable {
 
@@ -64,13 +65,23 @@ public class ProductDTO implements Serializable {
     public ProductDTO() {
     }
 
+    public ProductDTO(Integer price, Integer id, String name, String description, String image, String originalLink, Collection<VolumeDTO> volumeDTOCollection, CategoryDTO categoryId) {
+        this.price = price;
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.originalLink = originalLink;
+        this.volumeDTOCollection = volumeDTOCollection;
+        this.categoryId = categoryId;
+    }
+
     public ProductDTO(Integer price, String name, String image, String originalLink) {
         this.price = price;
         this.name = name;
         this.image = image;
         this.originalLink = originalLink;
     }
-    
 
     public ProductDTO(Integer id) {
         this.id = id;
@@ -165,5 +176,5 @@ public class ProductDTO implements Serializable {
     public void setPrice(Integer price) {
         this.price = price;
     }
-    
+
 }

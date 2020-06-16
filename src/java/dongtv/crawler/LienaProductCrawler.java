@@ -47,36 +47,6 @@ public class LienaProductCrawler extends BaseCrawler {
             if (document.length() > 0) {
                 return stAXParserForProduct(document);
             }
-//            String line = "";
-//            String document = "";
-//            int divCount = 0;
-//            boolean isFound = false;
-//            //make sure we don't have case like this <div><div></div></div>
-//            while ((line = reader.readLine()) != null) {
-//                //check the begin tag
-//                if (!isFound && document.length() == 0 && line.contains("<div class=\"product attribute description\">")) {
-//                    isFound = true;
-//                }
-//                if (isFound && line.contains("<div")) {
-//                    divCount = divCount + HTMLUtilities.getAllMatches(line, "<div").size();
-//                }
-//                if (divCount > 0 && line.contains("</div>")) {
-//                    divCount = divCount - HTMLUtilities.getAllMatches(line, "</div>").size();
-//                    if (divCount == 0) {
-//                        document += line.trim() + "\n";
-//                        isFound = false;
-//                    }
-//                }
-//                if (isFound) {
-//                    document += line.trim() + "\n";
-//                }
-//            }
-////            document = document.replaceAll("\"></a>", "\"></img></a>");
-//            document = document.replaceAll("&", "và");
-//            document = document.substring(0, document.length() - 7);
-//            System.out.println("DOCUMENT :" + document);
-
-            
             return null;
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(LienaProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,7 +63,6 @@ public class LienaProductCrawler extends BaseCrawler {
                 Logger.getLogger(BaseCrawler.class.getName()).log(Level.SEVERE, null, e);
             }
         }
-
         return null;
     }
 

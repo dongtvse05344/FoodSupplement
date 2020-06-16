@@ -4,8 +4,9 @@
     <xsl:output method="html"/>
 
     <xsl:template match="product">
-        <div class="product-item">
+        <div class="">
             <img src="{image}"/>
+            <br/>
             <a href="ProductDetailServlet?id={id}">
                 <xsl:value-of select="name" />
             </a>

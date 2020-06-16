@@ -5,10 +5,13 @@
  */
 package dongtv.dto;
 
+import dongtv.contanst.ProductStatus;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -31,12 +34,19 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ProductRawDTO.findByOriginalLink", query = "SELECT p FROM ProductRawDTO p WHERE p.originalLink = :originalLink"),
     @NamedQuery(name = "ProductRawDTO.findByCategoryId", query = "SELECT p FROM ProductRawDTO p WHERE p.categoryId = :categoryId"),
     @NamedQuery(name = "ProductRawDTO.findByPrice", query = "SELECT p FROM ProductRawDTO p WHERE p.price = :price"),
-    @NamedQuery(name = "ProductRawDTO.findByStatus", query = "SELECT p FROM ProductRawDTO p WHERE p.status = :status")})
+    @NamedQuery(name = "ProductRawDTO.findByStatus", query = "SELECT p FROM ProductRawDTO p WHERE p.status = :status"),
+    @NamedQuery(name = "ProductRawDTO.getTotalRows", query = "SELECT Count(p) FROM ProductRawDTO p"),
+    @NamedQuery(name = "ProductRawDTO.deleteAll", query = "DELETE FROM ProductRawDTO p"),
+})
 public class ProductRawDTO implements Serializable {
+
+    @Column(name = "description", length = 2147483647)
+    private String description;
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
     @Column(name = "rawxml", length = 2147483647)
@@ -56,6 +66,24 @@ public class ProductRawDTO implements Serializable {
     private int status;
 
     public ProductRawDTO() {
+    }
+
+    public ProductRawDTO(String rawxml, String name, String image, String originalLink, Integer price) {
+        this.rawxml = rawxml;
+        this.name = name;
+        this.image = image;
+        this.originalLink = originalLink;
+        this.price = price;
+        this.status = ProductStatus.NEW.getValue();
+    }
+
+    public ProductRawDTO(Integer id, String name, String image, String originalLink, Integer price, Integer status) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.originalLink = originalLink;
+        this.price = price;
+        this.status = status;
     }
 
     public ProductRawDTO(Integer id) {
@@ -155,5 +183,13 @@ public class ProductRawDTO implements Serializable {
     public String toString() {
         return "dongtv.dto.ProductRawDTO[ id=" + id + " ]";
     }
-    
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 }

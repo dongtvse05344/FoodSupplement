@@ -1,7 +1,6 @@
 .danger {
     color: #FE6D73;
 }
-
 .warning {
     color: #FFCB77;
 }
@@ -10,4 +9,28 @@
 }
 .info {
     color: #227C9D;
+}
+#menu-left {
+    width: 20%;
+    float: left;
+}
+
+.page li {
+    float: left;
+    min-width: 80px;
+    border: #227C9D;
+}
+ul.page {
+    list-style: none;
+}
+.btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border-color: darkgray;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
 }

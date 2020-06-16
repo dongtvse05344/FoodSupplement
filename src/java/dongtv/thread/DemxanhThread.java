@@ -11,9 +11,11 @@ import dongtv.crawler.DemxanhProductCrawler;
 import dongtv.crawler.DemxanhProductsCrawler;
 import dongtv.dao.CategoryDao;
 import dongtv.dao.ProductDao;
+import dongtv.dao.ProductRawDao;
 import dongtv.dao.VolumeDao;
 import dongtv.dto.CategoryDTO;
 import dongtv.dto.ProductDTO;
+import dongtv.dto.ProductRawDTO;
 import dongtv.dto.VolumeDTO;
 import dongtv.util.ImageUtils;
 import java.util.Date;
@@ -37,17 +39,17 @@ public class DemxanhThread extends BaseThread {
         this.context = context;
     }
 
-    private void getProduct(DemxanhProductCrawler productCrawler, Map.Entry<String, ProductDTO> pEntry, CategoryDTO categoryDb) {
+    private void getProduct(DemxanhProductCrawler productCrawler, Map.Entry<String, ProductRawDTO> pEntry, CategoryDTO categoryDb) {
         keep++;
 //        if (keep > 2) {
 //            return;
 //        }
-        Map<String, String> productInfo = productCrawler.getProduct(ContanstCrawler.DEMXANH + pEntry.getKey());
+        Map<String, String> productInfo = productCrawler.getProduct(pEntry.getKey());
         if (productInfo != null) {
             String des = productInfo.get(DESCRIPTION_TAG);
             pEntry.getValue().setDescription(des);
         }
-        pEntry.getValue().setCategoryId(categoryDb);
+        pEntry.getValue().setCategoryId(categoryDb.getId());
         //insert product
         try {
             String filename = IMAGE_PATH + new Date().getTime() + ".jpg";
@@ -56,15 +58,16 @@ public class DemxanhThread extends BaseThread {
             pEntry.getValue().setImage(filename);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        ProductDTO productDb = ProductDao.getInstance().create(pEntry.getValue());
+        }   
+//        ProductDTO productDb = ProductDao.getInstance().create(pEntry.getValue());
+        ProductRawDTO productRawDTO = ProductRawDao.getInstance().create(pEntry.getValue());
 
-        List<VolumeDTO> volumeDTOs = productCrawler.getProductVolume(ContanstCrawler.DEMXANH + pEntry.getKey());
-        for (VolumeDTO volumeDTO : volumeDTOs) {
-            volumeDTO.setProductId(productDb);
-            //insert volume
-            VolumeDao.getInstance().create(volumeDTO);
-        }
+//        List<VolumeDTO> volumeDTOs = productCrawler.getProductVolume( pEntry.getKey());
+//        for (VolumeDTO volumeDTO : volumeDTOs) {
+//            volumeDTO.setProductId(productDb);
+//            //insert volume
+//            VolumeDao.getInstance().create(volumeDTO);
+//        }
     }
     private DemxanhCategoryCrawler categoryCrawler;
     private DemxanhProductsCrawler productsCrawler;
@@ -80,8 +83,8 @@ public class DemxanhThread extends BaseThread {
             for (Map.Entry<String, String> entry : categories.entrySet()) {
                 //insert category
                 CategoryDTO categoryDb = CategoryDao.getInstance().create(new CategoryDTO(entry.getValue()));
-                Map<String, ProductDTO> products = productsCrawler.getProducts(ContanstCrawler.DEMXANH + entry.getKey());
-                for (Map.Entry<String, ProductDTO> pentry : products.entrySet()) {
+                Map<String, ProductRawDTO> products = productsCrawler.getProducts(entry.getKey());
+                for (Map.Entry<String, ProductRawDTO> pentry : products.entrySet()) {
                     try {
                         this.getProduct(productCrawler, pentry, categoryDb);
                     } catch (Exception e) {

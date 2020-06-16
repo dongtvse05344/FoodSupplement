@@ -8,7 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
 <!DOCTYPE html>
-<link rel="stylesheet" href="http://localhost:8080/FoodSupplement/css/home.css"/>
+<link rel="stylesheet" href="http://localhost:8080/FoodSupplement/css/common.css"/>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -23,7 +23,9 @@
             <input name="password" type="password" value="${param.password}"/>
             <br/>
             <p class="danger">${requestScope.ERROR}</p>
-            <button type="submit">Login</button>
+            <button class="btn" type="submit">Login</button>
+            <br/>
+            <a href="HomeServlet">Back to home</a>
         </form>
     </body>
 </html>
