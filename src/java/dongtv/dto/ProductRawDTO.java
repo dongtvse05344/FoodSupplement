@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -57,8 +59,9 @@ public class ProductRawDTO implements Serializable {
     private String image;
     @Column(name = "originalLink", length = 2147483647)
     private String originalLink;
-    @Column(name = "categoryId")
-    private Integer categoryId;
+    @JoinColumn(name = "categoryId", referencedColumnName = "id", nullable = false)
+    @ManyToOne(optional = false)
+    private CategoryDTO categoryId;
     @Column(name = "price")
     private Integer price;
     @Basic(optional = false)
@@ -135,11 +138,11 @@ public class ProductRawDTO implements Serializable {
         this.originalLink = originalLink;
     }
 
-    public Integer getCategoryId() {
+    public CategoryDTO getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(CategoryDTO categoryId) {
         this.categoryId = categoryId;
     }
 

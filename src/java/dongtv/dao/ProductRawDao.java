@@ -5,20 +5,14 @@
  */
 package dongtv.dao;
 
-import dongtv.dto.ProductDTO;
 import dongtv.dto.ProductRawDTO;
-import dongtv.dto.VolumeRawDTO;
 import dongtv.util.DBUtilities;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 /**
  *
@@ -41,13 +35,16 @@ public class ProductRawDao extends BaseDAO<ProductRawDTO, Integer> implements Se
 
     private ProductRawDao() {
     }
-    
+
     public boolean deleteAll() {
         EntityManager em = DBUtilities.getEntityManager();
         try {
-            List result = em.createNamedQuery("ProductRawDTO.deleteAll")
-                    .getResultList();
-            if (result != null && !result.isEmpty()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            int result = em.createNamedQuery("ProductRawDTO.deleteAll")
+                    .executeUpdate();
+            transaction.commit();
+            if (result >0) {
                 return true;
             }
             return false;
@@ -60,6 +57,7 @@ public class ProductRawDao extends BaseDAO<ProductRawDTO, Integer> implements Se
         }
         return false;
     }
+
     public Long getTotalRows() {
         EntityManager em = DBUtilities.getEntityManager();
         try {
@@ -80,44 +78,20 @@ public class ProductRawDao extends BaseDAO<ProductRawDTO, Integer> implements Se
     }
 
     public List<ProductRawDTO> getProductPaging(String orderby, int page, int rowsOfPage) throws Exception {
-        List<ProductRawDTO> res = new LinkedList<>();
+        EntityManager em = DBUtilities.getEntityManager();
         try {
-            conn = DBUtilities.makeConnection();
-            String sql = "SELECT id,price,name,description,image,originalLink,categoryId,status from product_raws Order by name OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ";
-            preStm = conn.prepareStatement(sql);
-            preStm.setInt(1, (page - 1) * rowsOfPage);
-            preStm.setInt(2, rowsOfPage);
-            rs = preStm.executeQuery();
-            while (rs.next()) {
-                res.add(new ProductRawDTO(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("image"),
-                        rs.getString("originalLink"),
-                        rs.getInt("price"),
-                        rs.getInt("status")
-                )
-                );
-            }
+            List<ProductRawDTO> result = em.createNamedQuery("ProductRawDTO.findAll", ProductRawDTO.class)
+                    .setFirstResult((page - 1) * rowsOfPage)
+                    .setMaxResults(rowsOfPage)
+                    .getResultList();
+            return result;
+        } catch (Exception e) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
         } finally {
-            closeConnect();
+            if (em != null) {
+                em.close();
+            }
         }
-        return res;
-    }
-
-    private Connection conn;
-    private PreparedStatement preStm;
-    private ResultSet rs;
-
-    private void closeConnect() throws SQLException {
-        if (rs != null) {
-            rs.close();
-        }
-        if (preStm != null) {
-            preStm.close();
-        }
-        if (conn != null) {
-            conn.close();
-        }
+        return null;
     }
 }

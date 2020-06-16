@@ -49,7 +49,7 @@ public class DemxanhThread extends BaseThread {
             String des = productInfo.get(DESCRIPTION_TAG);
             pEntry.getValue().setDescription(des);
         }
-        pEntry.getValue().setCategoryId(categoryDb.getId());
+        pEntry.getValue().setCategoryId(categoryDb);
         //insert product
         try {
             String filename = IMAGE_PATH + new Date().getTime() + ".jpg";

@@ -5,15 +5,12 @@
  */
 package dongtv.validation;
 
-import dongtv.dto.ProductRawsDTO;
 import dongtv.dto.ProductsDTO;
 import java.io.File;
-import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.Validator;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;

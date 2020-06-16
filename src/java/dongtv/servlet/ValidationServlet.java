@@ -52,7 +52,6 @@ public class ValidationServlet extends HttpServlet {
                 String realPath = getServletContext().getRealPath("/");
                 XMLUtils.marshalToFile(productsDTO, realPath + XML_PATH);
                 ProductsDTO realProducts = XSDValidation.validation(realPath + XML_PATH, realPath +XSD_PATH);
-                System.out.println(realProducts.getProductDTOs().get(0).getCategoryId());
 //                crawlService.convertRawstoReal(realProducts);
             }
         } catch (Exception e) {
