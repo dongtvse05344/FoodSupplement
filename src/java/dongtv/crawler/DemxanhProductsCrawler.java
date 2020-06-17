@@ -98,7 +98,7 @@ public class DemxanhProductsCrawler extends BaseCrawler {
                 priceI = Integer.parseInt(price);
             } catch (Exception e) {
             }
-            ProductRawDTO productRawDTO = new ProductRawDTO(documentString, name.trim(), image.trim(), link.trim(),priceI);
+            ProductRawDTO productRawDTO = new ProductRawDTO(name.trim(), image.trim(), link.trim(),priceI);
             products.put(link, productRawDTO);
         }
         return products;

@@ -36,6 +36,14 @@
         <servlet-name>ValidationServlet</servlet-name>
         <servlet-class>dongtv.servlet.ValidationServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateRawXMLServlet</servlet-name>
+        <servlet-class>dongtv.servlet.CreateRawXMLServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertRawXMLServlet</servlet-name>
+        <servlet-class>dongtv.servlet.InsertRawXMLServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/HomeServlet</url-pattern>
@@ -67,6 +75,14 @@
     <servlet-mapping>
         <servlet-name>ValidationServlet</servlet-name>
         <url-pattern>/ValidationServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateRawXMLServlet</servlet-name>
+        <url-pattern>/CreateRawXMLServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertRawXMLServlet</servlet-name>
+        <url-pattern>/InsertRawXMLServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

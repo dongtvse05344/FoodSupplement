@@ -49,7 +49,7 @@ public class ProductDetailServlet extends HttpServlet {
             String volumes_XML = XMLUtils.marrsallMatchToString(volumesDTO);
 
             //lấy sp tương tự
-            List<ProductDTO> products4 = productService.getPage(5);
+            List<ProductDTO> products4 = productService.getPage("",5);
             ProductsDTO productsDTO = new ProductsDTO();
             productsDTO.setProductDTOs(products4);
             String products_XML = XMLUtils.marrsallMatchToString(productsDTO);

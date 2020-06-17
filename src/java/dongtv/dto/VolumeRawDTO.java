@@ -9,11 +9,16 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -30,17 +35,19 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "VolumeRawDTO.findByW", query = "SELECT v FROM VolumeRawDTO v WHERE v.w = :w"),
     @NamedQuery(name = "VolumeRawDTO.findByH", query = "SELECT v FROM VolumeRawDTO v WHERE v.h = :h"),
     @NamedQuery(name = "VolumeRawDTO.findByPrice", query = "SELECT v FROM VolumeRawDTO v WHERE v.price = :price"),
-    @NamedQuery(name = "VolumeRawDTO.findByXmlRaw", query = "SELECT v FROM VolumeRawDTO v WHERE v.xmlRaw = :xmlRaw"),
     @NamedQuery(name = "VolumeRawDTO.findByStatus", query = "SELECT v FROM VolumeRawDTO v WHERE v.status = :status")})
-public class VolumeRawDTO implements Serializable {
+public class VolumeRawDTO implements Serializable, Comparable<VolumeRawDTO> {
+
+    @JoinColumn(name = "product_raw_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(optional = false)
+    private ProductRawDTO productRawId;
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-    @Column(name = "product_raw_id")
-    private Integer productRawId;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "L", precision = 53)
     private Double l;
@@ -50,8 +57,6 @@ public class VolumeRawDTO implements Serializable {
     private Double h;
     @Column(name = "price", precision = 53)
     private Double price;
-    @Column(name = "xml_raw", length = 2147483647)
-    private String xmlRaw;
     @Basic(optional = false)
     @Column(name = "status", nullable = false)
     private int status;
@@ -74,14 +79,6 @@ public class VolumeRawDTO implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getProductRawId() {
-        return productRawId;
-    }
-
-    public void setProductRawId(Integer productRawId) {
-        this.productRawId = productRawId;
     }
 
     public Double getL() {
@@ -116,12 +113,14 @@ public class VolumeRawDTO implements Serializable {
         this.price = price;
     }
 
-    public String getXmlRaw() {
-        return xmlRaw;
-    }
-
-    public void setXmlRaw(String xmlRaw) {
-        this.xmlRaw = xmlRaw;
+    public void pushData(String data) {
+        data = data.replace("X", "x");
+        String[] datas = data.split("x");
+        this.w = Double.parseDouble(datas[0]);
+        this.l = Double.parseDouble(datas[1]);
+        if (datas.length > 2) {
+            this.h = Double.parseDouble(datas[2]);
+        }
     }
 
     public int getStatus() {
@@ -157,4 +156,25 @@ public class VolumeRawDTO implements Serializable {
         return "dongtv.dto.VolumeRawDTO[ id=" + id + " ]";
     }
     
+    @XmlTransient
+    public ProductRawDTO getProductRawId() {
+        return productRawId;
+    }
+
+    public void setProductRawId(ProductRawDTO productRawId) {
+        this.productRawId = productRawId;
+    }
+
+    private double getVolumes() {
+        if (this.h != null && this.h > 0) {
+            return this.h * this.l * this.w;
+        }
+        return this.l * this.w;
+    }
+
+    @Override
+    public int compareTo(VolumeRawDTO o) {
+        return (int) ((int) this.getVolumes() - o.getVolumes());
+    }
+
 }

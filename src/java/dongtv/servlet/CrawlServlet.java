@@ -61,7 +61,7 @@ public class CrawlServlet extends HttpServlet {
                 String products_XML = XMLUtils.marrsallMatchToString(productsDTO);
                 request.setAttribute("PRODUCTS", products_XML);
                 int totalRows = crawlService.getTotalRows().intValue();
-                Paging paging = new Paging(page,totalRows ,5, "CrawlServlet");
+                Paging paging = new Paging(page,totalRows ,5, "CrawlServlet","");
                 String paging_XML = XMLUtils.marrsallMatchToString(paging);
                 request.setAttribute("PAGING", paging_XML);
 

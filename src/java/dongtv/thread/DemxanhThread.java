@@ -13,10 +13,12 @@ import dongtv.dao.CategoryDao;
 import dongtv.dao.ProductDao;
 import dongtv.dao.ProductRawDao;
 import dongtv.dao.VolumeDao;
+import dongtv.dao.VolumeRawDao;
 import dongtv.dto.CategoryDTO;
 import dongtv.dto.ProductDTO;
 import dongtv.dto.ProductRawDTO;
 import dongtv.dto.VolumeDTO;
+import dongtv.dto.VolumeRawDTO;
 import dongtv.util.ImageUtils;
 import java.util.Date;
 import java.util.List;
@@ -62,12 +64,12 @@ public class DemxanhThread extends BaseThread {
 //        ProductDTO productDb = ProductDao.getInstance().create(pEntry.getValue());
         ProductRawDTO productRawDTO = ProductRawDao.getInstance().create(pEntry.getValue());
 
-//        List<VolumeDTO> volumeDTOs = productCrawler.getProductVolume( pEntry.getKey());
-//        for (VolumeDTO volumeDTO : volumeDTOs) {
-//            volumeDTO.setProductId(productDb);
+        List<VolumeRawDTO> volumeDTOs = productCrawler.getProductVolume( pEntry.getKey());
+        for (VolumeRawDTO volumeDTO : volumeDTOs) {
+            volumeDTO.setProductRawId(productRawDTO);
 //            //insert volume
-//            VolumeDao.getInstance().create(volumeDTO);
-//        }
+            VolumeRawDao.getInstance().create(volumeDTO);
+        }
     }
     private DemxanhCategoryCrawler categoryCrawler;
     private DemxanhProductsCrawler productsCrawler;

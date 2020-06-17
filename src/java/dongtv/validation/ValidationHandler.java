@@ -14,6 +14,14 @@ import javax.xml.bind.ValidationEventLocator;
  * @author Tran Dong
  */
 public class ValidationHandler implements ValidationEventHandler {
+    
+    private StringBuilder errorMess;
+
+    public ValidationHandler(StringBuilder errorMess) {
+        this.errorMess = errorMess;
+    }
+    
+    
 
     @Override
     public boolean handleEvent(ValidationEvent event) {
@@ -21,14 +29,13 @@ public class ValidationHandler implements ValidationEventHandler {
                 || event.getSeverity() == ValidationEvent.ERROR) {
             ValidationEventLocator locator = event.getLocator();
             //print
-            System.out.println("Invalid booking document: " + locator.getURL());
+            this.errorMess.append("Invalid booking document: " + locator.getURL()+"\n");
 
-            System.out.println("Error: " + event.getMessage());
-            System.out.println("Error at column "
+            this.errorMess.append( "Error: " + event.getMessage()+"\n");
+            this.errorMess.append("Error at column "
                     + locator.getColumnNumber()
                     + ", line "
-                    + locator.getLineNumber()
-            );
+                    + locator.getLineNumber() +"\n");
         }
         return true;
     }

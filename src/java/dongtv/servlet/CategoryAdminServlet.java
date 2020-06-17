@@ -50,7 +50,7 @@ public class CategoryAdminServlet extends HttpServlet {
                 String categories_XML = XMLUtils.marrsallMatchToString(categoriesDTO);
                 request.setAttribute("CATEGORIES", categories_XML);
                 int totalRows = categoryService.getTotalRows().intValue();
-                Paging paging = new Paging(page,totalRows ,5, "CategoryAdminServlet");
+                Paging paging = new Paging(page,totalRows ,5, "CategoryAdminServlet","");
                 String paging_XML = XMLUtils.marrsallMatchToString(paging);
                 request.setAttribute("PAGING", paging_XML);
             }

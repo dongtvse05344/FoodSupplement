@@ -17,23 +17,32 @@ and open the template in the editor.
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="ProductType">
-        <xsd:all>
+        <xsd:sequence>
             <xsd:element name="categoryId" type="CategoryType"/>
-            <xsd:element name="name" type="xsd:string"/>
-            <xsd:element name="price" type="xsd:positiveInteger"/>
             <xsd:element name="description" type="xsd:string"/>
-            <xsd:element name="image" type="xsd:string"/>
-            <xsd:element name="originalLink" type="xsd:string"/>
             <xsd:element name="id" type="xsd:string"/>
-            <xsd:element name="rawxml" type="xsd:string"/>
+            <xsd:element name="image" type="xsd:string"/>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="originalLink" type="xsd:string"/>
+            <xsd:element name="price" type="xsd:positiveInteger"/>
             <xsd:element name="status" type="xsd:string"/>
-
-        </xsd:all>
+            <xsd:element name="volume" maxOccurs="unbounded" minOccurs="0"   type="VolumeType"/>
+        </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="CategoryType">
         <xsd:all>
             <xsd:element name="id" type="xsd:string"/>
             <xsd:element name="name" type="xsd:string"/>
+        </xsd:all>
+    </xsd:complexType>
+    <xsd:complexType name="VolumeType">
+        <xsd:all>
+            <xsd:element name="h" minOccurs="0" type="xsd:string"/>
+            <xsd:element name="l" type="xsd:string"/>
+            <xsd:element name="w" type="xsd:string"/>
+            <xsd:element name="price" type="xsd:string"/>
+            <xsd:element name="id" type="xsd:string"/>
+            <xsd:element name="status" type="xsd:string"/>
         </xsd:all>
     </xsd:complexType>
 </xsd:schema>

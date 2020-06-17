@@ -14,9 +14,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <body>
+    <body class="container">
         <c:set var="PRODUCTS" value="${requestScope.PRODUCTS}"/>
         <c:set var="PAGING" value="${requestScope.PAGING}"/>
+        <c:set var="ERROR" value="${requestScope.ERROR_VALIDATION}"/>
+        <c:set var="MESSAGE" value="${requestScope.MESSAGE}"/>
 
         <c:import charEncoding="UTF-8" var="product_item" url="http://localhost:8080/FoodSupplement/xsl/product_item_table.xsl"/>
         <c:import charEncoding="UTF-8" var="paging" url="http://localhost:8080/FoodSupplement/xsl/paging.xsl"/>
@@ -25,14 +27,31 @@
             <ul>
                 <li><a href="HomeAdminServlet">Quản lý sản phẩm</a></li>
                 <li><a href="CategoryAdminServlet">Quản lý danh mục</a></li>
-                <li><a href="CrawlServlet">Quản lý cào</a></li>
+                <li><a class="success">Quản lý cào</a></li>
                 <li><a href="LogoutServlet">Đăng xuất</a></li>
             </ul>
         </div>
         <h1>Hello Admin: ${sessionScope.NAME}!</h1>
-        <form action="ValidationServlet">
-            <input type="submit" value="Validate"/>
-        </form>
+        <div class="row">
+            <div class="row">
+                <form action="CreateRawXMLServlet">
+                    <input type="submit" class="btn" value="Sinh file XML"/>
+                </form>
+                Bạn có thể xem file XML _<a href="products.xml" download="true"> tại đây</a>
+            </div>
+            <div class="row">
+                <form action="ValidationServlet">
+                    <input type="submit" class="btn" value="Kiểm tra XML"/>
+                </form>
+                <form action="InsertRawXMLServlet">
+                    <input type="submit" class="btn" value="Insert vô Database"/>
+                </form>
+            </div>
+            <div class="row">
+                <pre class="info">${MESSAGE}</pre>
+                <pre class="danger">${ERROR}</pre>
+            </div>
+        </div>
 
         <x:transform doc="${PRODUCTS}" xslt="${product_item}"/>
         <x:transform doc="${PAGING}" xslt="${paging}"/>

@@ -23,13 +23,19 @@
 
         <div id="menu-left">
             <ul>
-                <li><a href="HomeAdminServlet">Quản lý sản phẩm</a></li>
+                <li><a class="success">Quản lý sản phẩm</a></li>
                 <li><a href="CategoryAdminServlet">Quản lý danh mục</a></li>
                 <li><a href="CrawlServlet">Quản lý cào</a></li>
                 <li><a href="LogoutServlet">Đăng xuất</a></li>
             </ul>
         </div>
         <h1>Hello Admin: ${sessionScope.NAME}!</h1>
+        <div class="row">
+            <form action="">
+                <input type="text" name="txtSearch" value="${param.txtSearch}" placeholder="Tìm kiếm theo tên"/>
+                <input type="submit" class="btn" value="Tìm kiếm"/>
+            </form>
+        </div>
         <x:transform doc="${PRODUCTS}" xslt="${product_item}"/>
         <x:transform doc="${PAGING}" xslt="${paging}"/>
 

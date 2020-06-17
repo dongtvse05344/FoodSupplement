@@ -23,7 +23,7 @@ public class CrawlListener implements ServletContextListener {
     private static LienaThread lienaThread;
     private static DemxanhThread demxanhThread;
     private static boolean isCrawl = false;  
-
+   
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("--- Listener start");
@@ -33,7 +33,7 @@ public class CrawlListener implements ServletContextListener {
 //            lienaThread.start();
             demxanhThread = new DemxanhThread(context);
             demxanhThread.start(); 
-        } 
+        }  
         System.out.println("--- Listener done");
     }
 

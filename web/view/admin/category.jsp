@@ -23,7 +23,7 @@
         <div id="menu-left">
             <ul>
                 <li><a href="HomeAdminServlet">Quản lý sản phẩm</a></li>
-                <li><a href="CategoryAdminServlet">Quản lý danh mục</a></li>
+                <li><a class="success">Quản lý danh mục</a></li>
                 <li><a href="CrawlServlet">Quản lý cào</a></li>
                 <li><a  href="LogoutServlet">Đăng xuất</a></li>
             </ul>

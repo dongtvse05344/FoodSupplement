@@ -40,6 +40,8 @@ public class HomeAdminServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = Routing.LOGIN_VIEW;
         String pageString = request.getParameter("page");
+        String nameSearch = request.getParameter("txtSearch");
+        if(nameSearch == null) nameSearch = "";
         int page = 1;
         if(pageString != null) {
             try {
@@ -52,13 +54,13 @@ public class HomeAdminServlet extends HttpServlet {
             if (ServletUtils.isLogin(session)) {
                 url = Routing.HOME_ADMIN_VIEW;
                 ProductService productService = new ProductService();
-                List<ProductDTO> products = productService.getPage(page);
+                List<ProductDTO> products = productService.getPage(nameSearch, page);
                 ProductsDTO productsDTO = new ProductsDTO();
                 productsDTO.setProductDTOs(products);
                 String products_XML = XMLUtils.marrsallMatchToString(productsDTO);
                 request.setAttribute("PRODUCTS", products_XML);
-                int totalRows = productService.getTotalRows().intValue();
-                Paging paging = new Paging(page,totalRows ,5, "HomeAdminServlet");
+                int totalRows = productService.getTotalRows(nameSearch).intValue();
+                Paging paging = new Paging(page,totalRows ,5, "HomeAdminServlet",nameSearch);
                 String paging_XML = XMLUtils.marrsallMatchToString(paging);
                 request.setAttribute("PAGING", paging_XML);
 

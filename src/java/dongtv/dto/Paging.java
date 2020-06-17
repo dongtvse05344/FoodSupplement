@@ -24,6 +24,7 @@ public class Paging implements Serializable{
     private int rowsOfPage;
     private int[] loop;
     private String action;
+    private String txtSearch;
 
     public Paging() {
     }
@@ -38,11 +39,12 @@ public class Paging implements Serializable{
         this.action = action;
     }
 
-    public Paging(int current,int total,int rowsOfPage, String action) {
+    public Paging(int current,int total,int rowsOfPage, String action, String txtSearch) {
         this.current = current;
         this.total = total;
         this.action = action;
         this.rowsOfPage = rowsOfPage;
+        this.txtSearch = txtSearch;
         min = current -2;
         min = Math.max(1, min);
         max = min + 4 ;

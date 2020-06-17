@@ -41,10 +41,11 @@ public class ProductDao extends BaseDAO<ProductDTO, Integer> implements Serializ
     private ProductDao() {
     }
     
-    public Long getTotalRows() {
+    public Long getTotalRows(String nameSearch) {
         EntityManager em = DBUtilities.getEntityManager();
         try {
             List<Long> result = em.createNamedQuery("ProductDTO.getTotalRows",Long.class)
+                    .setParameter("name", "%" + nameSearch +"%")
                     .getResultList();
             if(result !=null && !result.isEmpty()) {
                 return result.get(0);
@@ -60,10 +61,11 @@ public class ProductDao extends BaseDAO<ProductDTO, Integer> implements Serializ
         return null;
     }
 
-    public List<ProductDTO> getProductPaging(String orderby, int page, int rowsOfPage) throws Exception {
+    public List<ProductDTO> getProductPaging(String nameSearch, String orderby, int page, int rowsOfPage) throws Exception {
         EntityManager em = DBUtilities.getEntityManager();
         try {
             List<ProductDTO> result = em.createNamedQuery("ProductDTO.findAll", ProductDTO.class)
+                    .setParameter("name", "%" + nameSearch +"%")
                     .setFirstResult((page - 1) * rowsOfPage)
                     .setMaxResults(rowsOfPage)
                     .getResultList();

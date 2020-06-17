@@ -5,65 +5,53 @@
  */
 package dongtv.servlet;
 
-import dongtv.dao.CategoryDao;
-import dongtv.dao.ProductDao;
-import dongtv.dto.CategoriesDTO;
-import dongtv.dto.CategoryDTO;
-import dongtv.dto.ProductDTO;
+import dongtv.contanst.Routing;
+import dongtv.dto.ProductRawDTO;
+import dongtv.dto.ProductRawsDTO;
 import dongtv.dto.ProductsDTO;
-import dongtv.util.XMLUtils;
+import dongtv.service.CrawlService;
+import dongtv.util.ServletUtils;
+import dongtv.validation.XSDValidation;
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Tran Dong
  */
-public class HomeServlet extends HttpServlet {
+public class InsertRawXMLServlet extends HttpServlet {
+
+    private static final String XML_PATH = "products.xml";
+    private static final String XSD_PATH = "xsd//Products.xsd";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String url = Routing.LOGIN_VIEW;
         try {
-            //get category
-            CategoryDao categoryDao = CategoryDao.getInstance();
-            List<CategoryDTO> categories = categoryDao.getAll("CategoryDTO.findAll");
-            CategoriesDTO categoriesDTO = new CategoriesDTO();
-            categoriesDTO.setCategoryDTOs(categories);
-            String categories_XML = XMLUtils.marrsallMatchToString(categoriesDTO);
-            request.setAttribute("CATEGORIES", categories_XML);
-
-            //get product
-            ProductDao productDao = ProductDao.getInstance();
-            List<ProductDTO> products = productDao.getProductPaging("","name", 1, 10);
-            List<ProductDTO> products2 = productDao.getProductPaging("","name", 3, 5);
-            List<ProductDTO> products3 = productDao.getProductPaging("","name", 4, 5);
-            List<ProductDTO> products4 = productDao.getProductPaging("","name", 5, 5);
-
-            ProductsDTO productsDTO = new ProductsDTO();
-            productsDTO.setProductDTOs(products);
-            String product_XML = XMLUtils.marrsallMatchToString(productsDTO);
-            request.setAttribute("PRODUCTS", product_XML);
-            
-            productsDTO.setProductDTOs(products2);
-            String product_XML2 = XMLUtils.marrsallMatchToString(productsDTO);
-            request.setAttribute("PRODUCTS2", product_XML2);
-             
-            productsDTO.setProductDTOs(products3);
-            String product_XML3 = XMLUtils.marrsallMatchToString(productsDTO);
-            request.setAttribute("PRODUCTS3", product_XML3);
-            
-            productsDTO.setProductDTOs(products4);
-            String product_XML4 = XMLUtils.marrsallMatchToString(productsDTO);
-            request.setAttribute("PRODUCTS4", product_XML4);
+            HttpSession session = request.getSession();
+            if (ServletUtils.isLogin(session)) {
+                url = Routing.CRAWL_ADMIN_SERVLET;
+                String realPath = getServletContext().getRealPath("/");
+                StringBuilder erString = new StringBuilder();
+                ProductsDTO productsDTO = XSDValidation.validation(realPath + XML_PATH, realPath + XSD_PATH, erString);
+//                System.out.println(productsDTO.getProductDTOs().get(0).getVolumeDTOCollection().size());
+                request.setAttribute("ERROR_VALIDATION", erString.toString());
+                CrawlService crawlService = new CrawlService();
+                crawlService.convertRawstoReal(productsDTO);
+                File file = new File(realPath + XML_PATH);
+                System.out.println(file.delete());
+                request.setAttribute("MESSAGE", "Convert to Products Done !!!");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            request.getRequestDispatcher("view/home.jsp").forward(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

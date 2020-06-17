@@ -7,7 +7,9 @@ package dongtv.dto;
 
 import dongtv.contanst.ProductStatus;
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,8 +19,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -30,7 +35,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ProductRawDTO.findAll", query = "SELECT p FROM ProductRawDTO p"),
     @NamedQuery(name = "ProductRawDTO.findById", query = "SELECT p FROM ProductRawDTO p WHERE p.id = :id"),
-    @NamedQuery(name = "ProductRawDTO.findByRawxml", query = "SELECT p FROM ProductRawDTO p WHERE p.rawxml = :rawxml"),
     @NamedQuery(name = "ProductRawDTO.findByName", query = "SELECT p FROM ProductRawDTO p WHERE p.name = :name"),
     @NamedQuery(name = "ProductRawDTO.findByImage", query = "SELECT p FROM ProductRawDTO p WHERE p.image = :image"),
     @NamedQuery(name = "ProductRawDTO.findByOriginalLink", query = "SELECT p FROM ProductRawDTO p WHERE p.originalLink = :originalLink"),
@@ -38,9 +42,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ProductRawDTO.findByPrice", query = "SELECT p FROM ProductRawDTO p WHERE p.price = :price"),
     @NamedQuery(name = "ProductRawDTO.findByStatus", query = "SELECT p FROM ProductRawDTO p WHERE p.status = :status"),
     @NamedQuery(name = "ProductRawDTO.getTotalRows", query = "SELECT Count(p) FROM ProductRawDTO p"),
-    @NamedQuery(name = "ProductRawDTO.deleteAll", query = "DELETE FROM ProductRawDTO p"),
-})
+    @NamedQuery(name = "ProductRawDTO.deleteAll", query = "DELETE FROM ProductRawDTO p"),})
 public class ProductRawDTO implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productRawId")
+    private Collection<VolumeRawDTO> volumeRawDTOCollection;
 
     @Column(name = "description", length = 2147483647)
     private String description;
@@ -51,8 +57,6 @@ public class ProductRawDTO implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-    @Column(name = "rawxml", length = 2147483647)
-    private String rawxml;
     @Column(name = "name", length = 500)
     private String name;
     @Column(name = "image", length = 2147483647)
@@ -71,8 +75,7 @@ public class ProductRawDTO implements Serializable {
     public ProductRawDTO() {
     }
 
-    public ProductRawDTO(String rawxml, String name, String image, String originalLink, Integer price) {
-        this.rawxml = rawxml;
+    public ProductRawDTO(String name, String image, String originalLink, Integer price) {
         this.name = name;
         this.image = image;
         this.originalLink = originalLink;
@@ -104,14 +107,6 @@ public class ProductRawDTO implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getRawxml() {
-        return rawxml;
-    }
-
-    public void setRawxml(String rawxml) {
-        this.rawxml = rawxml;
     }
 
     public String getName() {
@@ -193,6 +188,15 @@ public class ProductRawDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @XmlElement(name = "volume")
+    public Collection<VolumeRawDTO> getVolumeRawDTOCollection() {
+        return volumeRawDTOCollection;
+    }
+
+    public void setVolumeRawDTOCollection(Collection<VolumeRawDTO> volumeRawDTOCollection) {
+        this.volumeRawDTOCollection = volumeRawDTOCollection;
     }
 
 }

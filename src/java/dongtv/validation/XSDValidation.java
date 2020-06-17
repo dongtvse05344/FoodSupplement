@@ -21,13 +21,13 @@ import org.xml.sax.SAXException;
  */
 public class XSDValidation {
 
-    public static ProductsDTO validation(String filePath, String xsdPath) throws JAXBException, SAXException {
+    public static ProductsDTO validation(String filePath, String xsdPath, StringBuilder erString) throws JAXBException, SAXException {
         JAXBContext jc = JAXBContext.newInstance(ProductsDTO.class);
         Unmarshaller u = jc.createUnmarshaller();
 
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Schema schema = sf.newSchema(new File(xsdPath));
-        u.setEventHandler(new ValidationHandler());
+        u.setEventHandler(new ValidationHandler(erString));
         u.setSchema(schema);
 //            File f = new File("src\\java\\console/customer.xml");
         File f = new File(filePath);

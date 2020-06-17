@@ -26,19 +26,18 @@ public class ProductService {
         volumeDao = VolumeDao.getInstance();
     }
 
-    public List<ProductDTO> getPage(int page) throws Exception {
-        return productDao.getProductPaging("name", page, 5);
+    public List<ProductDTO> getPage(String nameSearch, int page) throws Exception {
+        return productDao.getProductPaging(nameSearch, "name", page, 5);
     }
 
-    public Long getTotalRows() {
-        if (totalRows <= 0) {
-            totalRows = productDao.getTotalRows();
-        }
-        return totalRows;
+    public Long getTotalRows(String nameSearch) {
+        return totalRows = productDao.getTotalRows(nameSearch);
     }
+
     public ProductDTO getProduct(Integer id) {
         return productDao.findById(id);
     }
+
     public List<VolumeDTO> getVolumes(ProductDTO id) {
         return volumeDao.getVolumesbyProductId(id);
     }

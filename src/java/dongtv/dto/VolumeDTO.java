@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -105,7 +106,8 @@ public class VolumeDTO implements Serializable, Comparable<VolumeDTO> {
     public ProductDTO getProductId() {
         return productId;
     }
-
+    
+    @XmlTransient
     public void setProductId(ProductDTO productId) {
         this.productId = productId;
     }

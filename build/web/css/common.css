@@ -33,4 +33,8 @@ ul.page {
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 30px;
+    width: 100%;
+}
+.container {
+    margin: 10px 155px;
 }

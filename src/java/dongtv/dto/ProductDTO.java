@@ -20,6 +20,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -31,11 +32,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "products", catalog = "FoodSupplementDB", schema = "dbo")
 @XmlRootElement(name = "product")
 @NamedQueries({
-    @NamedQuery(name = "ProductDTO.findAll", query = "SELECT p FROM ProductDTO p"),
+    @NamedQuery(name = "ProductDTO.findAll", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name"),
     @NamedQuery(name = "ProductDTO.findById", query = "SELECT p FROM ProductDTO p WHERE p.id = :id"),
     @NamedQuery(name = "ProductDTO.findByName", query = "SELECT p FROM ProductDTO p WHERE p.name = :name"),
     @NamedQuery(name = "ProductDTO.findByCategoryId", query = "SELECT p FROM ProductDTO p WHERE p.categoryId = :categoryId"),
-    @NamedQuery(name = "ProductDTO.getTotalRows", query = "SELECT Count(p) FROM ProductDTO p"), 
+    @NamedQuery(name = "ProductDTO.getTotalRows", query = "SELECT Count(p) FROM ProductDTO p WHERE p.name  LIKE :name"), 
 })
 public class ProductDTO implements Serializable {
 
@@ -127,7 +128,7 @@ public class ProductDTO implements Serializable {
         this.originalLink = originalLink;
     }
 
-    @XmlTransient
+    @XmlElement(name = "volume")
     public Collection<VolumeDTO> getVolumeDTOCollection() {
         return volumeDTOCollection;
     }

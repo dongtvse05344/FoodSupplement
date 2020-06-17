@@ -26,17 +26,11 @@ import javax.servlet.http.HttpSession;
  * @author Tran Dong
  */
 public class ValidationServlet extends HttpServlet {
+
     private static final String XML_PATH = "products.xml";
     private static final String XSD_PATH = "xsd//Products.xsd";
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
+   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -44,14 +38,11 @@ public class ValidationServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             if (ServletUtils.isLogin(session)) {
-                url = Routing.CRAWL_ADMIN_SERVLET; 
-                CrawlService crawlService = new CrawlService();
-                List<ProductRawDTO> products = crawlService.getProductAll();
-                ProductRawsDTO productsDTO = new ProductRawsDTO();
-                productsDTO.setProductDTOs(products);
+                url = Routing.CRAWL_ADMIN_SERVLET;
                 String realPath = getServletContext().getRealPath("/");
-                XMLUtils.marshalToFile(productsDTO, realPath + XML_PATH);
-                ProductsDTO realProducts = XSDValidation.validation(realPath + XML_PATH, realPath +XSD_PATH);
+                StringBuilder erString = new StringBuilder();
+                XSDValidation.validation(realPath + XML_PATH, realPath + XSD_PATH,erString);
+                request.setAttribute("ERROR_VALIDATION", erString.toString());
 //                crawlService.convertRawstoReal(realProducts);
             }
         } catch (Exception e) {

@@ -18,11 +18,12 @@
         <ul class="page">
             <xsl:if test="current > 1">
                 <li>
-                    <a href="?page={current - 1}">Previous</a>
+                    <a href="?page={current - 1}&amp;txtSearch={txtSearch}">Previous</a>
                 </li>
             </xsl:if>
             
             <xsl:variable name="c" select="current" />
+            <xsl:variable name="txtSearch" select="txtSearch" />
 
             <xsl:for-each select="loop">
                 <xsl:choose>
@@ -35,7 +36,7 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <li>
-                            <a href="?page={.}">
+                            <a href="?page={.}&amp;txtSearch={$txtSearch}">
                                 <xsl:value-of select="."/>
                             </a>
                         </li>
@@ -46,10 +47,12 @@
             </xsl:for-each>
             <xsl:if test="current &lt; max">
                 <li>
-                    <a href="?page={current+1}">Next</a>
+                    <a href="?page={current+1}&amp;txtSearch={txtSearch}">Next</a>
                 </li>
             </xsl:if>
-           
+            <li>
+                <p>Tổng <xsl:value-of select="total"/> dòng</p>
+            </li>
         </ul>
     </xsl:template>
 

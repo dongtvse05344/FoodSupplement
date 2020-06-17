@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
  */
 public class LoginServlet extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response, boolean isPost)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = Routing.LOGIN_VIEW;
@@ -30,7 +30,9 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             if (ServletUtils.isLogin(session)) {
                 url = Routing.HOME_ADMIN_SERVLET;  
-            } else {
+            }
+            
+            else if(isPost) {
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
                 boolean isValid = true;
@@ -73,7 +75,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        processRequest(request, response,false);
     }
 
     /**
@@ -87,7 +89,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        processRequest(request, response,true);
     }
 
     /**
