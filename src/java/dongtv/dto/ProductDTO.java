@@ -32,13 +32,42 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "products", catalog = "FoodSupplementDB", schema = "dbo")
 @XmlRootElement(name = "product")
 @NamedQueries({
-    @NamedQuery(name = "ProductDTO.findAll", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name"),
+    @NamedQuery(name = "ProductDTO.findAll", query = "SELECT p FROM ProductDTO p "),
+    @NamedQuery(name = "ProductDTO.findByName", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name"),
     @NamedQuery(name = "ProductDTO.findById", query = "SELECT p FROM ProductDTO p WHERE p.id = :id"),
-    @NamedQuery(name = "ProductDTO.findByName", query = "SELECT p FROM ProductDTO p WHERE p.name = :name"),
-    @NamedQuery(name = "ProductDTO.findByCategoryId", query = "SELECT p FROM ProductDTO p WHERE p.categoryId = :categoryId"),
-    @NamedQuery(name = "ProductDTO.getTotalRows", query = "SELECT Count(p) FROM ProductDTO p WHERE p.name  LIKE :name"), 
-})
+
+    @NamedQuery(name = "ProductDTO.findTopAll", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name ORDER BY p.qDpg + p.qIso + p.qFps DESC"), //ORDER BY p.qDpg + p.qIso + p.qFps DESC
+    @NamedQuery(name = "ProductDTO.findTopDpg", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name ORDER BY p.qDpg DESC "), //ORDER BY p.qDpg DESC
+    @NamedQuery(name = "ProductDTO.findTopIso", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name ORDER BY p.qIso DESC"), //ORDER BY p.qIso DESC
+    @NamedQuery(name = "ProductDTO.findTopFps", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name ORDER BY p.qFps DESC"), //ORDER BY p.qFps DESC
+
+    @NamedQuery(name = "ProductDTO.getTotalRows", query = "SELECT Count(p) FROM ProductDTO p WHERE p.name  LIKE :name"),
+    @NamedQuery(name = "ProductDTO.getMeanDpg", query = "SELECT SUM(p.dpg)/COUNT(p.dpg) FROM ProductDTO p"),
+    @NamedQuery(name = "ProductDTO.getExxDpg", query = "SELECT SUM(p.dpg*p.dpg)/COUNT(p.dpg) FROM ProductDTO p"),
+    @NamedQuery(name = "ProductDTO.getMeanIso", query = "SELECT SUM(p.iso)/COUNT(p.iso) FROM ProductDTO p"),
+    @NamedQuery(name = "ProductDTO.getExxIso", query = "SELECT SUM(p.iso*p.iso)/COUNT(p.iso) FROM ProductDTO p"),
+    @NamedQuery(name = "ProductDTO.getMeanFps", query = "SELECT SUM(p.fps)/COUNT(p.fps) FROM ProductDTO p"),
+    @NamedQuery(name = "ProductDTO.getExxFps", query = "SELECT SUM(p.fps*p.fps)/COUNT(p.fps) FROM ProductDTO p"),})
 public class ProductDTO implements Serializable {
+
+    @Column(name = "qDpg", precision = 53)
+    private Double qDpg;
+    @Column(name = "qIso", precision = 53)
+    private Double qIso;
+    @Column(name = "qFps", precision = 53)
+    private Double qFps;
+    @Column(name = "qTan", precision = 53)
+    private Double qTan;
+
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "dpg", precision = 53)
+    private Double dpg;
+    @Column(name = "iso", precision = 53)
+    private Double iso;
+    @Column(name = "fps", precision = 53)
+    private Double fps;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    private Collection<SubProductDTO> subProductDTOCollection;
 
     @Column(name = "price")
     private Integer price;
@@ -57,8 +86,6 @@ public class ProductDTO implements Serializable {
     private String image;
     @Column(name = "originalLink", length = 2147483647)
     private String originalLink;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Collection<VolumeDTO> volumeDTOCollection;
     @JoinColumn(name = "categoryId", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private CategoryDTO categoryId;
@@ -66,14 +93,13 @@ public class ProductDTO implements Serializable {
     public ProductDTO() {
     }
 
-    public ProductDTO(Integer price, Integer id, String name, String description, String image, String originalLink, Collection<VolumeDTO> volumeDTOCollection, CategoryDTO categoryId) {
+    public ProductDTO(Integer price, Integer id, String name, String description, String image, String originalLink, CategoryDTO categoryId) {
         this.price = price;
         this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
         this.originalLink = originalLink;
-        this.volumeDTOCollection = volumeDTOCollection;
         this.categoryId = categoryId;
     }
 
@@ -128,15 +154,6 @@ public class ProductDTO implements Serializable {
         this.originalLink = originalLink;
     }
 
-    @XmlElement(name = "volume")
-    public Collection<VolumeDTO> getVolumeDTOCollection() {
-        return volumeDTOCollection;
-    }
-
-    public void setVolumeDTOCollection(Collection<VolumeDTO> volumeDTOCollection) {
-        this.volumeDTOCollection = volumeDTOCollection;
-    }
-
     public CategoryDTO getCategoryId() {
         return categoryId;
     }
@@ -167,7 +184,9 @@ public class ProductDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "dongtv.dto.ProductDTO[ id=" + id + " ]";
+        return "dongtv.dto.ProductDTO[ dpg=" + qDpg + " iso=" + qIso + " fps=" + qFps + " ]"
+                + "dongtv.dto.ProductDTO[ dpg=" + dpg + " iso=" + iso + " fps=" + fps + " ]";
+
     }
 
     public Integer getPrice() {
@@ -176,6 +195,71 @@ public class ProductDTO implements Serializable {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public Double getDpg() {
+        return dpg;
+    }
+
+    public void setDpg(Double dpg) {
+        this.dpg = dpg;
+    }
+
+    public Double getIso() {
+        return iso;
+    }
+
+    public void setIso(Double iso) {
+        this.iso = iso;
+    }
+
+    public Double getFps() {
+        return fps;
+    }
+
+    public void setFps(Double fps) {
+        this.fps = fps;
+    }
+
+    @XmlTransient
+    public Collection<SubProductDTO> getSubProductDTOCollection() {
+        return subProductDTOCollection;
+    }
+
+    public void setSubProductDTOCollection(Collection<SubProductDTO> subProductDTOCollection) {
+        this.subProductDTOCollection = subProductDTOCollection;
+    }
+
+    public Double getQDpg() {
+        return qDpg;
+    }
+
+    public void setQDpg(Double qDpg) {
+        this.qDpg = qDpg;
+    }
+
+    public Double getQIso() {
+        return qIso;
+    }
+
+    public void setQIso(Double qIso) {
+        this.qIso = qIso;
+    }
+
+    public Double getQFps() {
+        return qFps;
+    }
+
+    public void setQFps(Double qFps) {
+        this.qFps = qFps;
+    }
+
+    public Double getQTan() {
+        return qTan;
+    }
+
+    public void setQTan(Double qTan) {
+        this.qTan = qTan;
     }
 
 }

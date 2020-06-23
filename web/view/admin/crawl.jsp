@@ -20,7 +20,7 @@
         <c:set var="ERROR" value="${requestScope.ERROR_VALIDATION}"/>
         <c:set var="MESSAGE" value="${requestScope.MESSAGE}"/>
 
-        <c:import charEncoding="UTF-8" var="product_item" url="http://localhost:8080/FoodSupplement/xsl/product_item_table.xsl"/>
+        <c:import charEncoding="UTF-8" var="product_item" url="http://localhost:8080/FoodSupplement/xsl/product_raw_table.xsl"/>
         <c:import charEncoding="UTF-8" var="paging" url="http://localhost:8080/FoodSupplement/xsl/paging.xsl"/>
 
         <div id="menu-left">
@@ -34,12 +34,18 @@
         <h1>Hello Admin: ${sessionScope.NAME}!</h1>
         <div class="row">
             <div class="row">
+                <form action="GroupByNameServlet">
+                    <input type="submit" class="btn" value="Phân nhóm theo tên"/>
+                </form>
+            </div>
+            <div class="row">
                 <form action="CreateRawXMLServlet">
                     <input type="submit" class="btn" value="Sinh file XML"/>
                 </form>
                 Bạn có thể xem file XML _<a href="products.xml" download="true"> tại đây</a>
             </div>
             <div class="row">
+                <p class="warning" style="width: 100%">Đảm bảo rằng file XML là dữ liệu mới nhất</p>
                 <form action="ValidationServlet">
                     <input type="submit" class="btn" value="Kiểm tra XML"/>
                 </form>
@@ -47,6 +53,7 @@
                     <input type="submit" class="btn" value="Insert vô Database"/>
                 </form>
             </div>
+
             <div class="row">
                 <pre class="info">${MESSAGE}</pre>
                 <pre class="danger">${ERROR}</pre>

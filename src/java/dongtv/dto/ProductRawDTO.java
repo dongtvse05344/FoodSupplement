@@ -7,9 +7,7 @@ package dongtv.dto;
 
 import dongtv.contanst.ProductStatus;
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,11 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,20 +28,28 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "product_raws", catalog = "FoodSupplementDB", schema = "dbo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ProductRawDTO.findAll", query = "SELECT p FROM ProductRawDTO p"),
+    @NamedQuery(name = "ProductRawDTO.findAll", query = "SELECT p FROM ProductRawDTO p"), //order by p.name
+    @NamedQuery(name = "ProductRawDTO.findAllWithSort", query = "SELECT p FROM ProductRawDTO p order by p.name"), //order by p.name
     @NamedQuery(name = "ProductRawDTO.findById", query = "SELECT p FROM ProductRawDTO p WHERE p.id = :id"),
     @NamedQuery(name = "ProductRawDTO.findByName", query = "SELECT p FROM ProductRawDTO p WHERE p.name = :name"),
     @NamedQuery(name = "ProductRawDTO.findByImage", query = "SELECT p FROM ProductRawDTO p WHERE p.image = :image"),
     @NamedQuery(name = "ProductRawDTO.findByOriginalLink", query = "SELECT p FROM ProductRawDTO p WHERE p.originalLink = :originalLink"),
     @NamedQuery(name = "ProductRawDTO.findByCategoryId", query = "SELECT p FROM ProductRawDTO p WHERE p.categoryId = :categoryId"),
     @NamedQuery(name = "ProductRawDTO.findByPrice", query = "SELECT p FROM ProductRawDTO p WHERE p.price = :price"),
-    @NamedQuery(name = "ProductRawDTO.findByStatus", query = "SELECT p FROM ProductRawDTO p WHERE p.status = :status"),
     @NamedQuery(name = "ProductRawDTO.getTotalRows", query = "SELECT Count(p) FROM ProductRawDTO p"),
     @NamedQuery(name = "ProductRawDTO.deleteAll", query = "DELETE FROM ProductRawDTO p"),})
 public class ProductRawDTO implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productRawId")
-    private Collection<VolumeRawDTO> volumeRawDTOCollection;
+    @Column(name = "parentId")
+    private Integer parentId;
+
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "dpg", precision = 53)
+    private Double dpg;
+    @Column(name = "iso", precision = 53)
+    private Double iso;
+    @Column(name = "fps", precision = 53)
+    private Double fps;
 
     @Column(name = "description", length = 2147483647)
     private String description;
@@ -68,9 +71,6 @@ public class ProductRawDTO implements Serializable {
     private CategoryDTO categoryId;
     @Column(name = "price")
     private Integer price;
-    @Basic(optional = false)
-    @Column(name = "status", nullable = false)
-    private int status;
 
     public ProductRawDTO() {
     }
@@ -80,7 +80,6 @@ public class ProductRawDTO implements Serializable {
         this.image = image;
         this.originalLink = originalLink;
         this.price = price;
-        this.status = ProductStatus.NEW.getValue();
     }
 
     public ProductRawDTO(Integer id, String name, String image, String originalLink, Integer price, Integer status) {
@@ -89,16 +88,10 @@ public class ProductRawDTO implements Serializable {
         this.image = image;
         this.originalLink = originalLink;
         this.price = price;
-        this.status = status;
     }
 
     public ProductRawDTO(Integer id) {
         this.id = id;
-    }
-
-    public ProductRawDTO(Integer id, int status) {
-        this.id = id;
-        this.status = status;
     }
 
     public Integer getId() {
@@ -149,14 +142,6 @@ public class ProductRawDTO implements Serializable {
         this.price = price;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -190,13 +175,36 @@ public class ProductRawDTO implements Serializable {
         this.description = description;
     }
 
-    @XmlElement(name = "volume")
-    public Collection<VolumeRawDTO> getVolumeRawDTOCollection() {
-        return volumeRawDTOCollection;
+    public Double getDpg() {
+        return dpg;
     }
 
-    public void setVolumeRawDTOCollection(Collection<VolumeRawDTO> volumeRawDTOCollection) {
-        this.volumeRawDTOCollection = volumeRawDTOCollection;
+    public void setDpg(Double dpg) {
+        this.dpg = dpg;
+    }
+
+    public Double getIso() {
+        return iso;
+    }
+
+    public void setIso(Double iso) {
+        this.iso = iso;
+    }
+
+    public Double getFps() {
+        return fps;
+    }
+
+    public void setFps(Double fps) {
+        this.fps = fps;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
 }

@@ -28,7 +28,7 @@ import javax.servlet.http.HttpSession;
 public class ValidationServlet extends HttpServlet {
 
     private static final String XML_PATH = "products.xml";
-    private static final String XSD_PATH = "xsd//Products.xsd";
+    private static final String XSD_PATH = "xsd//CameraProduct.xsd";
 
    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

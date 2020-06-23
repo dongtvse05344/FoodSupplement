@@ -16,22 +16,26 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <body>
-        <a href="/FoodSupplement"><h1>Đệm Êm Đềm</h1></a>
+    <body class="container">
+        <a href="/FoodSupplement"><h1>Bảng xếp hạng Chỉnh ảnh</h1></a>
         <c:set var="PRODUCT" value="${requestScope.PRODUCT}"/>
-        <c:set var="VOLUMES" value="${requestScope.VOLUMES}"/>
+        <c:set var="SUBPRODUCTS" value="${requestScope.SUBPRODUCTS}"/>
         <c:set var="PRODUCTS" value="${requestScope.PRODUCTS}"/>
-
 
         <c:import charEncoding="UTF-8" var="product_item_detail" url="http://localhost:8080/FoodSupplement/xsl/product_item_detail.xsl"/>
         <c:import charEncoding="UTF-8" var="product_item_volumes" url="http://localhost:8080/FoodSupplement/xsl/volumes_product.xsl"/>
         <c:import charEncoding="UTF-8" var="products_item" url="http://localhost:8080/FoodSupplement/xsl/product_item.xsl"/>
+        <c:import charEncoding="UTF-8" var="sub_product_item" url="http://localhost:8080/FoodSupplement/xsl/sub_product_item.xsl"/>
 
         <x:transform doc="${PRODUCT}" xslt="${product_item_detail}"/>
-        <x:transform doc="${VOLUMES}" xslt="${product_item_volumes}"/>
+        <h3>Sản phẩm cùng tên</h3>
+        <div class="row">
+            <x:transform doc="${SUBPRODUCTS}" xslt="${sub_product_item}"/>
+        </div>
         <h3>Sản phẩm tương tự</h3>
         <div class="row">
             <x:transform doc="${PRODUCTS}" xslt="${products_item}"/>
         </div>
+
     </body>
 </html>

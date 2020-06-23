@@ -8,6 +8,8 @@ package dongtv.listener;
 import dongtv.thread.DemxanhThread;
 import dongtv.util.DBUtilities;
 import dongtv.thread.LienaThread;
+import dongtv.thread.Mayanh24hThread;
+import dongtv.thread.MayanhvnThread;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -22,8 +24,10 @@ public class CrawlListener implements ServletContextListener {
 
     private static LienaThread lienaThread;
     private static DemxanhThread demxanhThread;
-    private static boolean isCrawl = false;  
-   
+    private static Mayanh24hThread mayanh24hThread;
+    private static MayanhvnThread mayanhvnThread;
+    private static boolean isCrawl = false;
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("--- Listener start");
@@ -31,9 +35,13 @@ public class CrawlListener implements ServletContextListener {
         if (isCrawl) {
 //            lienaThread = new LienaThread(context);
 //            lienaThread.start();
-            demxanhThread = new DemxanhThread(context);
-            demxanhThread.start(); 
-        }  
+//            demxanhThread = new DemxanhThread(context);
+//            demxanhThread.start(); 
+            mayanh24hThread = new Mayanh24hThread(context);
+            mayanh24hThread.start();
+            mayanhvnThread = new MayanhvnThread(context);
+            mayanhvnThread.start();
+        }
         System.out.println("--- Listener done");
     }
 

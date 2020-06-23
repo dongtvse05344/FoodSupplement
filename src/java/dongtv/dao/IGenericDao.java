@@ -17,4 +17,5 @@ public interface IGenericDao<T, PK> {
     T update(T t);
     boolean delete(T t);
     List<T> getAll(String namedQuery);
+    Double getData(String namedQuery);
 }

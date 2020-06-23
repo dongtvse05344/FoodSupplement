@@ -6,14 +6,8 @@
 package dongtv.dao;
 
 import dongtv.dto.ProductDTO;
-import dongtv.dto.UserDTO;
 import dongtv.util.DBUtilities;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,8 +58,27 @@ public class ProductDao extends BaseDAO<ProductDTO, Integer> implements Serializ
     public List<ProductDTO> getProductPaging(String nameSearch, String orderby, int page, int rowsOfPage) throws Exception {
         EntityManager em = DBUtilities.getEntityManager();
         try {
-            List<ProductDTO> result = em.createNamedQuery("ProductDTO.findAll", ProductDTO.class)
+            List<ProductDTO> result = em.createNamedQuery("ProductDTO.findByName", ProductDTO.class)
                     .setParameter("name", "%" + nameSearch +"%")
+                    .setFirstResult((page - 1) * rowsOfPage)
+                    .setMaxResults(rowsOfPage)
+                    .getResultList();
+            return result;
+        } catch (Exception e) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+    
+    public List<ProductDTO> getTopProduct(String namedQuery, String nameSearch, int page, int rowsOfPage) throws Exception {
+        EntityManager em = DBUtilities.getEntityManager();
+        try {
+            List<ProductDTO> result = em.createNamedQuery(namedQuery, ProductDTO.class)
+                    .setParameter("name", "%" +nameSearch + "%")
                     .setFirstResult((page - 1) * rowsOfPage)
                     .setMaxResults(rowsOfPage)
                     .getResultList();

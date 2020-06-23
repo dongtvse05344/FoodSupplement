@@ -60,7 +60,7 @@ public class HomeAdminServlet extends HttpServlet {
                 String products_XML = XMLUtils.marrsallMatchToString(productsDTO);
                 request.setAttribute("PRODUCTS", products_XML);
                 int totalRows = productService.getTotalRows(nameSearch).intValue();
-                Paging paging = new Paging(page,totalRows ,5, "HomeAdminServlet",nameSearch);
+                Paging paging = new Paging(page,totalRows ,5, "HomeAdminServlet",nameSearch,"");
                 String paging_XML = XMLUtils.marrsallMatchToString(paging);
                 request.setAttribute("PAGING", paging_XML);
 

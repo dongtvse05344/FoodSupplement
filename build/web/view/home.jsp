@@ -16,7 +16,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <body>
+    <body class="container">
         <c:set var="PRODUCTS" value="${requestScope.PRODUCTS}"/>
         <c:set var="PRODUCTS2" value="${requestScope.PRODUCTS2}"/>
         <c:set var="PRODUCTS3" value="${requestScope.PRODUCTS3}"/>
@@ -25,27 +25,33 @@
         <c:set var="CATEGORIES" value="${requestScope.CATEGORIES}"/>
         <c:import charEncoding="UTF-8" var="category_item" url="http://localhost:8080/FoodSupplement/xsl/category_item.xsl"/>
         <c:import charEncoding="UTF-8" var="product_item" url="http://localhost:8080/FoodSupplement/xsl/product_item.xsl"/>
-        <h1>Đệm Êm Đềm</h1>
-        <h3>Combo bán chạy</h3>
-        <a class="info">Xem thêm >></a>
+        <h1> Bảng xếp hạng Chỉnh Ảnh </h1>
+        <div class="row">
+            <form action="SearchServlet">
+                Tìm kiếm theo tên:<input name="txtNameSearch" value="${param.txtSearchName}"/>
+                <input type="submit" value="Tìm kiếm" class="btn"/>
+            </form>
+        </div>
+        <h3>Sản phẩm chất lượng cao</h3>
+        <a class="info" href="SearchServlet?type=isTop" >Xem thêm >></a>
 
         <div class="row">
             <x:transform doc="${PRODUCTS}" xslt="${product_item}"/>
         </div>
 
-        <h3>Top sản phẩm cao cấp: trên 8 triệu</h3>
-        <a class="info">Xem thêm >></a>
+        <h3>Top sản phẩm độ phân giải điểm ảnh cao</h3>
+        <a class="info" href="SearchServlet?type=isTopDpg">Xem thêm >></a>
 
         <div class="row">
             <x:transform doc="${PRODUCTS2}" xslt="${product_item}"/>
         </div>
-        <h3>Top sản phẩm trung cấp: 5 - triệu</h3> 
-        <a class="info">Xem thêm >></a>
+        <h3>Top sản phẩm độ nhạy sáng ISO cao</h3> 
+        <a class="info" href="SearchServlet?type=isTopIso">Xem thêm >></a>
         <div class="row">
             <x:transform doc="${PRODUCTS3}" xslt="${product_item}"/>
         </div> 
-        <h3>Top sản phẩm bình dân: dưới 5 triệu</h3>
-        <a class="info">Xem thêm >></a>
+        <h3>Top sản phẩm có tốc độ màn chụp cao</h3>
+        <a class="info" href="SearchServlet?type=isTopFps">Xem thêm >></a>
         <div class="row">
             <x:transform doc="${PRODUCTS4}" xslt="${product_item}"/>
         </div>

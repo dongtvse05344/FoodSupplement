@@ -5,7 +5,7 @@
  */
 package dongtv.crawler;
 
-import dongtv.contanst.ContanstCrawler;
+import dongtv.contanst.ConstantsCrawler;
 import dongtv.util.HTMLUtilities;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
@@ -85,7 +85,7 @@ public class DemxanhCategoryCrawler extends BaseCrawler {
             Node node = nodes.item(i).cloneNode(true);
 
             expression = "a/@data-url";
-            String href = ContanstCrawler.DEMXANH + xpath.evaluate(expression, node, XPathConstants.STRING).toString();
+            String href = ConstantsCrawler.DEMXANH + xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             expression = "a";
             String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             categories.put(href, name);

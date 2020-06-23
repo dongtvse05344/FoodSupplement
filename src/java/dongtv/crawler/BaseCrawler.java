@@ -58,6 +58,9 @@ public class BaseCrawler {
             if (tagCount > 0 && line.contains("</" + tag + ">")) {
                 tagCount = tagCount - HTMLUtilities.getAllMatches(line, "</" + tag + ">").size();
                 if (tagCount == 0) {
+                    for (String ignore_text : IGNORE_TEXTS) {
+                        line = line.replaceAll(ignore_text, "");
+                    }
                     document += line.trim() + devide;
                     isFound = false;
                 }

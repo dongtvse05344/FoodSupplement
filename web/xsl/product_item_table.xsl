@@ -11,7 +11,13 @@
                 <th>Price</th>
                 <th>Orgininal Link</th>
                 <th>Image</th>
-                <th>Status</th>
+                <th>DPG</th>
+                <th>ISO</th>
+                <th>FPS</th>
+                <th>Q DPG</th>
+                <th>Q ISO</th>
+                <th>Q FPS</th>
+                <th>Edit</th>
 
             </tr>
             <xsl:apply-templates />
@@ -26,16 +32,39 @@
                 <xsl:value-of select="name"/>
             </td>
             <td>
-                <xsl:value-of select="price"/>
+                <xsl:if test="price != -1">
+                    <xsl:value-of select='format-number(price, "###,###")'/> VNĐ
+                </xsl:if>
+                <xsl:if test="price = -1">
+                    <p class="danger">Chưa cào được</p>
+                </xsl:if>
             </td>
             <td>
-                <a href="{originalLink}">Link gốc</a>
+                <a href="{originalLink}" target="_blank">Link gốc</a>
             </td>
             <td>
                 <image width="150" src="{image}"/>
             </td>
             <td>
-                <xsl:value-of select="status"/>
+                <xsl:value-of select="dpg"/>
+            </td>
+            <td>
+                <xsl:value-of select="iso"/>
+            </td>
+            <td>
+                <xsl:value-of select="fps"/>
+            </td>
+            <td>
+                <xsl:value-of select="QDpg"/>
+            </td>
+            <td>
+                <xsl:value-of select="QIso"/>
+            </td>
+            <td>
+                <xsl:value-of select="QFps"/>
+            </td>
+            <td>
+                <a href="EditProductServlet?id={id}">Edit</a>
             </td>
         </tr>
     </xsl:template>

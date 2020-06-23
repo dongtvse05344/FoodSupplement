@@ -5,20 +5,16 @@
  */
 package dongtv.thread;
 
-import dongtv.contanst.ContanstCrawler;
+import dongtv.contanst.ConstantsCrawler;
 import dongtv.crawler.DemxanhCategoryCrawler;
 import dongtv.crawler.DemxanhProductCrawler;
 import dongtv.crawler.DemxanhProductsCrawler;
 import dongtv.dao.CategoryDao;
 import dongtv.dao.ProductDao;
 import dongtv.dao.ProductRawDao;
-import dongtv.dao.VolumeDao;
-import dongtv.dao.VolumeRawDao;
 import dongtv.dto.CategoryDTO;
 import dongtv.dto.ProductDTO;
 import dongtv.dto.ProductRawDTO;
-import dongtv.dto.VolumeDTO;
-import dongtv.dto.VolumeRawDTO;
 import dongtv.util.ImageUtils;
 import java.util.Date;
 import java.util.List;
@@ -64,12 +60,12 @@ public class DemxanhThread extends BaseThread {
 //        ProductDTO productDb = ProductDao.getInstance().create(pEntry.getValue());
         ProductRawDTO productRawDTO = ProductRawDao.getInstance().create(pEntry.getValue());
 
-        List<VolumeRawDTO> volumeDTOs = productCrawler.getProductVolume( pEntry.getKey());
-        for (VolumeRawDTO volumeDTO : volumeDTOs) {
-            volumeDTO.setProductRawId(productRawDTO);
-//            //insert volume
-            VolumeRawDao.getInstance().create(volumeDTO);
-        }
+//        List<VolumeRawDTO> volumeDTOs = productCrawler.getProductVolume( pEntry.getKey());
+//        for (VolumeRawDTO volumeDTO : volumeDTOs) {
+//            volumeDTO.setProductRawId(productRawDTO);
+////            //insert volume
+//            VolumeRawDao.getInstance().create(volumeDTO);
+//        }
     }
     private DemxanhCategoryCrawler categoryCrawler;
     private DemxanhProductsCrawler productsCrawler;
@@ -81,7 +77,7 @@ public class DemxanhThread extends BaseThread {
             categoryCrawler = new DemxanhCategoryCrawler(context);
             productsCrawler = new DemxanhProductsCrawler(context);
             productCrawler = new DemxanhProductCrawler(context);
-            Map<String, String> categories = categoryCrawler.getCategories(ContanstCrawler.DEMXANH);
+            Map<String, String> categories = categoryCrawler.getCategories(ConstantsCrawler.DEMXANH);
             for (Map.Entry<String, String> entry : categories.entrySet()) {
                 //insert category
                 CategoryDTO categoryDb = CategoryDao.getInstance().create(new CategoryDTO(entry.getValue()));

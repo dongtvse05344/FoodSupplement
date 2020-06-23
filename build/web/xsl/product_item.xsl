@@ -11,7 +11,15 @@
                 <xsl:value-of select="name" />
             </a>
             <br/>
-            <p>Giá chỉ từ  <span class="success"><xsl:value-of select='format-number(price, "###,###")'/> VNĐ</span></p>
+            <xsl:if test="price != -1">
+                <p>Giá chỉ từ  <span class="success">
+                        <xsl:value-of select='format-number(price, "###,###")'/> VNĐ</span>
+                </p>
+
+            </xsl:if>
+            <xsl:if test="price = -1">
+                <p class="warning">Giá liên hệ</p>
+            </xsl:if>
         </div>
     </xsl:template>
 

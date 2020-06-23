@@ -5,12 +5,11 @@
  */
 package dongtv.servlet;
 
-import dongtv.dao.ProductDao;
 import dongtv.dto.ProductDTO;
 import dongtv.dto.ProductsDTO;
 import dongtv.contanst.Routing;
-import dongtv.dto.VolumeDTO;
-import dongtv.dto.VolumesDTO;
+import dongtv.dto.SubProductDTO;
+import dongtv.dto.SubProductsDTO;
 import dongtv.service.ProductService;
 import dongtv.util.XMLUtils;
 import java.io.IOException;
@@ -43,20 +42,23 @@ public class ProductDetailServlet extends HttpServlet {
             ProductService productService = new ProductService();
             ProductDTO product = productService.getProduct(id);
             String product_XML = XMLUtils.marrsallMatchToString(product);
-            List<VolumeDTO> volumes = productService.getVolumes(product);
-            VolumesDTO volumesDTO = new VolumesDTO();
-            volumesDTO.setVolumeDTOs(volumes);
-            String volumes_XML = XMLUtils.marrsallMatchToString(volumesDTO);
+
+            // Lấy sản phẩm con
+            List<SubProductDTO> subProducts = productService.getSubProduct(product);
+
+            SubProductsDTO subProductsDTO = new SubProductsDTO();
+            subProductsDTO.setProductDTOs(subProducts);
+            String sub_products_XML = XMLUtils.marrsallMatchToString(subProductsDTO);
 
             //lấy sp tương tự
-            List<ProductDTO> products4 = productService.getPage("",5);
+            List<ProductDTO> products4 = productService.getSimilarity(product);
             ProductsDTO productsDTO = new ProductsDTO();
             productsDTO.setProductDTOs(products4);
             String products_XML = XMLUtils.marrsallMatchToString(productsDTO);
-            
+
             request.setAttribute("PRODUCTS", products_XML);
+            request.setAttribute("SUBPRODUCTS", sub_products_XML);
             request.setAttribute("PRODUCT", product_XML);
-            request.setAttribute("VOLUMES", volumes_XML);
 
         } catch (Exception e) {
             e.printStackTrace();

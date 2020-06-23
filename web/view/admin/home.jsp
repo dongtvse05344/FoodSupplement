@@ -36,6 +36,11 @@
                 <input type="submit" class="btn" value="Tìm kiếm"/>
             </form>
         </div>
+        <div class="row">
+            <form action="QuantifyDataServlet">
+                <input type="submit" class="btn" value="Lượng hoá dữ liệu"/>
+            </form>
+        </div>
         <x:transform doc="${PRODUCTS}" xslt="${product_item}"/>
         <x:transform doc="${PAGING}" xslt="${paging}"/>
 

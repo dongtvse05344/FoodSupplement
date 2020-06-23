@@ -16,18 +16,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Tran Dong
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "volumes")
-public class VolumesDTO {
+@XmlRootElement(name = "products")
+public class SubProductsDTO {
+    @XmlElement(name = "product")
+    private List<SubProductDTO> productDTOs;
 
-    @XmlElement(name = "volume")
-    private List<VolumeDTO> volumeDTOs;
-
-    public List<VolumeDTO> getVolumeDTOs() {
-        return volumeDTOs;
+    public List<SubProductDTO> getProductDTOs() {
+        return productDTOs;
     }
 
-    public void setVolumeDTOs(List<VolumeDTO> volumeDTOs) {
-        this.volumeDTOs = volumeDTOs;
+    public void setProductDTOs(List<SubProductDTO> productDTOs) {
+        this.productDTOs = productDTOs;
     }
 
+   
 }

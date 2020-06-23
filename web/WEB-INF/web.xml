@@ -44,6 +44,26 @@
         <servlet-name>InsertRawXMLServlet</servlet-name>
         <servlet-class>dongtv.servlet.InsertRawXMLServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditProductServlet</servlet-name>
+        <servlet-class>dongtv.servlet.EditProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GroupByNameServlet</servlet-name>
+        <servlet-class>dongtv.servlet.GroupByNameServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>QuantifyDataServlet</servlet-name>
+        <servlet-class>dongtv.servlet.QuantifyDataServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateProductServlet</servlet-name>
+        <servlet-class>dongtv.servlet.UpdateProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchServlet</servlet-name>
+        <servlet-class>dongtv.servlet.SearchServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/HomeServlet</url-pattern>
@@ -83,6 +103,26 @@
     <servlet-mapping>
         <servlet-name>InsertRawXMLServlet</servlet-name>
         <url-pattern>/InsertRawXMLServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditProductServlet</servlet-name>
+        <url-pattern>/EditProductServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GroupByNameServlet</servlet-name>
+        <url-pattern>/GroupByNameServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>QuantifyDataServlet</servlet-name>
+        <url-pattern>/QuantifyDataServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateProductServlet</servlet-name>
+        <url-pattern>/UpdateProductServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchServlet</servlet-name>
+        <url-pattern>/SearchServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

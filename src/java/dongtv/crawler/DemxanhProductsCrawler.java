@@ -5,7 +5,7 @@
  */
 package dongtv.crawler;
 
-import dongtv.contanst.ContanstCrawler;
+import dongtv.contanst.ConstantsCrawler;
 import dongtv.dto.ProductDTO;
 import dongtv.dto.ProductRawDTO;
 import dongtv.util.HTMLUtilities;
@@ -85,8 +85,8 @@ public class DemxanhProductsCrawler extends BaseCrawler {
             String image = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             expression = ".//a[@class='product-image']/@href";
             String link = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            if (!link.contains(ContanstCrawler.DEMXANH)) {
-                link = ContanstCrawler.DEMXANH + link;
+            if (!link.contains(ConstantsCrawler.DEMXANH)) {
+                link = ConstantsCrawler.DEMXANH + link;
             }
             expression = ".//div[@class='p_it_info_name']";
             String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();

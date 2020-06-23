@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
 public class InsertRawXMLServlet extends HttpServlet {
 
     private static final String XML_PATH = "products.xml";
-    private static final String XSD_PATH = "xsd//Products.xsd";
+    private static final String XSD_PATH = "xsd//CameraProduct.xsd";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -39,13 +39,13 @@ public class InsertRawXMLServlet extends HttpServlet {
                 url = Routing.CRAWL_ADMIN_SERVLET;
                 String realPath = getServletContext().getRealPath("/");
                 StringBuilder erString = new StringBuilder();
-                ProductsDTO productsDTO = XSDValidation.validation(realPath + XML_PATH, realPath + XSD_PATH, erString);
+                ProductRawsDTO productsDTO = XSDValidation.validation(realPath + XML_PATH, realPath + XSD_PATH, erString);
 //                System.out.println(productsDTO.getProductDTOs().get(0).getVolumeDTOCollection().size());
                 request.setAttribute("ERROR_VALIDATION", erString.toString());
                 CrawlService crawlService = new CrawlService();
                 crawlService.convertRawstoReal(productsDTO);
                 File file = new File(realPath + XML_PATH);
-                System.out.println(file.delete());
+//                System.out.println(file.delete());
                 request.setAttribute("MESSAGE", "Convert to Products Done !!!");
             }
         } catch (Exception e) {

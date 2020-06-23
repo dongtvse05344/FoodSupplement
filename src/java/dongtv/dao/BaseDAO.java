@@ -118,4 +118,28 @@ public class BaseDAO<T, PK>  implements IGenericDao<T, PK> {
         }
         return null;
     }
+
+    @Override
+    public Double getData(String namedQuery) {
+        EntityManager em = DBUtilities.getEntityManager();
+        try {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            List<Double> result = em.createNamedQuery(namedQuery, Double.class).getResultList();
+            transaction.commit();
+            if(result !=null && !result.isEmpty()) {
+                return result.get(0);
+            }
+            return null;
+        } catch (Exception e) {
+            Logger.getLogger(BaseDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+    
+    
 }

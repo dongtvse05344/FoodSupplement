@@ -5,8 +5,7 @@
  */
 package dongtv.thread;
 
-import dongtv.dao.VolumeDao;
-import dongtv.contanst.ContanstCrawler;
+import dongtv.contanst.ConstantsCrawler;
 import dongtv.crawler.LienaCategoryCrawler;
 import dongtv.crawler.LienaProductCrawler;
 import dongtv.crawler.LienaProductsCrawler;
@@ -14,7 +13,6 @@ import dongtv.dao.CategoryDao;
 import dongtv.dao.ProductDao;
 import dongtv.dto.CategoryDTO;
 import dongtv.dto.ProductDTO;
-import dongtv.dto.VolumeDTO;
 import dongtv.util.ImageUtils;
 import java.util.Date;
 import java.util.List;
@@ -57,13 +55,13 @@ public class LienaThread extends BaseThread {
             e.printStackTrace();
         }
         ProductDTO productDb = ProductDao.getInstance().create(pEntry.getValue());
-
-        List<VolumeDTO> volumeDTOs = lienaProductCrawler.getProductVolume(pEntry.getKey());
-        for (VolumeDTO volumeDTO : volumeDTOs) {
-            volumeDTO.setProductId(productDb);
-            //insert volume 
-            VolumeDao.getInstance().create(volumeDTO);
-        }
+//
+//        List<VolumeDTO> volumeDTOs = lienaProductCrawler.getProductVolume(pEntry.getKey());
+//        for (VolumeDTO volumeDTO : volumeDTOs) {
+//            volumeDTO.setProductId(productDb);
+//            //insert volume 
+//            VolumeDao.getInstance().create(volumeDTO);
+//        }
     }
     private LienaCategoryCrawler categoryCrawler;
     private LienaProductsCrawler productsCrawler;
@@ -75,7 +73,7 @@ public class LienaThread extends BaseThread {
             categoryCrawler = new LienaCategoryCrawler(context);
             productsCrawler = new LienaProductsCrawler(context);
             lienaProductCrawler = new LienaProductCrawler(context);
-            Map<String, String> categories = categoryCrawler.getCategories(ContanstCrawler.LIENA);
+            Map<String, String> categories = categoryCrawler.getCategories(ConstantsCrawler.LIENA);
             for (Map.Entry<String, String> categoryEntry : categories.entrySet()) {
                 if (!categoryEntry.getKey().contains("tel")
                         && !categoryEntry.getKey().contains("ve-chung-toi")

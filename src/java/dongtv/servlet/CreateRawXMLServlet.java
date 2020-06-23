@@ -8,13 +8,10 @@ package dongtv.servlet;
 import dongtv.contanst.Routing;
 import dongtv.dto.ProductRawDTO;
 import dongtv.dto.ProductRawsDTO;
-import dongtv.dto.ProductsDTO;
 import dongtv.service.CrawlService;
 import dongtv.util.ServletUtils;
 import dongtv.util.XMLUtils;
-import dongtv.validation.XSDValidation;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -40,7 +37,7 @@ public class CreateRawXMLServlet extends HttpServlet {
             if (ServletUtils.isLogin(session)) {
                 url = Routing.CRAWL_ADMIN_SERVLET;
                 CrawlService crawlService = new CrawlService();
-                List<ProductRawDTO> products = crawlService.getProductAll();
+                List<ProductRawDTO> products = crawlService.getAllProducts();
                 ProductRawsDTO productsDTO = new ProductRawsDTO();
                 productsDTO.setProductDTOs(products);
                 String realPath = getServletContext().getRealPath("/");
