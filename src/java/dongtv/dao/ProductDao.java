@@ -55,7 +55,7 @@ public class ProductDao extends BaseDAO<ProductDTO, Integer> implements Serializ
         return null;
     }
 
-    public List<ProductDTO> getProductPaging(String nameSearch, String orderby, int page, int rowsOfPage) throws Exception {
+    public List<ProductDTO> getProductPaging(String nameSearch, int page, int rowsOfPage) throws Exception {
         EntityManager em = DBUtilities.getEntityManager();
         try {
             List<ProductDTO> result = em.createNamedQuery("ProductDTO.findByName", ProductDTO.class)

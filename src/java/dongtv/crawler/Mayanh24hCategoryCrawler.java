@@ -43,9 +43,12 @@ public class Mayanh24hCategoryCrawler extends BaseCrawler {
             String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Mayanh24hCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Mayanh24hCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Mayanh24hCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+
         } finally {
             try {
                 if (reader != null) {
@@ -58,8 +61,8 @@ public class Mayanh24hCategoryCrawler extends BaseCrawler {
         return null;
     }
 
-    public Map<String, String> DOMHandler(String documentString) throws XPathExpressionException {
-         Map<String, String> categories = new HashMap<String, String>();
+    public Map<String, String> DOMHandler(String documentString) throws XPathExpressionException, Exception {
+        Map<String, String> categories = new HashMap<String, String>();
         Document document = XMLUtils.parseStringtoDom(documentString);
 
         if (document == null) {
@@ -73,9 +76,9 @@ public class Mayanh24hCategoryCrawler extends BaseCrawler {
             Node node = nodes.item(i).cloneNode(true);
 
             expression = "a/@href";
-            String href =  xpath.evaluate(expression, node, XPathConstants.STRING).toString();
+            String href = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             expression = "a";
-            String name =  xpath.evaluate(expression, node, XPathConstants.STRING).toString();
+            String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             categories.put(href, name);
         }
         return categories;

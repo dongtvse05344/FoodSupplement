@@ -23,7 +23,7 @@ import javax.servlet.ServletContext;
  * @author Tran Dong
  */
 public class MayanhvnThread extends BaseThread {
-
+    private final String IMAGE_PATH = "images/mayanhvn/";
     private final ServletContext context;
     private MayanhvnCategoryCrawler mayanhvnCategoryCrawler;
     private MayanhvnProductsCrawler mayanhvnProductsCrawler;
@@ -37,6 +37,7 @@ public class MayanhvnThread extends BaseThread {
 
     private void getProduct(ProductRawDTO dto) {
         System.out.println(count++ + dto.getOriginalLink());
+        this.imageHande(dto, IMAGE_PATH, context);
         Map<String, String> product = mayanhvnProductCrawler.getProduct(dto.getOriginalLink());
         this.crawlService.getParamtoProduct(dto, product.get("DES"));
         dto.setDescription(product.get("DES"));

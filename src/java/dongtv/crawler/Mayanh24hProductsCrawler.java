@@ -45,9 +45,11 @@ public class Mayanh24hProductsCrawler extends BaseCrawler {
             String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Mayanh24hProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Mayanh24hProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Mayanh24hProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (reader != null) {
@@ -60,7 +62,7 @@ public class Mayanh24hProductsCrawler extends BaseCrawler {
         return null;
     }
 
-    public Map<String, ProductRawDTO> DOMHandler(String documentString) throws XPathExpressionException {
+    public Map<String, ProductRawDTO> DOMHandler(String documentString) throws XPathExpressionException, Exception {
 //        System.out.println(documentString);
         Map<String, ProductRawDTO> products = new HashMap<String, ProductRawDTO>();
         Document document = XMLUtils.parseStringtoDom(documentString);
@@ -106,9 +108,9 @@ public class Mayanh24hProductsCrawler extends BaseCrawler {
             document = document.replaceAll("></a>", "></img></a>");
             return DOMHandlerPages(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Mayanh24hProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Mayanh24hProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (reader != null) {

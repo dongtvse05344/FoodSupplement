@@ -25,7 +25,7 @@ import org.w3c.dom.Document;
  */
 public class Mayanh24hProductCrawler extends BaseCrawler {
 
-    private static String[] IGNORE_TEXTS = {"<hr>","<img.*jpg\">"};
+    private static String[] IGNORE_TEXTS = {"<hr>", "<img.*jpg\">"};
 
     public Mayanh24hProductCrawler(ServletContext context) {
         super(context);
@@ -41,9 +41,11 @@ public class Mayanh24hProductCrawler extends BaseCrawler {
             String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Mayanh24hProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Mayanh24hProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Mayanh24hProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (reader != null) {
@@ -56,7 +58,7 @@ public class Mayanh24hProductCrawler extends BaseCrawler {
         return null;
     }
 
-    public Map<String, String> DOMHandler(String documentString) throws XPathExpressionException {
+    public Map<String, String> DOMHandler(String documentString) throws XPathExpressionException, Exception {
         Map<String, String> product = new HashMap<String, String>();
         Document document = XMLUtils.parseStringtoDom(documentString);
 
@@ -68,11 +70,11 @@ public class Mayanh24hProductCrawler extends BaseCrawler {
         String expression = ".//table[@class='table-description']";
         String description = xpath.evaluate(expression, document, XPathConstants.STRING).toString();
         product.put("DES", description.trim());
-        
+
         expression = ".//h3[@class='product-name']";
         String name = xpath.evaluate(expression, document, XPathConstants.STRING).toString();
         product.put("NAME", name.trim());
-        
+
         expression = ".//tr[last()]/td[last()]";
         String params = xpath.evaluate(expression, document, XPathConstants.STRING).toString();
         product.put("PARAMS", params.trim());

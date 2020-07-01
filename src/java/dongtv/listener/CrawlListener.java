@@ -5,9 +5,7 @@
  */
 package dongtv.listener;
 
-import dongtv.thread.DemxanhThread;
 import dongtv.util.DBUtilities;
-import dongtv.thread.LienaThread;
 import dongtv.thread.Mayanh24hThread;
 import dongtv.thread.MayanhvnThread;
 import javax.persistence.EntityManager;
@@ -22,8 +20,6 @@ import javax.servlet.ServletContextListener;
  */
 public class CrawlListener implements ServletContextListener {
 
-    private static LienaThread lienaThread;
-    private static DemxanhThread demxanhThread;
     private static Mayanh24hThread mayanh24hThread;
     private static MayanhvnThread mayanhvnThread;
     private static boolean isCrawl = false;

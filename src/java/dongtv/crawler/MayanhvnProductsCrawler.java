@@ -45,9 +45,11 @@ public class MayanhvnProductsCrawler extends BaseCrawler {
             String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (reader != null) {
@@ -60,7 +62,7 @@ public class MayanhvnProductsCrawler extends BaseCrawler {
         return null;
     }
 
-    public Map<String, ProductRawDTO> DOMHandler(String documentString) throws XPathExpressionException {
+    public Map<String, ProductRawDTO> DOMHandler(String documentString) throws XPathExpressionException, Exception {
 //        System.out.println(documentString);
         Map<String, ProductRawDTO> products = new HashMap<String, ProductRawDTO>();
         Document document = XMLUtils.parseStringtoDom(documentString);
@@ -100,17 +102,18 @@ public class MayanhvnProductsCrawler extends BaseCrawler {
         try {
             reader = getBufferedReaderForURL(url);
             String beginTag = "<div class=\"paging\">";
-            String tag = "div"; 
+            String tag = "div";
 
             String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
             return DOMHandlerPages(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch(Exception e) {
+            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-        }finally {
+        } finally {
             try {
                 if (reader != null) {
                     reader.close();

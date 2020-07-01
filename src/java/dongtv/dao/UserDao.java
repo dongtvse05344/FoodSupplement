@@ -5,8 +5,6 @@
  */
 package dongtv.dao;
 
-import dongtv.crawler.DemxanhProductCrawler;
-import dongtv.dto.ProductDTO;
 import dongtv.dto.UserDTO;
 import dongtv.util.DBUtilities;
 import java.io.Serializable;

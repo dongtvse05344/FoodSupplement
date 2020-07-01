@@ -21,6 +21,7 @@ import javax.servlet.ServletContext;
  */
 public class Mayanh24hThread extends BaseThread {
 
+    private final String IMAGE_PATH = "images/mayanh24h/";
     private final ServletContext context;
     private Mayanh24hProductCrawler productCrawler;
     private int count = 1;
@@ -33,11 +34,13 @@ public class Mayanh24hThread extends BaseThread {
 
     private void getProduct(ProductRawDTO dto) {
         System.out.println(count++ + " :" + dto.getOriginalLink());
+        this.imageHande(dto, IMAGE_PATH, context);
+
         Map<String, String> product = productCrawler.getProduct(dto.getOriginalLink());
 //        System.out.println("PARAMS: " + product.get("PARAMS"));
 
         this.crawlService.getParamtoProduct(dto, product.get("PARAMS"));
-        dto.setDescription( product.get("DES"));
+        dto.setDescription(product.get("DES"));
         dto.setName(product.get("NAME"));
         crawlService.createProduct(dto);
     }

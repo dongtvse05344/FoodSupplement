@@ -27,7 +27,7 @@
         <c:import charEncoding="UTF-8" var="products_item" url="http://localhost:8080/FoodSupplement/xsl/product_item.xsl"/>
         <c:import charEncoding="UTF-8" var="sub_product_item" url="http://localhost:8080/FoodSupplement/xsl/sub_product_item.xsl"/>
 
-        <x:transform doc="${PRODUCT}" xslt="${product_item_detail}"/>
+        <x:transform doc="${PRODUCT}" xslt="${applicationScope.XSL_TEST}"/>
         <h3>Sản phẩm cùng tên</h3>
         <div class="row">
             <x:transform doc="${SUBPRODUCTS}" xslt="${sub_product_item}"/>

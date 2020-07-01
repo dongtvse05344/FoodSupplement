@@ -28,7 +28,7 @@ public class ProductService {
     }
 
     public List<ProductDTO> getPage(String nameSearch, int page) throws Exception {
-        return productDao.getProductPaging(nameSearch, "name", page, 5);
+        return productDao.getProductPaging(nameSearch, page, 5);
     }
     
     public List<ProductDTO> getTopProduct(String namedQuery, String nameSearch, int page, int rowsOfPage) throws Exception {

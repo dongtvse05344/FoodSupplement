@@ -5,6 +5,11 @@
  */
 package dongtv.thread;
 
+import dongtv.dto.ProductRawDTO;
+import dongtv.util.ImageUtils;
+import java.util.Date;
+import javax.servlet.ServletContext;
+
 /**
  *
  * @author Tran Dong
@@ -39,5 +44,16 @@ public class BaseThread extends Thread{
         setSuspended(false);
         notify();
         System.out.println("resume");
+    }
+    
+    protected void imageHande(ProductRawDTO product, String image_path, ServletContext context) {
+        try {
+            String filename = image_path + new Date().getTime() + ".jpg";
+            String realPath = context.getRealPath("/");
+            ImageUtils.saveImage(product.getImage(), realPath + filename);
+            product.setImage(filename);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }   
     }
 }

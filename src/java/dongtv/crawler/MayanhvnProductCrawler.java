@@ -41,9 +41,11 @@ public class MayanhvnProductCrawler extends BaseCrawler {
             String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MayanhvnProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(LienaCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MayanhvnProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(MayanhvnProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (reader != null) {
@@ -56,7 +58,7 @@ public class MayanhvnProductCrawler extends BaseCrawler {
         return null;
     }
 
-    public Map<String, String> DOMHandler(String documentString) throws XPathExpressionException {
+    public Map<String, String> DOMHandler(String documentString) throws XPathExpressionException, Exception {
 //        System.out.println(documentString);
         Map<String, String> product = new HashMap<String, String>();
         Document document = XMLUtils.parseStringtoDom(documentString);
