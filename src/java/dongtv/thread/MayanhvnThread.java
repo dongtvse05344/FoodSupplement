@@ -41,7 +41,7 @@ public class MayanhvnThread extends BaseThread {
         Map<String, String> product = mayanhvnProductCrawler.getProduct(dto.getOriginalLink());
         this.crawlService.getParamtoProduct(dto, product.get("DES"));
         dto.setDescription(product.get("DES"));
-        crawlService.createProduct(dto);
+        crawlService.createProduct(dto); 
     }
 
     @Override
@@ -56,7 +56,9 @@ public class MayanhvnThread extends BaseThread {
                 if (categoryEntry.getValue().contains("Ống")) {
                     continue;
                 }
-                CategoryDTO categoryDb = crawlService.createCategory(categoryEntry.getValue());
+                CategoryDTO categoryDb = 
+//                        null;
+                        crawlService.createCategory(categoryEntry.getValue());
                 Map<String, String> pages = mayanhvnProductsCrawler.getPages(categoryEntry.getKey());
                 if (pages == null) {
                     pages = new HashMap<>();

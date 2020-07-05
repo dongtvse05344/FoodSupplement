@@ -6,6 +6,9 @@
 package dongtv.servlet;
 
 import dongtv.contanst.Routing;
+import dongtv.dao.CategoryDao;
+import dongtv.dto.CategoriesDTO;
+import dongtv.dto.CategoryDTO;
 import dongtv.dto.Paging;
 import dongtv.dto.ProductDTO;
 import dongtv.dto.ProductsDTO;
@@ -32,42 +35,54 @@ public class SearchServlet extends HttpServlet {
         String url = Routing.SEARCH_VIEW;
 
         try {
-            String txtNameSearch = request.getParameter("txtNameSearch") ;
-            if(txtNameSearch ==null) txtNameSearch ="";
-            String type = request.getParameter("type");
+            CategoryDao categoryDao = CategoryDao.getInstance();
 
+            String txtNameSearch = request.getParameter("txtSearch");
+            if (txtNameSearch == null) {
+                txtNameSearch = "";
+            }
+            String type = request.getParameter("type");
+            String cateId = request.getParameter("cateId");
+            System.out.println(cateId);
             String _page = request.getParameter("page");
             int page = 1;
             try {
                 page = Integer.parseInt(_page);
             } catch (Exception e) {
             }
+            List<CategoryDTO> categories = categoryDao.getAll("CategoryDTO.findAll");
+            CategoriesDTO categoriesDTO = new CategoriesDTO();
+            categoriesDTO.setCategoryDTOs(categories);
+            String categories_XML = XMLUtils.marrsallMatchToString(categoriesDTO);
+            request.setAttribute("CATEGORIES", categories_XML);
             List<ProductDTO> result = new ArrayList<>();
-
             ProductService productService = new ProductService();
-            if (!"isTop".equals(type)) {
-                result = productService.getTopProduct("ProductDTO.findTopAll", txtNameSearch, 1, 20);
-            } else if (!"isTopDpg".equals(type)) {
-                result = productService.getTopProduct("ProductDTO.findTopDpg", txtNameSearch, 1, 20);
+            if (cateId != null && !cateId.isEmpty()) {
+                CategoryDTO categoryDTO = categoryDao.findById(Integer.parseInt(cateId));
+                result = productService.getProductsByCate(categoryDTO, page, 20);
+            }
+            if ("isTop".equals(type)) {
+                result = productService.getTopProduct("ProductDTO.findTopAll", txtNameSearch, page, 20);
+            } else if ("isTopDpg".equals(type)) {
+                result = productService.getTopProduct("ProductDTO.findTopDpg", txtNameSearch, page, 20);
 
-            } else if (!"isTopIso".equals(type)) {
-                result = productService.getTopProduct("ProductDTO.findTopIso", txtNameSearch, 1, 20);
+            } else if ("isTopIso".equals(type)) {
+                result = productService.getTopProduct("ProductDTO.findTopIso", txtNameSearch, page, 20);
 
-            } else if (!"isTopFps".equals(type)) {
-                result = productService.getTopProduct("ProductDTO.findTopFps", txtNameSearch, 1, 20);
+            } else if ("isTopFps".equals(type)) {
+                result = productService.getTopProduct("ProductDTO.findTopFps", txtNameSearch, page, 20);
 
             } else {
-                result = productService.getTopProduct("ProductDTO.findByName", txtNameSearch, 1, 20);
+                result = productService.getTopProduct("ProductDTO.findByName", txtNameSearch, page, 20);
             }
             int totalRows = productService.getTotalRows(txtNameSearch).intValue();
-
             //Convert to XML
             ProductsDTO productsDTO = new ProductsDTO();
             productsDTO.setProductDTOs(result);
             String products_XML = XMLUtils.marrsallMatchToString(productsDTO);
             request.setAttribute("PRODUCTS", products_XML);
 
-            Paging paging = new Paging(page, totalRows, 5, "SearchServlet", txtNameSearch, type);
+            Paging paging = new Paging(page, totalRows, 20, "SearchServlet", txtNameSearch, type, cateId);
             String paging_XML = XMLUtils.marrsallMatchToString(paging);
             request.setAttribute("PAGING", paging_XML);
 

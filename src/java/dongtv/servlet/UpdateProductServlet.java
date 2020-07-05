@@ -29,27 +29,28 @@ public class UpdateProductServlet extends HttpServlet {
         String url = Routing.LOGIN_VIEW;
         try {
             HttpSession session = request.getSession();
-            if (!ServletUtils.isLogin(session)) {
+            if (ServletUtils.isLogin(session)) {
                 url = Routing.HOME_ADMIN_SERVLET;
                 Integer id = Integer.parseInt(request.getParameter("id"));
                 ProductService productService = new ProductService();
                 ProductDTO productDTO = productService.getProduct(id);
                 String name = request.getParameter("name");
                 Integer price = Integer.parseInt(request.getParameter("price"));
-                Double dpg = Double.parseDouble(request.getParameter("price"));
-                Double iso = Double.parseDouble(request.getParameter("price"));
-                Double fps = Double.parseDouble(request.getParameter("price"));
+                Double dpg = Double.parseDouble(request.getParameter("dpg"));
+                Double iso = Double.parseDouble(request.getParameter("iso"));
+                Double fps = Double.parseDouble(request.getParameter("fps"));
 
                 productDTO.setName(name);
                 productDTO.setPrice(price);
                 productDTO.setDpg(dpg);
                 productDTO.setIso(iso);
                 productDTO.setFps(fps);
-                
+
                 productService.updateProduct(productDTO);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            url = Routing.EDIT_PRODUCT_ADMIN;
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

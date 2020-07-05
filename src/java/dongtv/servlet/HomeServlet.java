@@ -39,10 +39,12 @@ public class HomeServlet extends HttpServlet {
 
             //get product
             ProductDao productDao = ProductDao.getInstance();
-            List<ProductDTO> products = productDao.getTopProduct("ProductDTO.findTopAll","", 1, 8);
-            List<ProductDTO> products2 = productDao.getTopProduct("ProductDTO.findTopDpg","", 1, 4);
-            List<ProductDTO> products3 = productDao.getTopProduct("ProductDTO.findTopIso","", 1, 4);
-            List<ProductDTO> products4 = productDao.getTopProduct("ProductDTO.findTopFps","", 1, 4);
+            List<ProductDTO> products = productDao.getTopProduct("ProductDTO.findTopAll","", 1, 9);
+            
+            
+            List<ProductDTO> products2 = productDao.getTopProduct("ProductDTO.findTopDpg","", 1, 6);
+            List<ProductDTO> products3 = productDao.getTopProduct("ProductDTO.findTopIso","", 1, 6);
+            List<ProductDTO> products4 = productDao.getTopProduct("ProductDTO.findTopFps","", 1, 6);
 
             ProductsDTO productsDTO = new ProductsDTO();
             productsDTO.setProductDTOs(products);

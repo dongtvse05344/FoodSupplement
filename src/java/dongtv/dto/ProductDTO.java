@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ProductDTO.findAll", query = "SELECT p FROM ProductDTO p "),
     @NamedQuery(name = "ProductDTO.findByName", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name"),
     @NamedQuery(name = "ProductDTO.findById", query = "SELECT p FROM ProductDTO p WHERE p.id = :id"),
+    @NamedQuery(name = "ProductDTO.findByCateId", query = "SELECT p FROM ProductDTO p WHERE p.categoryId = :cateId"),
 
     @NamedQuery(name = "ProductDTO.findTopAll", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name ORDER BY p.qDpg + p.qIso + p.qFps DESC"), //ORDER BY p.qDpg + p.qIso + p.qFps DESC
     @NamedQuery(name = "ProductDTO.findTopDpg", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name ORDER BY p.qDpg DESC "), //ORDER BY p.qDpg DESC
@@ -48,7 +49,15 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ProductDTO.getExxIso", query = "SELECT SUM(p.iso*p.iso)/COUNT(p.iso) FROM ProductDTO p"),
     @NamedQuery(name = "ProductDTO.getMeanFps", query = "SELECT SUM(p.fps)/COUNT(p.fps) FROM ProductDTO p"),
     @NamedQuery(name = "ProductDTO.getExxFps", query = "SELECT SUM(p.fps*p.fps)/COUNT(p.fps) FROM ProductDTO p"),})
-public class ProductDTO implements Serializable {
+public class ProductDTO implements Serializable, Cloneable {
+
+    @Column(name = "display", precision = 53)
+    private Double display;
+
+    public Object clone() throws
+            CloneNotSupportedException {
+        return super.clone();
+    }
 
     @Column(name = "qDpg", precision = 53)
     private Double qDpg;
@@ -260,6 +269,14 @@ public class ProductDTO implements Serializable {
 
     public void setQTan(Double qTan) {
         this.qTan = qTan;
+    }
+
+    public Double getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(Double display) {
+        this.display = display;
     }
 
 }

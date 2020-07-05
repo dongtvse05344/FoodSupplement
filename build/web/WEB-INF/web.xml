@@ -4,6 +4,10 @@
         <description>ServletContextListener</description>
         <listener-class>dongtv.listener.CrawlListener</listener-class>
     </listener>
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>dongtv.listener.XslListener</listener-class>
+    </listener>
     <servlet>
         <servlet-name>HomeServlet</servlet-name>
         <servlet-class>dongtv.servlet.HomeServlet</servlet-class>
@@ -64,6 +68,10 @@
         <servlet-name>SearchServlet</servlet-name>
         <servlet-class>dongtv.servlet.SearchServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ComparisonServlet</servlet-name>
+        <servlet-class>dongtv.servlet.ComparisonServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/HomeServlet</url-pattern>
@@ -123,6 +131,10 @@
     <servlet-mapping>
         <servlet-name>SearchServlet</servlet-name>
         <url-pattern>/SearchServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ComparisonServlet</servlet-name>
+        <url-pattern>/ComparisonServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

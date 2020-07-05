@@ -55,7 +55,9 @@ public class Mayanh24hThread extends BaseThread {
 
             Map<String, String> categories = categoryCrawler.getCategories(ConstantsCrawler.MAYANH24H);
             for (Map.Entry<String, String> categoryEntry : categories.entrySet()) {
-                CategoryDTO categoryDb = crawlService.createCategory(categoryEntry.getValue());
+                CategoryDTO categoryDb =
+//                        null;
+                        crawlService.createCategory(categoryEntry.getValue());
                 Map<String, String> pages = productsCrawler.getPages(categoryEntry.getKey());
                 pages.put(categoryEntry.getKey(), "w");
                 for (Map.Entry<String, String> pageEntry : pages.entrySet()) {
@@ -65,11 +67,11 @@ public class Mayanh24hThread extends BaseThread {
                         ProductRawDTO dto = productEntry.getValue();
                         dto.setCategoryId(categoryDb);
                         getProduct(dto);
-//                        return;
+//                        break;
                     }
-//                    return;
+//                    break;
                 }
-//                return;
+//                break;
             }
             long CRAWLING_INTERVAL = 1;
             Mayanh24hThread.sleep(CRAWLING_INTERVAL);

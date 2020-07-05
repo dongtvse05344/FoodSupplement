@@ -40,6 +40,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ProductRawDTO.deleteAll", query = "DELETE FROM ProductRawDTO p"),})
 public class ProductRawDTO implements Serializable {
 
+    @Column(name = "display", precision = 53)
+    private Double display;
+
     @Column(name = "parentId")
     private Integer parentId;
 
@@ -80,6 +83,14 @@ public class ProductRawDTO implements Serializable {
         this.image = image;
         this.originalLink = originalLink;
         this.price = price;
+    }
+    
+    public ProductRawDTO(String name, String image, String originalLink, Integer price,String des) {
+        this.name = name;
+        this.image = image;
+        this.originalLink = originalLink;
+        this.price = price;
+        this.description = des;
     }
 
     public ProductRawDTO(Integer id, String name, String image, String originalLink, Integer price, Integer status) {
@@ -205,6 +216,14 @@ public class ProductRawDTO implements Serializable {
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
+    }
+
+    public Double getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(Double display) {
+        this.display = display;
     }
 
 }

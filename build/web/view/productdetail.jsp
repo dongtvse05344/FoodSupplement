@@ -10,6 +10,9 @@
 <!DOCTYPE html>
 <link rel="stylesheet" href="http://localhost:8080/FoodSupplement/css/common.css"/>
 <link rel="stylesheet" href="http://localhost:8080/FoodSupplement/css/home.css"/>
+<script src="http://localhost:8080/FoodSupplement/js/localStorage.service.js"></script>
+<script src="http://localhost:8080/FoodSupplement/js/base.controller.js"></script>
+
 
 <html>
     <head>
@@ -22,20 +25,18 @@
         <c:set var="SUBPRODUCTS" value="${requestScope.SUBPRODUCTS}"/>
         <c:set var="PRODUCTS" value="${requestScope.PRODUCTS}"/>
 
-        <c:import charEncoding="UTF-8" var="product_item_detail" url="http://localhost:8080/FoodSupplement/xsl/product_item_detail.xsl"/>
-        <c:import charEncoding="UTF-8" var="product_item_volumes" url="http://localhost:8080/FoodSupplement/xsl/volumes_product.xsl"/>
-        <c:import charEncoding="UTF-8" var="products_item" url="http://localhost:8080/FoodSupplement/xsl/product_item.xsl"/>
-        <c:import charEncoding="UTF-8" var="sub_product_item" url="http://localhost:8080/FoodSupplement/xsl/sub_product_item.xsl"/>
 
-        <x:transform doc="${PRODUCT}" xslt="${applicationScope.XSL_TEST}"/>
+        <x:transform doc="${PRODUCT}" xslt="${applicationScope.XSL_PRODUCT_ITEM_DETAIL}"/>
         <h3>Sản phẩm cùng tên</h3>
         <div class="row">
-            <x:transform doc="${SUBPRODUCTS}" xslt="${sub_product_item}"/>
+            <x:transform doc="${SUBPRODUCTS}" xslt="${applicationScope.XSL_SUB_PRODUCT_ITEM}"/>
         </div>
         <h3>Sản phẩm tương tự</h3>
         <div class="row">
-            <x:transform doc="${PRODUCTS}" xslt="${products_item}"/>
+            <x:transform doc="${PRODUCTS}" xslt="${applicationScope.XSL_PRODUCT_ITEM}"/>
         </div>
+        <button onclick="goToComparison()" id="btnComparison">Đến trang so sánh (0)</button>
+        <button onclick="clearSelected()"  id="btnComparisonClear">Xóa dữ liệu so sánh</button>
 
     </body>
 </html>

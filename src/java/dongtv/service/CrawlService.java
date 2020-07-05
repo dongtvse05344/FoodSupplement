@@ -17,6 +17,7 @@ import dongtv.dto.ProductsDTO;
 import dongtv.dto.SubProductDTO;
 import dongtv.util.HTMLUtilities;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -66,6 +67,7 @@ public class CrawlService {
         product.setDpg(dto.getDpg());
         product.setFps(dto.getFps());
         product.setIso(dto.getIso());
+        product.setDisplay(dto.getDisplay());
         return productDao.create(product);
     }
 
@@ -188,84 +190,110 @@ public class CrawlService {
 //        productRawDao.deleteAll();
     }
 
-    public void getParamtoProduct(ProductRawDTO dto, String des) {
-        List<String> types = HTMLUtilities.getAllMatches(des, "[ -][0-9]{1,3}[,.]*[0-9]{0,3}");
-        System.out.println("MPX: " + types);
-        // Bộ cảm biến
-        Double dpg = null;
-        for (String type : types) {
-            try {
-                Double tmp = Double.parseDouble(type.trim().replace(",", "."));
-                if (dpg == null && tmp >= 10 && tmp <= 65) {
-                    dpg = tmp;
-                    types.remove(type);
-                    break;
+    public Double getDpgFromDes(String des) {
+        Double res = null;
+        try {
+            List<String> dpg = HTMLUtilities.getAllMatches(des, "[0-9]{1,3}[.,]{0,1}[0-9]{0,3}[ -–]{0,3}[Mm][PpEe]");
+            if (dpg.size() > 0) {
+                int p = 0;
+                do {
+                    String _dpg = HTMLUtilities.getAllMatches(dpg.get(0), "[0-9]{1,3}[.,]{0,1}[0-9]{0,3}")
+                            .get(p++).replace(",", ".");
+                    res = Double.parseDouble(_dpg);
                 }
-            } catch (Exception e) {
-                continue;
+                while(res >100 || res <=1);
+                if(res > 100 && res <= 1) res = null;
             }
+        } catch (Exception e) {
         }
-        System.out.println("DPG :" + dpg);
-        //ÍO
-        Double iso = null;
-        for (String type : types) {
-            try {
-                Double tmp = Double.parseDouble(type.substring(1).replace(",", ".").replace(".", ""));
-                if (iso == null && tmp >= 10000 && tmp <= 250000) {
-                    iso = tmp;
-                    types.remove(type);
-                    break;
-                }
-            } catch (Exception e) {
-                continue;
-            }
-        }
-        System.out.println("ISO :" + iso);
-        // Chụp liên tiếp
-        List<String> fpss = HTMLUtilities.getAllMatches(des, " [0-9]{1,2}[ ]{0,1}fps");
-        Double fps = null;
+        return res;
+    }
 
-        if (fpss.isEmpty()) {
-            for (String type : types) {
-                try {
-                    Double tmp = Double.parseDouble(type.substring(1).replace(",", ".").replace(".", ""));
-                    if (fps == null && tmp >= 2 && tmp <= 16) {
-                        fps = tmp;
-                        types.remove(type);
+    public Double getIsoFromDes(String des) {
+        Double res = null;
+        try {
+            List<String> iso = HTMLUtilities.getAllMatches(des, "I[Ss][Oo].{1,18}[0-9]{1,6}[,.]{0,1}[0-9]{0,3}[0]{2}");
+            if (iso.size() > 0) {
+                List<String> temp = HTMLUtilities.getAllMatches(iso.get(0), "[0-9]{1,6}[,.]{0,1}[0-9]{0,3}");
+                List<Double> temp3 = new ArrayList<>();
+                for (String childTemp : temp) {
+                    try {
+                        Double a = Double.parseDouble(childTemp.replace(",", "").replace(".", ""));
+                        temp3.add(a);
+                    } catch (Exception e) {
+                    }
+                }
+                Collections.sort(temp3);
+
+                res = temp3.get(temp3.size() - 1);
+            }
+        } catch (Exception e) {
+        }
+        return res;
+    }
+
+    public Double getFpsFromDes(String des) {
+        Double res = null;
+        try {
+            List<String> fps = HTMLUtilities.getAllMatches(des, "[ -][0-9]{1,2}[.,]{0,1}[0-9]{0,1}[ ]{0,1}[fpshìnhảkhufra]{3}");
+            if (fps.size() > 0) {
+                String temp = fps.toString();
+                List<String> temp2 = HTMLUtilities.getAllMatches(temp, "[0-9]{1,2}[.,]{0,1}[0-9]{0,1}");
+                List<Double> temp3 = new ArrayList<>();
+                for (String childTemp : temp2) {
+                    try {
+                        Double a = Double.parseDouble(childTemp);
+                        temp3.add(a);
+                    } catch (Exception e) {
+                    }
+                }
+                Collections.sort(temp3);
+                int pointer = 0;
+                while (pointer < temp3.size()) {
+                    if (temp3.get(pointer) > 30) {
                         break;
                     }
-                } catch (Exception e) {
-                    continue;
+                    pointer++;
+                }
+                if (pointer > 0) {
+                    res = temp3.get(pointer - 1);
                 }
             }
-        } else {
-            String temp = fpss.get(0).replace("fps", "").trim();
-            try {
-                Double tmp = Double.parseDouble(temp);
-                if (fps == null && tmp >= 2 && tmp <= 16) {
-                    fps = tmp;
-                } else {
-                    for (String type : types) {
-                        try {
-                            tmp = Double.parseDouble(type.substring(1).replace(",", ".").replace(".", ""));
-                            if (fps == null && tmp >= 2 && tmp <= 16) {
-                                fps = tmp;
-                                types.remove(type);
-                                break;
-                            }
-                        } catch (Exception e) {
-                            continue;
-                        }
-                    }
-                }
-            } catch (Exception e) {
-            }
+        } catch (Exception e) {
         }
+        return res;
+    }
 
-        System.out.println("FPS :" + fps);
+    public Double getDisplayFromDes(String des) {
+        Double res = null;
+        try {
+            List<String> display = HTMLUtilities.getAllMatches(des, " [0-9][.,]{0,1}[0-9]{0,3}[ ]{0,1}[\"in”']{1,2}");
+            if (display.size() > 0) {
+                String temp = HTMLUtilities.getAllMatches(display.get(0), "[0-9]{1,2}[.,]{0,1}[0-9]{0,1}")
+                        .get(0).replace(",", ".");
+                res = Double.parseDouble(temp);
+                if (res > 8 || res < 0.5) {
+                    res = null;
+                }
+            }
+        } catch (Exception e) {
+        }
+        return res;
+    }
+
+    public void getParamtoProduct(ProductRawDTO dto, String des) {
+//        getParamFromDes(dto, des); 
+        Double dpg = getDpgFromDes(des);
+//        System.out.println("DPG: " + dpg);
+        Double iso = getIsoFromDes(des);
+//        System.out.println("ISO: " + iso);
+        Double fps = getFpsFromDes(des);
+//        System.out.println("FPS: " + fps);
+        Double display = getDisplayFromDes(des);
         dto.setDpg(dpg);
         dto.setIso(iso);
         dto.setFps(fps);
+        dto.setDisplay(display);
     }
 
     public void createProduct(ProductRawDTO product) {
@@ -279,6 +307,8 @@ public class CrawlService {
     private static String textPattern = "[a-zA-Z0-9]{1}";
 
     public boolean compareName(String np1, String np2) {
+        np1 = np1.toLowerCase();
+        np2 = np2.toLowerCase();
         int pointer = 0;
         while (pointer < np1.length() && pointer < np2.length() && np1.charAt(pointer) == np2.charAt(pointer)) {
             if (isDone(np1.charAt(pointer))) {
@@ -287,6 +317,9 @@ public class CrawlService {
             pointer++;
         }
         if (pointer >= np1.length() || pointer >= np2.length()) {
+            return true;
+        }
+        if(isDone(np1.charAt(pointer))|| isDone(np2.charAt(pointer))) {
             return true;
         }
         return false;
@@ -299,7 +332,7 @@ public class CrawlService {
     }
 
     private boolean isDone(char x) {
-        if (x == '(' || x == ',' || x == '+'|| x == '-') {
+        if (x == '(' || x == ',' || x == '+' || x == '-') {
             return true;
         }
         return false;

@@ -20,6 +20,7 @@ and open the template in the editor.
         <xsd:sequence>
             <xsd:element name="categoryId" type="CategoryType"/>
             <xsd:element name="description" type="xsd:string"/>
+            <xsd:element name="display" type="xsd:string" minOccurs="0"/>
             <xsd:element name="dpg" type="xsd:string" minOccurs="0"/>
             <xsd:element name="fps" type="xsd:string" minOccurs="0"/>
             <xsd:element name="id" type="xsd:string"/>

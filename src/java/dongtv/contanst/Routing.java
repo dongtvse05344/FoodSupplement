@@ -14,6 +14,8 @@ public class Routing {
     public static String HOME_VIEW = "view/home.jsp";
     public static String SEARCH_VIEW = "view/search.jsp";
     public static String ERROR_VIEW = "view/error.jsp";
+    public static String COMPARISION_VIEW = "view/comparison.jsp";
+
     public static String PRODUCT_DETAIL_VIEW = "view/productdetail.jsp";
     public static String HOME_ADMIN_VIEW = "view/admin/home.jsp";
     public static String CATEGORY_ADMIN_VIEW = "view/admin/category.jsp";
@@ -25,5 +27,6 @@ public class Routing {
     public static String HOME_SERVLET = "HomeServlet";
     public static String HOME_ADMIN_SERVLET = "HomeAdminServlet";
     public static String CRAWL_ADMIN_SERVLET = "CrawlServlet";
+    public static String EDIT_PRODUCT_ADMIN = "EditProductServlet";
 
 }

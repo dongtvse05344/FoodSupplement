@@ -20,20 +20,20 @@ public class Test {
     public static void main(String[] args) throws Exception {
         CrawlService crawlService = new CrawlService();
         ProductService productService = new ProductService();
-//        boolean a = crawlService.compareName(
-//                "Canon EOS 5D Mark IV Body" , 
-//                "Canon EOS 5D Mark IV Body ( Hàng chính hãng LBM)"
-//        );
-//        System.out.println(a);
-        List<ProductDTO> products = productService.getPage("", 1);
-        for (int i = 0; i < products.size() - 1; i++) {
-            System.out.println(products.get(0));
-
-            System.out.println(products.get(i + 1));
-
-            System.out.println(productService.cosinOf2Vector(products.get(0), products.get(i + 1)));
-            System.out.println("");
-        }
+        boolean a = crawlService.compareName(
+                "Sony Alpha A7S Mark II, Mới 100% (Chính hãng)" , 
+                "Sony A7S Mark II ( Hàng chính hãng )"
+        );
+        System.out.println(a);
+//        List<ProductDTO> products = productService.getPage("", 1);
+//        for (int i = 0; i < products.size() - 1; i++) {
+//            System.out.println(products.get(0));
+//
+//            System.out.println(products.get(i + 1));
+//
+//            System.out.println(productService.cosinOf2Vector(products.get(0), products.get(i + 1)));
+//            System.out.println("");
+//        }
 
     }
 }

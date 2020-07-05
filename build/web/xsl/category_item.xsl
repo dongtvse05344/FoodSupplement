@@ -3,19 +3,17 @@
 >
     <xsl:output method="html"/>
 
-    <!--    <xsl:template match="/">
-        <html>
-            <head>
-                <title>index.xsl</title>
-            </head>
-            <body>
-            </body>
-        </html>
-    </xsl:template>-->
+    <xsl:template match="/">
+        <ul class="list-cate">
+            <xsl:apply-templates/> 
+        </ul>
+    </xsl:template>
     <xsl:template match="category">
-        <p class="category_item" style="color:blue">
-            <xsl:value-of select="name"/> 
-        </p>
+        <li>
+            <a class="category_item" href="SearchServlet?cateId={id}">
+                <xsl:value-of select="name"/> 
+            </a>
+        </li>
     </xsl:template>
     <xsl:template match="id">
     </xsl:template>

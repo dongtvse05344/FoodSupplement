@@ -19,7 +19,10 @@
         <c:import charEncoding="UTF-8" var="product_item_detail_edit_form" url="http://localhost:8080/FoodSupplement/xsl/product_item_detail_edit_form.xsl"/>
 
         <h1>Edit Product</h1>
-        <x:transform doc="${PRODUCT}" xslt="${product_item_detail_edit_form}"/>
+        <form method="post" action="UpdateProductServlet">
+            <input type="hidden" value="${param.txtSearch}"/>
+            <x:transform doc="${PRODUCT}" xslt="${product_item_detail_edit_form}"/>
+        </form>
 
     </body>
 </html>

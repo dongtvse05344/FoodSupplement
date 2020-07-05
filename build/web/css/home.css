@@ -4,7 +4,39 @@
 }
 
 .product-item {
-    width: 300px;
+    width: 370px;
     float: left;
     margin: 10px 20px;
+    height: 370px;
+    padding: 5px;
+}
+#btnComparison {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    height: 30px;
+}
+
+#btnComparisonClear {
+    position: fixed;
+    right: 10px;
+    bottom: 60px;
+    height: 30px;
+}
+
+.comparison img {width: 250px;}
+
+ul.list-cate {
+    position: fixed;
+    right: 30px;
+}
+
+ul.list-cate {
+    position: fixed;
+    right: 30px;
+    list-style: none;
+}
+
+.list-cate li {
+    height: 30px;
 }

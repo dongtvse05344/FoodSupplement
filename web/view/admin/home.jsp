@@ -31,7 +31,7 @@
         </div>
         <h1>Hello Admin: ${sessionScope.NAME}!</h1>
         <div class="row">
-            <form action="">
+            <form action="HomeAdminServlet">
                 <input type="text" name="txtSearch" value="${param.txtSearch}" placeholder="Tìm kiếm theo tên"/>
                 <input type="submit" class="btn" value="Tìm kiếm"/>
             </form>

@@ -7,6 +7,7 @@ package dongtv.service;
 
 import dongtv.dao.ProductDao;
 import dongtv.dao.SubProductDao;
+import dongtv.dto.CategoryDTO;
 import dongtv.dto.ProductDTO;
 import dongtv.dto.SubProductDTO;
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ public class ProductService {
 
     private ProductDao productDao;
     private SubProductDao subProductDao;
-    private static long totalRows = -1;
 
     public ProductService() {
         productDao = ProductDao.getInstance();
@@ -28,15 +28,19 @@ public class ProductService {
     }
 
     public List<ProductDTO> getPage(String nameSearch, int page) throws Exception {
-        return productDao.getProductPaging(nameSearch, page, 5);
+        return productDao.getTopProduct("ProductDTO.findByName", nameSearch, page, 5);
     }
     
     public List<ProductDTO> getTopProduct(String namedQuery, String nameSearch, int page, int rowsOfPage) throws Exception {
         return productDao.getTopProduct(namedQuery, nameSearch, page, rowsOfPage);
     }
+    
+    public List<ProductDTO> getProductsByCate(CategoryDTO cateId, int page, int rowsOfPage) throws Exception {
+        return productDao.getProductsByCate(cateId, page, rowsOfPage);
+    }
 
     public Long getTotalRows(String nameSearch) {
-        return totalRows = productDao.getTotalRows(nameSearch);
+        return productDao.getTotalRows(nameSearch);
     }
 
     public ProductDTO getProduct(Integer id) {
@@ -116,7 +120,7 @@ public class ProductService {
                 if(this.cosinOf2Vector(products.get(i), dto)>= 0.9) {
                     result.add(products.get(i));
                 }
-                if(result.size() > 4) return result;
+                if(result.size() > 5) return result;
             }
         }
         return result;

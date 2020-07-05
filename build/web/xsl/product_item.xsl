@@ -11,15 +11,31 @@
                 <xsl:value-of select="name" />
             </a>
             <br/>
-            <xsl:if test="price != -1">
-                <p>Giá chỉ từ  <span class="success">
+            <!--            <xsl:if test="price != -1">
+                <p> <span class="success">
                         <xsl:value-of select='format-number(price, "###,###")'/> VNĐ</span>
                 </p>
 
             </xsl:if>
             <xsl:if test="price = -1">
                 <p class="warning">Giá liên hệ</p>
-            </xsl:if>
+            </xsl:if>-->
+            
+            <p> 
+                <span class="success">
+                    Độ phân giải: <xsl:value-of select='dpg'/> Megapixel</span>
+            </p>
+            <p> 
+                <span class="success">
+                    ISO trung bình: <xsl:value-of select='format-number(iso, "###,###")'/>
+                </span>
+            </p>
+            <p> 
+                <span class="success">
+                    Màn chập: <xsl:value-of select='format-number(fps, "###,###")'/> FPS
+                </span>
+            </p>
+            <button class="selectedBtn" onclick="selected({id})">Chọn để so sánh</button>
         </div>
     </xsl:template>
 

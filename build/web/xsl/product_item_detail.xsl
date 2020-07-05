@@ -37,7 +37,7 @@
                     <td>ISO: </td>
                     <td>
                         <p class="info">
-                            <xsl:value-of select="iso"/>
+                            <xsl:value-of select='format-number(iso, "###,###")'/>
                         </p>
                     </td>
                 </tr>
@@ -46,6 +46,13 @@
                     <td>
                         <p class="info">
                             <xsl:value-of select="fps"/> FPS</p> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>Màn hình: </td>
+                    <td>
+                        <p class="info">
+                            <xsl:value-of select="display"/> "</p> 
                     </td>
                 </tr>
             </table>

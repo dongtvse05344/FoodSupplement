@@ -4,7 +4,6 @@
     <xsl:output method="html"/>
 
     <xsl:template match="product">
-        <form method="post" action="UpdateProductServlet">
             ID <input name="id" value="{id}" readonly="true"/>            
             <br/>
             Name: <input name="name" value="{name}"/>
@@ -23,7 +22,6 @@
                 <xsl:value-of select="description" />
             </p>
             <input type="submit" value="Edit"/>
-        </form>
     </xsl:template>
 
 </xsl:stylesheet>
