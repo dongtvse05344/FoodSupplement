@@ -7,25 +7,43 @@
     -->
     <xsl:template match="/">
         <xsl:variable name="max" select="products/product[last()]" />
+        <xsl:variable name="maxPosition" select="products/hightLight" />
+
         <table border="1" class="comparison">
             <tr>
                 <th>Ảnh</th>
                 <xsl:for-each select="products/product">
-                    <xsl:if test="position() != last()">
-                        <td>
-                            <img src="{image}"/>
-                        </td>
-                    </xsl:if>
+                    <xsl:choose>
+                        <xsl:when test="position() = $maxPosition">
+                            <td class="hightlight">
+                                <img src="{image}"/>
+                            </td>
+                        </xsl:when>
+                        <xsl:when test="position() != last()">
+                            <td>
+                                <img src="{image}"/>
+                            </td>
+                        </xsl:when>
+                    </xsl:choose>
+                   
                 </xsl:for-each>
             </tr>
             <tr>
                 <th>Tên</th>
                 <xsl:for-each select="products/product">
-                    <xsl:if test="position() != last()">
-                        <td>
-                            <xsl:value-of select="name" />
-                        </td>
-                    </xsl:if>
+                    <xsl:choose>
+                        <xsl:when test="position() = $maxPosition">
+                            <td class="hightlight">
+                                <xsl:value-of select="name" />
+                            </td>
+                        </xsl:when>
+                        <xsl:when test="position() != last()">
+                            <td>
+                                <xsl:value-of select="name" />
+                            </td>
+                        </xsl:when>
+                    </xsl:choose>
+                   
                 </xsl:for-each>
             </tr>
             <tr>
@@ -33,16 +51,34 @@
                 <xsl:for-each select="products/product">
                     <xsl:if test="position() != last()">
                         <xsl:choose>
-                            <xsl:when test="dpg = $max/dpg">
-                                <td class="success bold">
-                                    <xsl:value-of select="dpg" />
-                                </td>
+                            <xsl:when test="position() = $maxPosition">
+                                <xsl:choose>
+                                    <xsl:when test="dpg = $max/dpg">
+                                        <td class="hightlight success bold">
+                                            <xsl:value-of select="dpg" />
+                                        </td>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <td  class="hightlight">
+                                            <xsl:value-of select="dpg" />
+                                        </td>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:when>
-                            <xsl:otherwise>
-                                <td>
-                                    <xsl:value-of select="dpg" />
-                                </td>
-                            </xsl:otherwise>
+                            <xsl:when test="position() != last()">
+                                <xsl:choose>
+                                    <xsl:when test="dpg = $max/dpg">
+                                        <td class="success bold">
+                                            <xsl:value-of select="dpg" />
+                                        </td>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <td>
+                                            <xsl:value-of select="dpg" />
+                                        </td>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:when>
                         </xsl:choose>
                     </xsl:if>
                 </xsl:for-each>
@@ -50,39 +86,71 @@
             <tr>
                 <th>ISO</th>
                 <xsl:for-each select="products/product">
-                    <xsl:if test="position() != last()">
-                        <xsl:choose>
-                            <xsl:when test="iso = $max/iso">
-                                <td class="success bold">
-                                    <xsl:value-of select='format-number(iso, "###,###")' />
-                                </td>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <td>
-                                    <xsl:value-of select='format-number(iso, "###,###")' />
-                                </td>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:if>
+                    <xsl:choose>
+                        <xsl:when test="position() = $maxPosition">
+                            <xsl:choose>
+                                <xsl:when test="iso = $max/iso">
+                                    <td class="hightlight success bold">
+                                        <xsl:value-of select='format-number(iso, "###,###")' />
+                                    </td>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <td class="hightlight">
+                                        <xsl:value-of select='format-number(iso, "###,###")' />
+                                    </td>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                        <xsl:when test="position() != last()">
+                            <xsl:choose>
+                                <xsl:when test="iso = $max/iso">
+                                    <td class="success bold">
+                                        <xsl:value-of select='format-number(iso, "###,###")' />
+                                    </td>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <td>
+                                        <xsl:value-of select='format-number(iso, "###,###")' />
+                                    </td>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                    </xsl:choose>
                 </xsl:for-each>
             </tr>
             <tr>
                 <th>Tốc độ màn chập</th>
                 <xsl:for-each select="products/product">
-                    <xsl:if test="position() != last()">
-                        <xsl:choose>
-                            <xsl:when test="fps = $max/fps">
-                                <td class="success bold">
-                                    <xsl:value-of select="fps" />
-                                </td>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <td>
-                                    <xsl:value-of select="fps" />
-                                </td>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:if>
+                    <xsl:choose>
+                        <xsl:when test="position() = $maxPosition">
+                            <xsl:choose>
+                                <xsl:when test="fps = $max/fps">
+                                    <td class="hightlight success bold">
+                                        <xsl:value-of select="fps" />
+                                    </td>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <td class="hightlight">
+                                        <xsl:value-of select="fps" />
+                                    </td>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                        <xsl:when test="position() != last()">
+                            <xsl:choose>
+                                <xsl:when test="fps = $max/fps">
+                                    <td class="success bold">
+                                        <xsl:value-of select="fps" />
+                                    </td>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <td>
+                                        <xsl:value-of select="fps" />
+                                    </td>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                    </xsl:choose>
                 </xsl:for-each>
             </tr>
             <tr>

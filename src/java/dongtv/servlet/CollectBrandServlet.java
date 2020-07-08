@@ -6,14 +6,10 @@
 package dongtv.servlet;
 
 import dongtv.contanst.Routing;
-import dongtv.dto.Paging;
-import dongtv.dto.ProductDTO;
-import dongtv.dto.ProductsDTO;
 import dongtv.service.ProductService;
 import dongtv.util.ServletUtils;
-import dongtv.util.XMLUtils;
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -24,9 +20,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Tran Dong
+ * @author shuu1
  */
-public class HomeAdminServlet extends HttpServlet {
+public class CollectBrandServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,35 +37,18 @@ public class HomeAdminServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = Routing.LOGIN_VIEW;
-        String pageString = request.getParameter("page");
-        String nameSearch = request.getParameter("txtSearch");
-        if(nameSearch == null) nameSearch = "";
-        int page = 1;
-        if(pageString != null) {
-            try {
-                page = Integer.parseInt(pageString);
-            } catch (Exception e) {
-            }
-        }
+
         try {
             HttpSession session = request.getSession();
             if (ServletUtils.isLogin(session)) {
-                url = Routing.HOME_ADMIN_VIEW;
+                url = Routing.HOME_ADMIN_SERVLET;
                 ProductService productService = new ProductService();
-                List<ProductDTO> products = productService.getPage(nameSearch, page);
-                ProductsDTO productsDTO = new ProductsDTO();
-                productsDTO.setProductDTOs(products);
-                String products_XML = XMLUtils.marrsallMatchToString(productsDTO);
-                request.setAttribute("PRODUCTS", products_XML);
-                int totalRows = productService.getTotalRows(nameSearch).intValue();
-                Paging paging = new Paging(page,totalRows ,5, "HomeAdminServlet",nameSearch,"","");
-                String paging_XML = XMLUtils.marrsallMatchToString(paging);
-                request.setAttribute("PAGING", paging_XML);
-
+                productService.collectBrand();
             }
         } catch (Exception ex) {
-           url = Routing.INVALID_VIEW;
-            Logger.getLogger(HomeAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
+            url = Routing.INVALID_VIEW;
+            Logger.getLogger(CollectBrandServlet.class.getName()).log(Level.SEVERE, null, ex);
+
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

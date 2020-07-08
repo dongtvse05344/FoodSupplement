@@ -25,7 +25,7 @@ import org.w3c.dom.Document;
  */
 public class Mayanh24hProductCrawler extends BaseCrawler {
 
-    private static String[] IGNORE_TEXTS = {"<hr>", "<img.*jpg\">"};
+    private static final String[] IGNORE_TEXTS = {"<hr>", "<img.*jpg\">"};
 
     public Mayanh24hProductCrawler(ServletContext context) {
         super(context);
@@ -52,7 +52,7 @@ public class Mayanh24hProductCrawler extends BaseCrawler {
                     reader.close();
                 }
             } catch (IOException e) {
-                Logger.getLogger(BaseCrawler.class.getName()).log(Level.SEVERE, null, e);
+                Logger.getLogger(Mayanh24hProductCrawler.class.getName()).log(Level.SEVERE, null, e);
             }
         }
         return null;

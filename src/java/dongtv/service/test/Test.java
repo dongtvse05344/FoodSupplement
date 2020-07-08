@@ -20,11 +20,12 @@ public class Test {
     public static void main(String[] args) throws Exception {
         CrawlService crawlService = new CrawlService();
         ProductService productService = new ProductService();
-        boolean a = crawlService.compareName(
-                "Sony Alpha A7S Mark II, Mới 100% (Chính hãng)" , 
-                "Sony A7S Mark II ( Hàng chính hãng )"
-        );
-        System.out.println(a);
+       
+//        boolean a = crawlService.compareName(
+//                "Sony Alpha A7S Mark II, Mới 100% (Chính hãng)" , 
+//                "Sony A7S Mark II ( Hàng chính hãng )"
+//        );
+//        System.out.println(a);
 //        List<ProductDTO> products = productService.getPage("", 1);
 //        for (int i = 0; i < products.size() - 1; i++) {
 //            System.out.println(products.get(0));
@@ -34,6 +35,5 @@ public class Test {
 //            System.out.println(productService.cosinOf2Vector(products.get(0), products.get(i + 1)));
 //            System.out.println("");
 //        }
-
     }
 }

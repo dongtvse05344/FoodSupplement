@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dongtv.dto;
+package dongtv.dto.raw;
 
-import dongtv.contanst.ProductStatus;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -123,7 +122,7 @@ public class ProductRawDTO implements Serializable {
 
     public String getImage() {
         return image;
-    }
+    }  
 
     public void setImage(String image) {
         this.image = image;

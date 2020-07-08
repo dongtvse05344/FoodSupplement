@@ -9,6 +9,7 @@ import dongtv.util.DBUtilities;
 import dongtv.thread.Mayanh24hThread;
 import dongtv.thread.MayanhjpThread;
 import dongtv.thread.MayanhvnThread;
+import dongtv.thread.ZshopThread;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -24,19 +25,22 @@ public class CrawlListener implements ServletContextListener {
     private static Mayanh24hThread mayanh24hThread;
     private static MayanhvnThread mayanhvnThread;
     private static MayanhjpThread mayanhjpThread;
-    private static boolean isCrawl = false;  
+    private static ZshopThread zshopThread;
+    private static boolean isCrawl = false; 
     
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("--- Listener start");
         final ServletContext context = sce.getServletContext();
         if (isCrawl) { 
-            mayanh24hThread = new Mayanh24hThread(context);
-            mayanh24hThread.start();
+//            mayanh24hThread = new Mayanh24hThread(context);
+//            mayanh24hThread.start();
             mayanhvnThread = new MayanhvnThread(context);
-            mayanhvnThread.start();
+            mayanhvnThread.start(); 
             mayanhjpThread = new MayanhjpThread(context);
             mayanhjpThread.start();
+            zshopThread = new ZshopThread(context);
+            zshopThread.start(); 
         }
         System.out.println("--- Listener done");
     }

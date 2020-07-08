@@ -27,7 +27,7 @@ import org.w3c.dom.NodeList;
  */
 public class Mayanh24hCategoryCrawler extends BaseCrawler {
 
-    private static String[] IGNORE_TEXTS = {};
+    private static final String[] IGNORE_TEXTS = {};
 
     public Mayanh24hCategoryCrawler(ServletContext context) {
         super(context);
@@ -55,7 +55,7 @@ public class Mayanh24hCategoryCrawler extends BaseCrawler {
                     reader.close();
                 }
             } catch (IOException e) {
-                Logger.getLogger(BaseCrawler.class.getName()).log(Level.SEVERE, null, e);
+                Logger.getLogger(Mayanh24hCategoryCrawler.class.getName()).log(Level.SEVERE, null, e);
             }
         }
         return null;

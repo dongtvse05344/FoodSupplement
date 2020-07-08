@@ -5,8 +5,7 @@
  */
 package dongtv.crawler;
 
-import dongtv.contanst.ConstantsCrawler;
-import dongtv.dto.ProductRawDTO;
+import dongtv.dto.raw.ProductRawDTO;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,7 +28,7 @@ import org.w3c.dom.NodeList;
  */
 public class Mayanh24hProductsCrawler extends BaseCrawler {
 
-    private static String[] IGNORE_TEXTS = {};
+    private static final String[] IGNORE_TEXTS = {};
 
     public Mayanh24hProductsCrawler(ServletContext context) {
         super(context);
@@ -111,6 +110,8 @@ public class Mayanh24hProductsCrawler extends BaseCrawler {
             Logger.getLogger(Mayanh24hProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
             Logger.getLogger(Mayanh24hProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Mayanh24hProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (reader != null) {
@@ -123,7 +124,7 @@ public class Mayanh24hProductsCrawler extends BaseCrawler {
         return null;
     }
 
-    public Map<String, String> DOMHandlerPages(String documentString) throws XPathExpressionException {
+    public Map<String, String> DOMHandlerPages(String documentString) throws XPathExpressionException, Exception {
         Map<String, String> categories = new HashMap<String, String>();
         Document document = XMLUtils.parseStringtoDom(documentString);
 

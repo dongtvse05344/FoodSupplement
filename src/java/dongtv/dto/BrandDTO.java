@@ -17,53 +17,46 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Tran Dong
+ * @author shuu1
  */
 @Entity
-@Table(name = "categories", catalog = "FoodSupplementDB", schema = "dbo")
-@XmlRootElement(name = "category")
+@Table(name = "brands", catalog = "FoodSupplementDB", schema = "dbo")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CategoryDTO.findAll", query = "SELECT c FROM CategoryDTO c ORDER BY c.name"),
-    @NamedQuery(name = "CategoryDTO.findById", query = "SELECT c FROM CategoryDTO c WHERE c.id = :id"),
-    @NamedQuery(name = "CategoryDTO.findByName", query = "SELECT c FROM CategoryDTO c WHERE c.name = :name"),
-    @NamedQuery(name = "CategoryDTO.getTotalRows", query = "SELECT Count(c) FROM CategoryDTO c")
-
-})
-public class CategoryDTO implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
-    private Collection<ProductRawDTO> productRawDTOCollection;
+    @NamedQuery(name = "BrandDTO.findAll", query = "SELECT b FROM BrandDTO b"),
+    @NamedQuery(name = "BrandDTO.findById", query = "SELECT b FROM BrandDTO b WHERE b.id = :id"),
+    @NamedQuery(name = "BrandDTO.findByName", query = "SELECT b FROM BrandDTO b WHERE b.name = :name")})
+public class BrandDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Integer id;
-    @Column(name = "name", length = 255)
+    @Basic(optional = false)
+    @Column(name = "name", nullable = false, length = 255)
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "brandDTO1")
+
+    @OneToMany(mappedBy = "brandId")
     private Collection<ProductDTO> productDTOCollection;
 
-    public CategoryDTO(Integer id, String name) {
-        this.id = id;
-        this.name = name;
+    public BrandDTO() {
     }
 
-    public CategoryDTO() {
-    }
-
-    public CategoryDTO(Integer id) {
+    public BrandDTO(Integer id) {
         this.id = id;
     }
 
-    public CategoryDTO(String name) {
+    public BrandDTO(String name) {
         this.name = name;
     }
 
@@ -102,10 +95,10 @@ public class CategoryDTO implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CategoryDTO)) {
+        if (!(object instanceof BrandDTO)) {
             return false;
         }
-        CategoryDTO other = (CategoryDTO) object;
+        BrandDTO other = (BrandDTO) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -114,16 +107,7 @@ public class CategoryDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "dongtv.dto.CategoryDTO[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<ProductRawDTO> getProductRawDTOCollection() {
-        return productRawDTOCollection;
-    }
-
-    public void setProductRawDTOCollection(Collection<ProductRawDTO> productRawDTOCollection) {
-        this.productRawDTOCollection = productRawDTOCollection;
+        return "dongtv.dto.BrandDTO[ id=" + id + " ]";
     }
 
 }

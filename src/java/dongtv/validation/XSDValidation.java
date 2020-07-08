@@ -5,7 +5,7 @@
  */
 package dongtv.validation;
 
-import dongtv.dto.ProductRawsDTO;
+import dongtv.dto.raw.ProductRawsDTO;
 import dongtv.dto.ProductsDTO;
 import java.io.File;
 import javax.xml.XMLConstants;

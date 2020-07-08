@@ -40,6 +40,9 @@
             <form action="QuantifyDataServlet">
                 <input type="submit" class="btn" value="Lượng hoá dữ liệu"/>
             </form>
+            <form action="CollectBrandServlet">
+                <input type="submit" class="btn" value="Thu thập nhãn hàng"/>
+            </form>
         </div>
         <x:transform doc="${PRODUCTS}" xslt="${product_item}"/>
         <x:transform doc="${PAGING}" xslt="${paging}"/>

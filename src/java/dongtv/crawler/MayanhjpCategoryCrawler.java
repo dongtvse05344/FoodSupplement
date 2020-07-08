@@ -28,7 +28,7 @@ import org.w3c.dom.NodeList;
  */
 public class MayanhjpCategoryCrawler extends BaseCrawler {
 
-    private static String[] IGNORE_TEXTS = {};
+    private static final String[] IGNORE_TEXTS = {};
 
     public MayanhjpCategoryCrawler(ServletContext context) {
         super(context);
@@ -44,11 +44,11 @@ public class MayanhjpCategoryCrawler extends BaseCrawler {
             String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(MayanhvnCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MayanhjpCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(MayanhvnCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MayanhjpCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(MayanhvnCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MayanhjpCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (reader != null) {

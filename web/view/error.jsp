@@ -13,5 +13,7 @@
     </head>
     <body>
         <h1>Something was wrong. Please back to home!</h1>
+        <a href="HomeServlet">Back to home</a>
+
     </body>
 </html>

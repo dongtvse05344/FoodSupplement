@@ -16,7 +16,7 @@ import java.security.NoSuchAlgorithmException;
  * @author Tran Dong
  */
 public class UserService {
-    private UserDao userDao;
+    private final UserDao userDao;
 
     public UserService() {
         userDao = UserDao.getInstance();

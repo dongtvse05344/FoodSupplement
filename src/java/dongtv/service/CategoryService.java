@@ -6,8 +6,7 @@
 package dongtv.service;
 
 import dongtv.dao.CategoryDao;
-import dongtv.dto.CategoryDTO;
-import dongtv.dto.ProductDTO;
+import dongtv.dto.raw.CategoryDTO;
 import java.util.List;
 
 /**
@@ -16,7 +15,7 @@ import java.util.List;
  */
 public class CategoryService {
 
-    private CategoryDao categoryDao;
+    private final CategoryDao categoryDao;
     private static long totalRows = -1;
 
     public CategoryService() {

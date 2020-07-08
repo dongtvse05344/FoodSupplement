@@ -6,12 +6,14 @@
 package dongtv.servlet;
 
 import dongtv.contanst.Routing;
-import dongtv.dto.ProductRawDTO;
+import dongtv.dto.raw.ProductRawDTO;
 import dongtv.service.CrawlService;
 import dongtv.util.ServletUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +40,7 @@ public class GroupByNameServlet extends HttpServlet {
                 ProductRawDTO current = products.get(0);
                 for (int i = 1; i < products.size(); i++) {
                     ProductRawDTO dto = products.get(i);
-                    if(crawlService.compareName(current, dto)) {
+                    if (crawlService.compareName(current, dto)) {
                         dto.setParentId(current.getId());
                         crawlService.updateProductRaw(dto);
                     } else {
@@ -49,8 +51,9 @@ public class GroupByNameServlet extends HttpServlet {
                 }
 
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            url = Routing.INVALID_VIEW;
+            Logger.getLogger(GroupByNameServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
 

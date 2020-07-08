@@ -25,9 +25,12 @@
         <c:set var="PRODUCTS4" value="${requestScope.PRODUCTS4}"/>
 
         <c:set var="CATEGORIES" value="${requestScope.CATEGORIES}"/>
-        <x:transform doc="${CATEGORIES}" xslt="${applicationScope.XSL_CATE_ITEM}"/>
+        <c:set var="BRANDS" value="${requestScope.BRANDS}"/>
 
+        <x:transform doc="${CATEGORIES}" xslt="${applicationScope.XSL_CATE_ITEM}"/>
         <h1> Bảng xếp hạng Chỉnh Ảnh </h1>
+        <x:transform doc="${BRANDS}" xslt="${applicationScope.XSL_BRAND}" />
+
         <div class="row">
             <form action="SearchServlet">
                 Tìm kiếm theo tên:<input name="txtSearch" value="${param.txtSearch}"/>

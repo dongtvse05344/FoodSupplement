@@ -5,6 +5,7 @@
  */
 package dongtv.dto;
 
+import dongtv.dto.raw.CategoryDTO;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -20,7 +21,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -36,6 +36,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ProductDTO.findByName", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name"),
     @NamedQuery(name = "ProductDTO.findById", query = "SELECT p FROM ProductDTO p WHERE p.id = :id"),
     @NamedQuery(name = "ProductDTO.findByCateId", query = "SELECT p FROM ProductDTO p WHERE p.categoryId = :cateId"),
+    @NamedQuery(name = "ProductDTO.findRowByCateId", query = "SELECT COUNT(p) FROM ProductDTO p WHERE p.categoryId = :cateId"),
+
+    @NamedQuery(name = "ProductDTO.findByBrandId", query = "SELECT p FROM ProductDTO p WHERE p.brandId = :brandId"),
+    @NamedQuery(name = "ProductDTO.findRowByBrandId", query = "SELECT COUNT(p) FROM ProductDTO p WHERE p.brandId = :brandId"),
 
     @NamedQuery(name = "ProductDTO.findTopAll", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name ORDER BY p.qDpg + p.qIso + p.qFps DESC"), //ORDER BY p.qDpg + p.qIso + p.qFps DESC
     @NamedQuery(name = "ProductDTO.findTopDpg", query = "SELECT p FROM ProductDTO p WHERE p.name LIKE :name ORDER BY p.qDpg DESC "), //ORDER BY p.qDpg DESC
@@ -50,6 +54,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ProductDTO.getMeanFps", query = "SELECT SUM(p.fps)/COUNT(p.fps) FROM ProductDTO p"),
     @NamedQuery(name = "ProductDTO.getExxFps", query = "SELECT SUM(p.fps*p.fps)/COUNT(p.fps) FROM ProductDTO p"),})
 public class ProductDTO implements Serializable, Cloneable {
+
+    @JoinColumn(name = "brandId", referencedColumnName = "id")
+    @ManyToOne
+    private BrandDTO brandId;
 
     @Column(name = "display", precision = 53)
     private Double display;
@@ -279,4 +287,11 @@ public class ProductDTO implements Serializable, Cloneable {
         this.display = display;
     }
 
+    public BrandDTO getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(BrandDTO brandId) {
+        this.brandId = brandId;
+    }
 }

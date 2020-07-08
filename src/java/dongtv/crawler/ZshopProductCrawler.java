@@ -5,7 +5,6 @@
  */
 package dongtv.crawler;
 
-import dongtv.contanst.ConstantsCrawler;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,37 +18,35 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  *
- * @author Tran Dong
+ * @author shuu1
  */
-public class MayanhvnCategoryCrawler extends BaseCrawler {
+public class ZshopProductCrawler extends BaseCrawler {
 
     private static final String[] IGNORE_TEXTS = {};
 
-    public MayanhvnCategoryCrawler(ServletContext context) {
+    public ZshopProductCrawler(ServletContext context) {
         super(context);
     }
 
-    public Map<String, String> getCategories(String url) {
+    public Map<String, String> getProduct(String url) {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<ul class=\"ul list-filter\">";
-            String tag = "ul";
+            String beginTag = "<div class=\"ty-product-block__description\">";
+            String tag = "div";
 
             String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
-            document = document.replaceAll("></a>", "></img></a>");
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(MayanhvnCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ZshopProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(MayanhvnCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ZshopProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(MayanhvnCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ZshopProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         } finally {
             try {
                 if (reader != null) {
@@ -63,27 +60,18 @@ public class MayanhvnCategoryCrawler extends BaseCrawler {
     }
 
     public Map<String, String> DOMHandler(String documentString) throws XPathExpressionException, Exception {
-        Map<String, String> categories = new HashMap<String, String>();
-
+        Map<String, String> product = new HashMap<String, String>();
         Document document = XMLUtils.parseStringtoDom(documentString);
 
         if (document == null) {
             System.out.println("Cannot create document");
-            return categories;
+            return product;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = "//li";
-        NodeList nodes = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Node node = nodes.item(i).cloneNode(true);
-
-            expression = "a/@href";
-            String href = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = "a";
-            String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            categories.put(ConstantsCrawler.MAYANHVN_ROOT + href, name);
-        }
-        return categories;
+        String expression = ".";
+        String description = xpath.evaluate(expression, document, XPathConstants.STRING).toString();
+        product.put("DES", description);
+        return product;
     }
 
 }

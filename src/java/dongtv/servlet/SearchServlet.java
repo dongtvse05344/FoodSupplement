@@ -6,9 +6,12 @@
 package dongtv.servlet;
 
 import dongtv.contanst.Routing;
+import dongtv.dao.BrandDao;
 import dongtv.dao.CategoryDao;
-import dongtv.dto.CategoriesDTO;
-import dongtv.dto.CategoryDTO;
+import dongtv.dto.BrandDTO;
+import dongtv.dto.BrandsDTO;
+import dongtv.dto.raw.CategoriesDTO;
+import dongtv.dto.raw.CategoryDTO;
 import dongtv.dto.Paging;
 import dongtv.dto.ProductDTO;
 import dongtv.dto.ProductsDTO;
@@ -18,6 +21,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +41,7 @@ public class SearchServlet extends HttpServlet {
 
         try {
             CategoryDao categoryDao = CategoryDao.getInstance();
-
+            BrandDao brandDao = BrandDao.getInstance();
             String txtNameSearch = request.getParameter("txtSearch");
             if (txtNameSearch == null) {
                 txtNameSearch = "";
@@ -50,18 +55,29 @@ public class SearchServlet extends HttpServlet {
                 page = Integer.parseInt(_page);
             } catch (Exception e) {
             }
+            // get Cate
             List<CategoryDTO> categories = categoryDao.getAll("CategoryDTO.findAll");
             CategoriesDTO categoriesDTO = new CategoriesDTO();
             categoriesDTO.setCategoryDTOs(categories);
             String categories_XML = XMLUtils.marrsallMatchToString(categoriesDTO);
             request.setAttribute("CATEGORIES", categories_XML);
-            List<ProductDTO> result = new ArrayList<>();
+
+            // get brand
+            List<BrandDTO> brands = brandDao.getAll("BrandDTO.findAll");
+            BrandsDTO brandsDto = new BrandsDTO();
+            brandsDto.setBrandDTO(brands);
+
+            // get product
+            List<ProductDTO> result;
             ProductService productService = new ProductService();
+
+            Integer totalRows = null;
             if (cateId != null && !cateId.isEmpty()) {
                 CategoryDTO categoryDTO = categoryDao.findById(Integer.parseInt(cateId));
                 result = productService.getProductsByCate(categoryDTO, page, 20);
-            }
-            if ("isTop".equals(type)) {
+                totalRows = productService.findRowByCateId(categoryDTO).intValue();
+
+            } else if ("isTop".equals(type)) {
                 result = productService.getTopProduct("ProductDTO.findTopAll", txtNameSearch, page, 20);
             } else if ("isTopDpg".equals(type)) {
                 result = productService.getTopProduct("ProductDTO.findTopDpg", txtNameSearch, page, 20);
@@ -72,10 +88,20 @@ public class SearchServlet extends HttpServlet {
             } else if ("isTopFps".equals(type)) {
                 result = productService.getTopProduct("ProductDTO.findTopFps", txtNameSearch, page, 20);
 
+            } else if ("brand".equals(type)) {
+                String brandid = request.getParameter("value");
+                BrandDTO brandDTO = brandDao.findById(Integer.parseInt(brandid));
+                brandsDto.setSelected(brandid);
+
+                result = productService.getProductsByBrand(brandDTO, page, 20);
+                totalRows = productService.findRowByBrandId(brandDTO).intValue();
+
             } else {
                 result = productService.getTopProduct("ProductDTO.findByName", txtNameSearch, page, 20);
             }
-            int totalRows = productService.getTotalRows(txtNameSearch).intValue();
+            if (totalRows == null) {
+                totalRows = productService.getTotalRows(txtNameSearch).intValue();
+            }
             //Convert to XML
             ProductsDTO productsDTO = new ProductsDTO();
             productsDTO.setProductDTOs(result);
@@ -86,8 +112,14 @@ public class SearchServlet extends HttpServlet {
             String paging_XML = XMLUtils.marrsallMatchToString(paging);
             request.setAttribute("PAGING", paging_XML);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            // brand
+            String brands_XML = XMLUtils.marrsallMatchToString(brandsDto);
+            System.out.println(brands_XML);
+            request.setAttribute("BRANDS", brands_XML);
+
+        } catch (Exception ex) {
+            url = Routing.INVALID_VIEW;
+            Logger.getLogger(SearchServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

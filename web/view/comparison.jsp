@@ -21,8 +21,7 @@
     <body class="container">
         <a href="/FoodSupplement"><h1>Bảng xếp hạng Chỉnh ảnh</h1></a>
         <c:set var="PRODUCTS" value="${requestScope.PRODUCTS}"/>
-        <c:import charEncoding="UTF-8" var="XSL" url="http://localhost:8080/FoodSupplement/xsl/comparison.xsl"/>
-        <x:transform  doc="${PRODUCTS}" xslt="${XSL}" />
+        <x:transform  doc="${PRODUCTS}" xslt="${applicationScope.XSL_COMPARISON}" />
         <button onclick="goToComparison()" id="btnComparison">Đến trang so sánh (0)</button>
         <button onclick="clearSelected()"  id="btnComparisonClear">Xóa dữ liệu so sánh</button>
 

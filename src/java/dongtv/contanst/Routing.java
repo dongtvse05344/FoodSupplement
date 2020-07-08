@@ -15,6 +15,7 @@ public class Routing {
     public static String SEARCH_VIEW = "view/search.jsp";
     public static String ERROR_VIEW = "view/error.jsp";
     public static String COMPARISION_VIEW = "view/comparison.jsp";
+    public static String INVALID_VIEW = "view/invalid.jsp";
 
     public static String PRODUCT_DETAIL_VIEW = "view/productdetail.jsp";
     public static String HOME_ADMIN_VIEW = "view/admin/home.jsp";

@@ -40,3 +40,29 @@ ul.list-cate {
 .list-cate li {
     height: 30px;
 }
+
+ul.brands {
+    list-style: none;
+}
+
+.brands li {
+    float: left;
+    margin-right: 20px;
+    padding: 5px;
+    border: 1px solid #227C9D;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.brands a {
+    text-decoration: none;
+    color: #227C9D;
+}
+
+.brands li.selected {
+    background: #227C9D;
+}
+
+.brands li.selected a {
+    color: white;
+}

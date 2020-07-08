@@ -11,6 +11,8 @@ import dongtv.service.ProductService;
 import dongtv.util.ServletUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -48,8 +50,8 @@ public class UpdateProductServlet extends HttpServlet {
 
                 productService.updateProduct(productDTO);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(UpdateProductServlet.class.getName()).log(Level.SEVERE, null, ex);
             url = Routing.EDIT_PRODUCT_ADMIN;
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

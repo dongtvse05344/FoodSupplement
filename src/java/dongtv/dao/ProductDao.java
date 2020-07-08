@@ -5,18 +5,15 @@
  */
 package dongtv.dao;
 
-import dongtv.dto.CategoryDTO;
+import dongtv.dto.BrandDTO;
+import dongtv.dto.raw.CategoryDTO;
 import dongtv.dto.ProductDTO;
 import dongtv.util.DBUtilities;
-import java.awt.print.Book;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -60,8 +57,6 @@ public class ProductDao extends BaseDAO<ProductDTO, Integer> implements Serializ
         return null;
     }
 
-    
-
     public List<ProductDTO> getTopProduct(String namedQuery, String nameSearch, int page, int rowsOfPage) throws Exception {
         EntityManager em = DBUtilities.getEntityManager();
         try {
@@ -80,7 +75,7 @@ public class ProductDao extends BaseDAO<ProductDTO, Integer> implements Serializ
         }
         return null;
     }
-    
+
     public List<ProductDTO> getProductsByCate(CategoryDTO cateId, int page, int rowsOfPage) throws Exception {
         EntityManager em = DBUtilities.getEntityManager();
         try {
@@ -99,5 +94,64 @@ public class ProductDao extends BaseDAO<ProductDTO, Integer> implements Serializ
         }
         return null;
     }
-    
+
+    public Long findRowByCateId(CategoryDTO cateId) {
+        EntityManager em = DBUtilities.getEntityManager();
+        try {
+            List<Long> result = em.createNamedQuery("ProductDTO.findRowByCateId", Long.class)
+                    .setParameter("cateId", cateId)
+                    .getResultList();
+            if (result != null && !result.isEmpty()) {
+                return result.get(0);
+            }
+            return null;
+        } catch (Exception e) {
+            Logger.getLogger(ProductDao.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+
+    public List<ProductDTO> getProductsByBrand(BrandDTO brandId, int page, int rowsOfPage) throws Exception {
+        EntityManager em = DBUtilities.getEntityManager();
+        try {
+            List<ProductDTO> result = em.createNamedQuery("ProductDTO.findByBrandId", ProductDTO.class)
+                    .setParameter("brandId", brandId)
+                    .setFirstResult((page - 1) * rowsOfPage)
+                    .setMaxResults(rowsOfPage)
+                    .getResultList();
+            return result;
+        } catch (Exception e) {
+            Logger.getLogger(ProductDao.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+
+    public Long findRowByBrandId(BrandDTO brandId) {
+        EntityManager em = DBUtilities.getEntityManager();
+        try {
+            List<Long> result = em.createNamedQuery("ProductDTO.findRowByBrandId", Long.class)
+                    .setParameter("brandId", brandId)
+                    .getResultList();
+            if (result != null && !result.isEmpty()) {
+                return result.get(0);
+            }
+            return null;
+        } catch (Exception e) {
+            Logger.getLogger(ProductDao.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+
 }

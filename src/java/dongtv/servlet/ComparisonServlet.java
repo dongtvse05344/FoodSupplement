@@ -12,9 +12,10 @@ import dongtv.service.ProductService;
 import dongtv.util.HTMLUtilities;
 import dongtv.util.XMLUtils;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -103,17 +104,44 @@ public class ComparisonServlet extends HttpServlet {
                         };
                         maxP.setDisplay(Math.max(a, b));
                     }
+                    int maxPoint =0;
+                    int maxPosition = -1;
+                    for (int i =0; i< productDtos.size();i++) {
+                        ProductDTO dto = productDtos.get(i);
+                        int point = 0;
+                        if(dto.getDpg().equals(maxP.getDpg())) {
+                            point++;
+                        }
+                        if(dto.getFps().equals(maxP.getFps())) {
+                            point++;
+                        }
+                        if(dto.getIso().equals(maxP.getIso())) {
+                            point++;
+                        }
+                        if(dto.getPrice().equals(maxP.getPrice())) {
+                            point++;
+                        }
+                        if(dto.getDisplay().equals(maxP.getDisplay())) {
+                            point++;
+                        }
+                        if(maxPoint < point) {
+                            maxPosition = i;
+                            maxPoint = point;
+                        }
+                    }
                     productDtos.add(maxP);
                     ProductsDTO productsDTO = new ProductsDTO();
                     productsDTO.setProductDTOs(productDtos);
+                    productsDTO.setHightLight(maxPosition+1);
                     String products_XML = XMLUtils.marrsallMatchToString(productsDTO);
                     request.setAttribute("PRODUCTS", products_XML);
                     url = Routing.COMPARISION_VIEW;
                 }
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            url = Routing.INVALID_VIEW;
+            Logger.getLogger(ComparisonServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

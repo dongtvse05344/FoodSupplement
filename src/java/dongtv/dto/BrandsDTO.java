@@ -13,22 +13,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Tran Dong
+ * @author shuu1
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "products")
-public class ProductRawsDTO {
-    @XmlElement(name = "product")
-    private List<ProductRawDTO> productDTOs;
+@XmlRootElement(name = "brands")
+public class BrandsDTO {
 
-    public List<ProductRawDTO> getProductDTOs() {
-        return productDTOs;
+    @XmlElement(name = "brand")
+    List<BrandDTO> brandDTO;
+
+    public String getSelected() {
+        return selected;
     }
 
-    public void setProductDTOs(List<ProductRawDTO> productDTOs) {
-        this.productDTOs = productDTOs;
+    public void setSelected(String selected) {
+        this.selected = selected;
+    }
+    String selected;
+
+    public List<BrandDTO> getBrandDTO() {
+        return brandDTO;
     }
 
-   
-    
+    public void setBrandDTO(List<BrandDTO> brandDTO) {
+        this.brandDTO = brandDTO;
+    }
+
 }

@@ -57,9 +57,9 @@ public class XMLUtils implements Serializable {
 //            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 //            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             StringWriter sw = new StringWriter();
-            marshaller.marshal(obj, sw);
-            String res = sw.toString();
-            res = res.replaceAll("xmlns=\".*\"", "");
+            marshaller.marshal(obj, sw); 
+            String res = sw.toString(); 
+//            res = res.replaceAll("xmlns=\"http://xml.dongtv.vn/schema/products\"", "");
             return res;
     }
 

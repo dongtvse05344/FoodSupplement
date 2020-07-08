@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import javax.servlet.ServletContext;
@@ -26,7 +25,7 @@ import javax.xml.stream.XMLStreamException;
  */
 public class BaseCrawler {
 
-    private ServletContext context;
+    private final ServletContext context;
     protected boolean isDebug = true;
 
     public BaseCrawler(ServletContext context) {
@@ -82,13 +81,18 @@ public class BaseCrawler {
         return document;
     }
 
-    protected BufferedReader getBufferedReaderForURL(String urlString) throws MalformedURLException, UnsupportedEncodingException, IOException {
-        URL url = new URL(urlString);
-        URLConnection connection = url.openConnection();
-        connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
-        InputStream is = connection.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-        return reader;
+    protected BufferedReader getBufferedReaderForURL(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            URLConnection connection = url.openConnection();
+            connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+            InputStream is = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            return reader;
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     protected XMLEventReader parseStringToXMLEventReader(String xmlSection) throws UnsupportedEncodingException, XMLStreamException {

@@ -25,7 +25,7 @@ import org.w3c.dom.Document;
  */
 public class MayanhvnProductCrawler extends BaseCrawler {
 
-    private static String[] IGNORE_TEXTS = {};
+    private static final String[] IGNORE_TEXTS = {};
 
     public MayanhvnProductCrawler(ServletContext context) {
         super(context);

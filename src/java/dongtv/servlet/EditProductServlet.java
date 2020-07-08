@@ -12,6 +12,8 @@ import dongtv.util.ServletUtils;
 import dongtv.util.XMLUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,8 +45,9 @@ public class EditProductServlet extends HttpServlet {
                 System.out.println(productDTO.getId());
                 request.setAttribute("PRODUCT", product_XML);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            url = Routing.INVALID_VIEW;
+            Logger.getLogger(EditProductServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

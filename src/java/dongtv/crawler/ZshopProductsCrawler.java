@@ -5,7 +5,6 @@
  */
 package dongtv.crawler;
 
-import dongtv.contanst.ConstantsCrawler;
 import dongtv.dto.raw.ProductRawDTO;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
@@ -25,13 +24,13 @@ import org.w3c.dom.NodeList;
 
 /**
  *
- * @author Tran Dong
+ * @author shuu1
  */
-public class MayanhvnProductsCrawler extends BaseCrawler {
+public class ZshopProductsCrawler extends BaseCrawler {
 
     private static final String[] IGNORE_TEXTS = {"class=pagingSpace"};
 
-    public MayanhvnProductsCrawler(ServletContext context) {
+    public ZshopProductsCrawler(ServletContext context) {
         super(context);
     }
 
@@ -39,17 +38,18 @@ public class MayanhvnProductsCrawler extends BaseCrawler {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<div class=\"product-list\">";
+            String beginTag = "<div class=\"grid-list\">";
             String tag = "div";
-
+            isDebug = false;
             String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+            document = document.replace("</ul> </ul>", "</ul>");
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ZshopProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ZshopProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ZshopProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (reader != null) {
@@ -63,7 +63,6 @@ public class MayanhvnProductsCrawler extends BaseCrawler {
     }
 
     public Map<String, ProductRawDTO> DOMHandler(String documentString) throws XPathExpressionException, Exception {
-//        System.out.println(documentString);
         Map<String, ProductRawDTO> products = new HashMap<String, ProductRawDTO>();
         Document document = XMLUtils.parseStringtoDom(documentString);
 
@@ -72,26 +71,26 @@ public class MayanhvnProductsCrawler extends BaseCrawler {
             return products;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = "//li[contains(@class, 'item')]";
+        String expression = "div/div[@class='ty-column4']";
         NodeList nodes = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i).cloneNode(true);
 
             expression = ".//img/@src";
             String image = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//a[@class='p-name']/@href";
+            expression = ".//a/@href";
             String link = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//a[@class='p-name']";
+            expression = ".//div[@class='ty-grid-list__item-name']/a";
             String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//span[@class='p-price']";
+            expression = ".//span[@class='ty-price-num']";
             String price = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             Integer priceI = -1;
             try {
-                price = price.substring(0, price.length() - 1).replace(".", "");
+                price = price.substring(0, price.length()).replace(",", "");
                 priceI = Integer.parseInt(price);
             } catch (Exception e) {
             }
-            ProductRawDTO productRawDTO = new ProductRawDTO(name.trim(), ConstantsCrawler.MAYANHVN_ROOT + image.trim(), ConstantsCrawler.MAYANHVN_ROOT + link.trim(), priceI);
+            ProductRawDTO productRawDTO = new ProductRawDTO(name.trim(),image.trim(),link.trim(), priceI);
             products.put(link, productRawDTO);
         }
         return products;
@@ -101,18 +100,17 @@ public class MayanhvnProductsCrawler extends BaseCrawler {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<div class=\"paging\">";
+            String beginTag = "<div class=\"ty-pagination__items\">";
             String tag = "div";
 
             String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
             return DOMHandlerPages(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ZshopProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ZshopProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            Logger.getLogger(ZshopProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (reader != null) {
@@ -140,13 +138,14 @@ public class MayanhvnProductsCrawler extends BaseCrawler {
             Node node = nodes.item(i).cloneNode(true);
             expression = "@href";
             String href = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = "a";
+            expression = ".";
             String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             if (href == null || href.length() == 0) {
                 continue;
             }
-            categories.put(ConstantsCrawler.MAYANHVN_ROOT + href, name);
+            categories.put(href, name);
         }
         return categories;
     }
+
 }

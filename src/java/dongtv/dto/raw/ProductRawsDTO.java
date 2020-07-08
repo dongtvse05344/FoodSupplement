@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dongtv.dto;
+package dongtv.dto.raw;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -17,29 +17,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "products")
-public class ProductsDTO {
+public class ProductRawsDTO {
     @XmlElement(name = "product")
-    private List<ProductDTO> productDTOs;
+    private List<ProductRawDTO> productDTOs;
 
-    private Integer hightLight; 
-
-    public Integer getHightLight() {
-        return hightLight;
-    }
-
-    public void setHightLight(Integer hightLight) {
-        this.hightLight = hightLight;
-    }
-    
-    
-    public List<ProductDTO> getProductDTOs() {
+    public List<ProductRawDTO> getProductDTOs() {
         return productDTOs;
     }
 
-    public void setProductDTOs(List<ProductDTO> productDTOs) {
+    public void setProductDTOs(List<ProductRawDTO> productDTOs) {
         this.productDTOs = productDTOs;
     }
-    
-    
+
+   
     
 }

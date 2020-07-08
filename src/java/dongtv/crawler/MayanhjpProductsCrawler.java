@@ -6,7 +6,7 @@
 package dongtv.crawler;
 
 import dongtv.contanst.ConstantsCrawler;
-import dongtv.dto.ProductRawDTO;
+import dongtv.dto.raw.ProductRawDTO;
 import dongtv.util.HTMLUtilities;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
@@ -30,7 +30,7 @@ import org.w3c.dom.NodeList;
  */
 public class MayanhjpProductsCrawler extends BaseCrawler {
 
-    private static String[] IGNORE_TEXTS = {"</br>", "color=[a-z]{1,6}", "<font >Th"};
+    private static final String[] IGNORE_TEXTS = {"</br>", "color=[a-z]{1,6}", "<font >Th"};
 
     public MayanhjpProductsCrawler(ServletContext context) {
         super(context);
@@ -51,11 +51,11 @@ public class MayanhjpProductsCrawler extends BaseCrawler {
             }
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MayanhjpProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | XPathExpressionException ex) {
-            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MayanhjpProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MayanhjpProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (reader != null) {
@@ -100,7 +100,7 @@ public class MayanhjpProductsCrawler extends BaseCrawler {
                 String priceregex = HTMLUtilities.getAllMatches(price, "[0-9]{1,3}[.,]{0,1}[0-9]{1,3}[.,]{0,1}[0-9]{1,3}").get(0)
                         .replace(".", "").replace(",", "");
                 priceI = Integer.parseInt(priceregex);
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
             } 
             ProductRawDTO productRawDTO = new ProductRawDTO(name.trim(), ConstantsCrawler.MAYANHJP + image.trim(), link.trim(), priceI, description);
             products.put(link, productRawDTO);

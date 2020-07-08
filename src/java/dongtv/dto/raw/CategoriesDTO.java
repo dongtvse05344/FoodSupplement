@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dongtv.dto;
+package dongtv.dto.raw;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "categories")
-public class CategoriesDTO {
+public class CategoriesDTO { 
     @XmlElement(name = "category")
     List<CategoryDTO> categoryDTOs;
 

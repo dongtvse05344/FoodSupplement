@@ -6,8 +6,8 @@
 package dongtv.util;
 
 import dongtv.dao.CategoryDao;
-import dongtv.dto.CategoriesDTO;
-import dongtv.dto.CategoryDTO;
+import dongtv.dto.raw.CategoriesDTO;
+import dongtv.dto.raw.CategoryDTO;
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ import java.util.List;
  * @author Tran Dong
  */
 public class Test {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         CategoryDao categoryDao =CategoryDao.getInstance();
         List<CategoryDTO> categories = categoryDao.getAll("CategoryDTO.findAll");
         CategoriesDTO categoriesDTO  =  new CategoriesDTO();

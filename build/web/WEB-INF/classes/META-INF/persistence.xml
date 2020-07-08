@@ -10,8 +10,9 @@
     <class>dongtv.dto.UserDTO</class>
     <class>dongtv.dto.UserDTO_1</class>
     <class>dongtv.dto.VolumeRawDTO</class>
-    <class>dongtv.dto.ProductRawDTO</class>
     <class>dongtv.dto.SubProductDTO</class>
+    <class>dongtv.dto.BrandDTO</class>
+    <class>dongtv.dto.raw.ProductRawDTO</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=FoodSupplementDB"/>

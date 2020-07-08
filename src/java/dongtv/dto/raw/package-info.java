@@ -10,7 +10,7 @@
         xmlns = {@XmlNs(prefix = "", namespaceURI = "http://xml.dongtv.vn/schema/products")}
 
 )
-package dongtv.dto;
+package dongtv.dto.raw;
 
 import javax.xml.bind.annotation.XmlNs;
 

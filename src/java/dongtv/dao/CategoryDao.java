@@ -5,8 +5,7 @@
  */
 package dongtv.dao;
 
-import dongtv.dto.CategoryDTO;
-import dongtv.dto.ProductDTO;
+import dongtv.dto.raw.CategoryDTO;
 import dongtv.util.DBUtilities;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -98,36 +97,4 @@ public class CategoryDao extends BaseDAO<CategoryDTO, Integer> implements Serial
             conn.close();
         }
     }
-
-//    private Connection conn;
-//    private PreparedStatement preStm;
-//    private ResultSet rs;
-//    
-//    public boolean addCategory(String name) throws Exception {
-//        boolean res = false;
-//        try {
-//            conn = DBUtilities.makeConnection();
-//             String sql ="INSERT INTO Categories(name) "
-//                    + " VALUES(?)";
-//            preStm = conn.prepareStatement(sql);
-//            preStm.setString(1, name);
-//            res = preStm.executeUpdate() > 0;
-//        } finally {
-//            closeConnect();
-//        }
-//
-//        return res;
-//    }
-//    
-//    private void closeConnect() throws SQLException {
-//        if (rs != null) {
-//            rs.close();
-//        }
-//        if (preStm != null) {
-//            preStm.close();
-//        }
-//        if (conn != null) {
-//            conn.close();
-//        }
-//    }
 }

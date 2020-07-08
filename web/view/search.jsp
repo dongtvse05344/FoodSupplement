@@ -19,14 +19,19 @@
     <body class="container">
         <c:set var="PRODUCTS" value="${requestScope.PRODUCTS}"/>
         <c:set var="PAGING" value="${requestScope.PAGING}"/>
-        
+
         <c:set var="CATEGORIES" value="${requestScope.CATEGORIES}"/>
+        <c:set var="BRANDS" value="${requestScope.BRANDS}"/>
+ 
         <x:transform doc="${CATEGORIES}" xslt="${applicationScope.XSL_CATE_ITEM}"/>
 
         <a href="/FoodSupplement"><h1>Bảng xếp hạng chỉnh ảnh</h1></a>
+        <x:transform doc="${BRANDS}" xslt="${applicationScope.XSL_BRAND}"/>
         <div class="row">
             <form action="">
                 <input type="hidden" name="type" value="${param.type}"  />
+                <input type="hidden" name="value" value="${param.value}"  />
+
                 <input type="text" name="txtSearch" value="${param.txtSearch}" placeholder="Tìm kiếm theo tên"/>
                 <input type="submit" class="btn" value="Tìm kiếm"/>
             </form>

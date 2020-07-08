@@ -72,6 +72,10 @@
         <servlet-name>ComparisonServlet</servlet-name>
         <servlet-class>dongtv.servlet.ComparisonServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CollectBrandServlet</servlet-name>
+        <servlet-class>dongtv.servlet.CollectBrandServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/HomeServlet</url-pattern>
@@ -135,6 +139,10 @@
     <servlet-mapping>
         <servlet-name>ComparisonServlet</servlet-name>
         <url-pattern>/ComparisonServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CollectBrandServlet</servlet-name>
+        <url-pattern>/CollectBrandServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

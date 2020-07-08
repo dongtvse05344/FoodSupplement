@@ -9,18 +9,15 @@ import dongtv.dao.CategoryDao;
 import dongtv.dao.ProductDao;
 import dongtv.dao.ProductRawDao;
 import dongtv.dao.SubProductDao;
-import dongtv.dto.CategoryDTO;
+import dongtv.dto.raw.CategoryDTO;
 import dongtv.dto.ProductDTO;
-import dongtv.dto.ProductRawDTO;
-import dongtv.dto.ProductRawsDTO;
-import dongtv.dto.ProductsDTO;
+import dongtv.dto.raw.ProductRawDTO;
+import dongtv.dto.raw.ProductRawsDTO;
 import dongtv.dto.SubProductDTO;
 import dongtv.util.HTMLUtilities;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -28,10 +25,10 @@ import java.util.regex.Pattern;
  */
 public class CrawlService {
 
-    private ProductRawDao productRawDao;
-    private ProductDao productDao;
-    private CategoryDao categoryDao;
-    private SubProductDao subProductDao;
+    private final ProductRawDao productRawDao;
+    private final ProductDao productDao;
+    private final CategoryDao categoryDao;
+    private final SubProductDao subProductDao;
     private static long totalRows = -1;
 
     public CrawlService() {

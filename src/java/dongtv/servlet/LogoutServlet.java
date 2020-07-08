@@ -8,6 +8,8 @@ package dongtv.servlet;
 import dongtv.contanst.Routing;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +31,9 @@ public class LogoutServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("NAME", null);
             session.setAttribute("ISLOGIN", null);
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            url = Routing.INVALID_VIEW;
+            Logger.getLogger(LogoutServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

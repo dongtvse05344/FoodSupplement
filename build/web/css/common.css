@@ -8,7 +8,7 @@
     color: #227C9D;
 }
 .info {
-    color: #227C9D;
+    color: #053C5E;
 }
 #menu-left {
     width: 20%;
@@ -45,7 +45,17 @@ ul.page {
 
 tr:nth-child(even) {background-color: #f2f2f2;}
 td {
-    text-align: center; vertical-align: middle;
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
+}
+
+td.hightlight {
+    border-color: #227C9D;
+    border-style: dotted;
+    border-width: 5px;
+    border-top-width: 0px;
+    border-bottom-width: 1px;
 }
 th {
     background-color: #4CAF50;

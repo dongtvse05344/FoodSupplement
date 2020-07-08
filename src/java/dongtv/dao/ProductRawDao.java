@@ -5,7 +5,7 @@
  */
 package dongtv.dao;
 
-import dongtv.dto.ProductRawDTO;
+import dongtv.dto.raw.ProductRawDTO;
 import dongtv.util.DBUtilities;
 import java.io.Serializable;
 import java.util.List;

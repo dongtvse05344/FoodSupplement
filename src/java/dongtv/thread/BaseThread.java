@@ -5,7 +5,7 @@
  */
 package dongtv.thread;
 
-import dongtv.dto.ProductRawDTO;
+import dongtv.dto.raw.ProductRawDTO;
 import dongtv.util.ImageUtils;
 import java.util.Date;
 import javax.servlet.ServletContext;

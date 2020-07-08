@@ -6,15 +6,11 @@
 package dongtv.servlet;
 
 import dongtv.contanst.Routing;
-import dongtv.dto.ProductRawDTO;
-import dongtv.dto.ProductRawsDTO;
-import dongtv.dto.ProductsDTO;
-import dongtv.service.CrawlService;
 import dongtv.util.ServletUtils;
-import dongtv.util.XMLUtils;
 import dongtv.validation.XSDValidation;
 import java.io.IOException;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -45,8 +41,10 @@ public class ValidationServlet extends HttpServlet {
                 request.setAttribute("ERROR_VALIDATION", erString.toString());
 //                crawlService.convertRawstoReal(realProducts);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(ValidationServlet.class.getName()).log(Level.SEVERE, null, ex);
+            url = Routing.INVALID_VIEW;
+
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

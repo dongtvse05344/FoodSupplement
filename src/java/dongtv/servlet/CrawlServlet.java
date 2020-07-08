@@ -8,8 +8,8 @@ package dongtv.servlet;
 import dongtv.contanst.Routing;
 import dongtv.dto.Paging;
 import dongtv.dto.ProductDTO;
-import dongtv.dto.ProductRawDTO;
-import dongtv.dto.ProductRawsDTO;
+import dongtv.dto.raw.ProductRawDTO;
+import dongtv.dto.raw.ProductRawsDTO;
 import dongtv.dto.ProductsDTO;
 import dongtv.service.CrawlService;
 import dongtv.service.ProductService;
@@ -17,6 +17,8 @@ import dongtv.util.ServletUtils;
 import dongtv.util.XMLUtils;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +46,7 @@ public class CrawlServlet extends HttpServlet {
         String url = Routing.LOGIN_VIEW;
         String pageString = request.getParameter("page");
         int page = 1;
-        if(pageString != null) {
+        if (pageString != null) {
             try {
                 page = Integer.parseInt(pageString);
             } catch (Exception e) {
@@ -61,13 +63,14 @@ public class CrawlServlet extends HttpServlet {
                 String products_XML = XMLUtils.marrsallMatchToString(productsDTO);
                 request.setAttribute("PRODUCTS", products_XML);
                 int totalRows = crawlService.getTotalRows().intValue();
-                Paging paging = new Paging(page,totalRows ,5, "CrawlServlet","","","");
+                Paging paging = new Paging(page, totalRows, 5, "CrawlServlet", "", "", "");
                 String paging_XML = XMLUtils.marrsallMatchToString(paging);
                 request.setAttribute("PAGING", paging_XML);
 
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            url = Routing.INVALID_VIEW;
+            Logger.getLogger(CrawlServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

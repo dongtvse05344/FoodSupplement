@@ -5,13 +5,17 @@
  */
 package dongtv.service;
 
+import dongtv.dao.BrandDao;
 import dongtv.dao.ProductDao;
 import dongtv.dao.SubProductDao;
-import dongtv.dto.CategoryDTO;
+import dongtv.dto.BrandDTO;
+import dongtv.dto.raw.CategoryDTO;
 import dongtv.dto.ProductDTO;
 import dongtv.dto.SubProductDTO;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,22 +23,28 @@ import java.util.List;
  */
 public class ProductService {
 
-    private ProductDao productDao;
-    private SubProductDao subProductDao;
+    private final ProductDao productDao;
+    private final SubProductDao subProductDao;
+    private final BrandDao brandDao;
 
     public ProductService() {
         productDao = ProductDao.getInstance();
         subProductDao = SubProductDao.getInstance();
+        brandDao = BrandDao.getInstance();
     }
 
     public List<ProductDTO> getPage(String nameSearch, int page) throws Exception {
         return productDao.getTopProduct("ProductDTO.findByName", nameSearch, page, 5);
     }
-    
+
     public List<ProductDTO> getTopProduct(String namedQuery, String nameSearch, int page, int rowsOfPage) throws Exception {
         return productDao.getTopProduct(namedQuery, nameSearch, page, rowsOfPage);
     }
     
+    public List<ProductDTO> getProductsByBrand(BrandDTO brandId, int page, int rowsOfPage) throws Exception {
+        return productDao.getProductsByBrand(brandId, page, rowsOfPage);
+    }
+
     public List<ProductDTO> getProductsByCate(CategoryDTO cateId, int page, int rowsOfPage) throws Exception {
         return productDao.getProductsByCate(cateId, page, rowsOfPage);
     }
@@ -42,11 +52,19 @@ public class ProductService {
     public Long getTotalRows(String nameSearch) {
         return productDao.getTotalRows(nameSearch);
     }
+    
+    public Long findRowByCateId(CategoryDTO cateId) {
+        return productDao.findRowByCateId(cateId);
+    }
+    
+    public Long findRowByBrandId(BrandDTO brandId) {
+        return productDao.findRowByBrandId(brandId);
+    }
 
     public ProductDTO getProduct(Integer id) {
         return productDao.findById(id);
     }
-    
+
     public ProductDTO updateProduct(ProductDTO dto) {
         return productDao.update(dto);
     }
@@ -116,11 +134,13 @@ public class ProductService {
         List<ProductDTO> result = new ArrayList<>();
         List<ProductDTO> products = getAll();
         for (int i = 0; i < products.size(); i++) {
-            if(!products.get(i).getId().equals(dto.getId())) {
-                if(this.cosinOf2Vector(products.get(i), dto)>= 0.9) {
+            if (!products.get(i).getId().equals(dto.getId())) {
+                if (this.cosinOf2Vector(products.get(i), dto) >= 0.9) {
                     result.add(products.get(i));
                 }
-                if(result.size() > 5) return result;
+                if (result.size() > 5) {
+                    return result;
+                }
             }
         }
         return result;
@@ -128,5 +148,46 @@ public class ProductService {
 
     private List<ProductDTO> getAll() {
         return productDao.getAll("ProductDTO.findAll");
+    }
+
+    public void collectBrand() {
+        
+        // DELETE ALL BRAND
+        List<ProductDTO> products = productDao.getAll("ProductDTO.findAll");
+        Map<String, String> brands = new HashMap<String, String>();
+        for (ProductDTO product : products) {
+            brands.put(product.getName().toLowerCase()
+                    .replace("máy ảnh ", "")
+                    .replace("máy quay ", "")
+                    .replace("ma?y quay ", "")
+                    .replace("body ", "")
+                    .replace("ống kính ", "").split(" ")[0], "x");
+        }
+        List<BrandDTO> brandDTOs = new ArrayList<>();
+        for (Map.Entry<String, String> brand : brands.entrySet()) {
+            if (!checkUTF8(brand.getKey())) {
+                BrandDTO brandDto = brandDao.create(new BrandDTO(brand.getKey()));
+                brandDTOs.add(brandDto);
+            }
+        }
+        for (ProductDTO product : products) { 
+            for (BrandDTO brand : brandDTOs) {
+                if(product.getName().toLowerCase().contains(brand.getName())) {
+                    product.setBrandId(brand);
+                    break;
+                }
+            }
+            productDao.update(product);
+        }
+    }
+
+    public boolean checkUTF8(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if ((int) c > 126 || c < 97) {
+                return true;
+            }
+        }
+        return false;
     }
 }

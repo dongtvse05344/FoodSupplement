@@ -6,8 +6,8 @@
 package dongtv.servlet;
 
 import dongtv.contanst.Routing;
-import dongtv.dto.CategoriesDTO;
-import dongtv.dto.CategoryDTO;
+import dongtv.dto.raw.CategoriesDTO;
+import dongtv.dto.raw.CategoryDTO;
 import dongtv.dto.Paging;
 import dongtv.service.CategoryService;
 import dongtv.util.ServletUtils;
@@ -15,6 +15,8 @@ import dongtv.util.XMLUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -50,12 +52,14 @@ public class CategoryAdminServlet extends HttpServlet {
                 String categories_XML = XMLUtils.marrsallMatchToString(categoriesDTO);
                 request.setAttribute("CATEGORIES", categories_XML);
                 int totalRows = categoryService.getTotalRows().intValue();
-                Paging paging = new Paging(page,totalRows ,5, "CategoryAdminServlet","","","");
+                Paging paging = new Paging(page, totalRows, 5, "CategoryAdminServlet", "", "", "");
                 String paging_XML = XMLUtils.marrsallMatchToString(paging);
                 request.setAttribute("PAGING", paging_XML);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            url = Routing.INVALID_VIEW;
+            Logger.getLogger(CategoryAdminServlet.class.getName()).log(Level.SEVERE, null, ex);
+
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

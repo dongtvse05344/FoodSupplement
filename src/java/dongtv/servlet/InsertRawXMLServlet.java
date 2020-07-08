@@ -6,8 +6,8 @@
 package dongtv.servlet;
 
 import dongtv.contanst.Routing;
-import dongtv.dto.ProductRawDTO;
-import dongtv.dto.ProductRawsDTO;
+import dongtv.dto.raw.ProductRawDTO;
+import dongtv.dto.raw.ProductRawsDTO;
 import dongtv.dto.ProductsDTO;
 import dongtv.service.CrawlService;
 import dongtv.util.ServletUtils;
