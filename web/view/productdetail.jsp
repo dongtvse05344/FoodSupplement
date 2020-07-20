@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="http://localhost:8080/FoodSupplement/css/home.css"/>
 <script src="http://localhost:8080/FoodSupplement/js/localStorage.service.js"></script>
 <script src="http://localhost:8080/FoodSupplement/js/base.controller.js"></script>
+<script src="http://localhost:8080/FoodSupplement/js/productdetail.controller.js"></script>
 
 
 <html>
@@ -24,8 +25,6 @@
         <c:set var="PRODUCT" value="${requestScope.PRODUCT}"/>
         <c:set var="SUBPRODUCTS" value="${requestScope.SUBPRODUCTS}"/>
         <c:set var="PRODUCTS" value="${requestScope.PRODUCTS}"/>
-
-
         <x:transform doc="${PRODUCT}" xslt="${applicationScope.XSL_PRODUCT_ITEM_DETAIL}"/>
         <h3>Sản phẩm cùng tên</h3>
         <div class="row">

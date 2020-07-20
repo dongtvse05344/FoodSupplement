@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "BrandDTO.findAll", query = "SELECT b FROM BrandDTO b"),
     @NamedQuery(name = "BrandDTO.findById", query = "SELECT b FROM BrandDTO b WHERE b.id = :id"),
+    @NamedQuery(name = "BrandDTO.deleteAll", query = "DELETE FROM BrandDTO b"),
     @NamedQuery(name = "BrandDTO.findByName", query = "SELECT b FROM BrandDTO b WHERE b.name = :name")})
 public class BrandDTO implements Serializable {
 

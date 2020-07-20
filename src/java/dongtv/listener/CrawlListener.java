@@ -26,13 +26,13 @@ public class CrawlListener implements ServletContextListener {
     private static MayanhvnThread mayanhvnThread;
     private static MayanhjpThread mayanhjpThread;
     private static ZshopThread zshopThread;
-    private static boolean isCrawl = false; 
+    private static boolean isCrawl = false;  
     
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("--- Listener start");
         final ServletContext context = sce.getServletContext();
-        if (isCrawl) { 
+        if (isCrawl) {  
 //            mayanh24hThread = new Mayanh24hThread(context);
 //            mayanh24hThread.start();
             mayanhvnThread = new MayanhvnThread(context);

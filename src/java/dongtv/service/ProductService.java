@@ -12,10 +12,13 @@ import dongtv.dto.BrandDTO;
 import dongtv.dto.raw.CategoryDTO;
 import dongtv.dto.ProductDTO;
 import dongtv.dto.SubProductDTO;
+import dongtv.servlet.CollectBrandServlet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -40,7 +43,7 @@ public class ProductService {
     public List<ProductDTO> getTopProduct(String namedQuery, String nameSearch, int page, int rowsOfPage) throws Exception {
         return productDao.getTopProduct(namedQuery, nameSearch, page, rowsOfPage);
     }
-    
+
     public List<ProductDTO> getProductsByBrand(BrandDTO brandId, int page, int rowsOfPage) throws Exception {
         return productDao.getProductsByBrand(brandId, page, rowsOfPage);
     }
@@ -52,11 +55,11 @@ public class ProductService {
     public Long getTotalRows(String nameSearch) {
         return productDao.getTotalRows(nameSearch);
     }
-    
+
     public Long findRowByCateId(CategoryDTO cateId) {
         return productDao.findRowByCateId(cateId);
     }
-    
+
     public Long findRowByBrandId(BrandDTO brandId) {
         return productDao.findRowByBrandId(brandId);
     }
@@ -123,11 +126,16 @@ public class ProductService {
     }
 
     public double cosinOf2Vector(ProductDTO p1, ProductDTO p2) {
-        double result = (double) 0;
-        result = p1.getQDpg() * p2.getQDpg() + p1.getQIso() * p2.getQIso() + p1.getQFps() * p2.getQFps();
-        double multiOflength = Math.sqrt(p1.getQDpg() * p1.getQDpg() + p1.getQIso() * p1.getQIso() + p1.getQFps() * p1.getQFps())
-                * Math.sqrt(p2.getQDpg() * p2.getQDpg() + p2.getQIso() * p2.getQIso() + p2.getQFps() * p2.getQFps());
-        return result / multiOflength;
+        try {
+            double result = (double) 0;
+            result = p1.getQDpg() * p2.getQDpg() + p1.getQIso() * p2.getQIso() + p1.getQFps() * p2.getQFps();
+            double multiOflength = Math.sqrt(p1.getQDpg() * p1.getQDpg() + p1.getQIso() * p1.getQIso() + p1.getQFps() * p1.getQFps())
+                    * Math.sqrt(p2.getQDpg() * p2.getQDpg() + p2.getQIso() * p2.getQIso() + p2.getQFps() * p2.getQFps());
+            return result / multiOflength;
+        } catch (Exception e) {
+            return 0;
+        }
+
     }
 
     public List<ProductDTO> getSimilarity(ProductDTO dto) {
@@ -151,7 +159,7 @@ public class ProductService {
     }
 
     public void collectBrand() {
-        
+
         // DELETE ALL BRAND
         List<ProductDTO> products = productDao.getAll("ProductDTO.findAll");
         Map<String, String> brands = new HashMap<String, String>();
@@ -164,15 +172,21 @@ public class ProductService {
                     .replace("ống kính ", "").split(" ")[0], "x");
         }
         List<BrandDTO> brandDTOs = new ArrayList<>();
+        try {
+            System.out.println(brandDao.deleteAll());
+        } catch (Exception ex) {
+            Logger.getLogger(ProductService.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
         for (Map.Entry<String, String> brand : brands.entrySet()) {
             if (!checkUTF8(brand.getKey())) {
                 BrandDTO brandDto = brandDao.create(new BrandDTO(brand.getKey()));
                 brandDTOs.add(brandDto);
             }
         }
-        for (ProductDTO product : products) { 
+        for (ProductDTO product : products) {
             for (BrandDTO brand : brandDTOs) {
-                if(product.getName().toLowerCase().contains(brand.getName())) {
+                if (product.getName().toLowerCase().contains(brand.getName())) {
                     product.setBrandId(brand);
                     break;
                 }

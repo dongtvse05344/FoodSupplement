@@ -12,13 +12,14 @@
 <link rel="stylesheet" href="http://localhost:8080/FoodSupplement/css/common.css"/>
 <script src="http://localhost:8080/FoodSupplement/js/localStorage.service.js"></script>
 <script src="http://localhost:8080/FoodSupplement/js/base.controller.js"></script>
+<script src="http://localhost:8080/FoodSupplement/js/home.controller.js"></script>
 
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head> 
-    <body class="container">
+    <body class="container" onload="displayResult()">
         <c:set var="PRODUCTS" value="${requestScope.PRODUCTS}"/>
         <c:set var="PRODUCTS2" value="${requestScope.PRODUCTS2}"/>
         <c:set var="PRODUCTS3" value="${requestScope.PRODUCTS3}"/>
@@ -43,22 +44,24 @@
         <div class="row">
             <x:transform doc="${PRODUCTS}" xslt="${applicationScope.XSL_PRODUCT_ITEM}"/>
         </div>
-
         <h3>Top sản phẩm độ phân giải điểm ảnh cao</h3>
         <a class="info" href="SearchServlet?type=isTopDpg">Xem thêm >></a>
-
         <div class="row">
-            <x:transform doc="${PRODUCTS2}" xslt="${applicationScope.XSL_PRODUCT_ITEM}"/>
+            <div id="topDpg">
+            </div>
         </div>
+
         <h3>Top sản phẩm độ nhạy sáng ISO cao</h3> 
         <a class="info" href="SearchServlet?type=isTopIso">Xem thêm >></a>
         <div class="row">
-            <x:transform doc="${PRODUCTS3}" xslt="${applicationScope.XSL_PRODUCT_ITEM}"/>
+            <div id="topIso">
+            </div>
         </div> 
         <h3>Top sản phẩm có tốc độ màn chụp cao</h3>
         <a class="info" href="SearchServlet?type=isTopFps">Xem thêm >></a>
         <div class="row">
-            <x:transform doc="${PRODUCTS4}" xslt="${applicationScope.XSL_PRODUCT_ITEM}"/>
+            <div id="topFps">
+            </div>
         </div>
         <button onclick="goToComparison()"  id="btnComparison">Đến trang so sánh (0)</button>
         <button onclick="clearSelected()"  id="btnComparisonClear">Xóa dữ liệu so sánh</button>

@@ -30,6 +30,8 @@ public class XslListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         final ServletContext context = sce.getServletContext();
         String realPath = context.getRealPath("/");
+        
+        
         Source xslInput = new StreamSource(realPath + XSL_PRODUCT_ITEM_DETAIL);
         context.setAttribute("XSL_PRODUCT_ITEM_DETAIL", xslInput);
 

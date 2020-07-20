@@ -46,7 +46,7 @@ public class HomeAdminServlet extends HttpServlet {
         if(nameSearch == null) nameSearch = "";
         int page = 1;
         if(pageString != null) {
-            try {
+            try { 
                 page = Integer.parseInt(pageString);
             } catch (Exception e) {
             }

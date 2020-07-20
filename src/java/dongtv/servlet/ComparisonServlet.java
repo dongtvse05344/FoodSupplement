@@ -109,19 +109,19 @@ public class ComparisonServlet extends HttpServlet {
                     for (int i =0; i< productDtos.size();i++) {
                         ProductDTO dto = productDtos.get(i);
                         int point = 0;
-                        if(dto.getDpg().equals(maxP.getDpg())) {
+                        if(compare(dto.getDpg(), maxP.getDpg()) ) {
                             point++;
                         }
-                        if(dto.getFps().equals(maxP.getFps())) {
+                        if(compare(dto.getFps(),maxP.getFps())) {
                             point++;
                         }
-                        if(dto.getIso().equals(maxP.getIso())) {
+                        if(compare(dto.getIso(),maxP.getIso())) {
                             point++;
                         }
-                        if(dto.getPrice().equals(maxP.getPrice())) {
+                        if(compare(dto.getPrice(),maxP.getPrice())) {
                             point++;
                         }
-                        if(dto.getDisplay().equals(maxP.getDisplay())) {
+                        if(compare(dto.getDisplay(),maxP.getDisplay())) {
                             point++;
                         }
                         if(maxPoint < point) {
@@ -145,6 +145,17 @@ public class ComparisonServlet extends HttpServlet {
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
+    }
+    
+    private boolean compare(Double a, Double b) {
+        if(a==null || b == null) return false;
+        if(a.equals(b)) return true;
+        return false;
+    }
+    private boolean compare(Integer a, Integer b) {
+        if(a==null || b == null) return false;
+        if(a.equals(b)) return true;
+        return false;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

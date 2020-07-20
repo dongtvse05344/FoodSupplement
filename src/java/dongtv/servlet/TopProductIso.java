@@ -5,20 +5,9 @@
  */
 package dongtv.servlet;
 
-import dongtv.contanst.Routing;
-import dongtv.dao.BrandDao;
-import dongtv.dao.CategoryDao;
-import dongtv.dao.ProductDao;
-import dongtv.dto.BrandDTO;
-import dongtv.dto.BrandsDTO;
-import dongtv.dto.raw.CategoriesDTO;
-import dongtv.dto.raw.CategoryDTO;
-import dongtv.dto.ProductDTO;
-import dongtv.dto.ProductsDTO;
 import dongtv.service.CachingService;
-import dongtv.util.XMLUtils;
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -28,37 +17,33 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Tran Dong
+ * @author shuu1
  */
-public class HomeServlet extends HttpServlet {
+public class TopProductIso extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        CachingService cachingService = new CachingService(request.getServletContext());
-        String url =  Routing.HOME_VIEW;
-        try {
-            //get category
-            CategoryDao categoryDao = CategoryDao.getInstance();
-            List<CategoryDTO> categories = categoryDao.getAll("CategoryDTO.findAll");
-            CategoriesDTO categoriesDTO = new CategoriesDTO();
-            categoriesDTO.setCategoryDTOs(categories);
-            String categories_XML = XMLUtils.marrsallMatchToString(categoriesDTO);
-            request.setAttribute("CATEGORIES", categories_XML);
+        response.setContentType("text/xml;charset=UTF-8");
+         try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
 
-            // get brand
-            String brands_XML = cachingService.getBrand();
-            request.setAttribute("BRANDS", brands_XML);
-            //get product
-            //load from caching
-            String product_XML = cachingService.getTopProduct();
-
-            request.setAttribute("PRODUCTS", product_XML);
-        } catch (Exception ex) {
-            url = Routing.INVALID_VIEW;
-            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            try {
+                CachingService cachingService = new CachingService(request.getServletContext());
+                String product_XML2;
+                product_XML2 = cachingService.getTopProductIso();
+                out.println(product_XML2);
+            } catch (Exception ex) {
+                Logger.getLogger(TopProductIso.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

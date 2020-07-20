@@ -8,6 +8,7 @@ package dongtv.service.test;
 import dongtv.dto.ProductDTO;
 import dongtv.service.CrawlService;
 import dongtv.service.ProductService;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class Test {
     public static void main(String[] args) throws Exception {
         CrawlService crawlService = new CrawlService();
         ProductService productService = new ProductService();
-       
+        LocalDate myObj = LocalDate.now(); // Create a date object
+        System.out.println(Integer.parseInt(myObj.toString().replace("-", ""))); // Display the current date
 //        boolean a = crawlService.compareName(
 //                "Sony Alpha A7S Mark II, Mới 100% (Chính hãng)" , 
 //                "Sony A7S Mark II ( Hàng chính hãng )"

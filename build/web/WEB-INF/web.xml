@@ -76,6 +76,18 @@
         <servlet-name>CollectBrandServlet</servlet-name>
         <servlet-class>dongtv.servlet.CollectBrandServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TopProductDpg</servlet-name>
+        <servlet-class>dongtv.servlet.TopProductDpg</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TopProductIso</servlet-name>
+        <servlet-class>dongtv.servlet.TopProductIso</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TopProductFps</servlet-name>
+        <servlet-class>dongtv.servlet.TopProductFps</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/HomeServlet</url-pattern>
@@ -143,6 +155,18 @@
     <servlet-mapping>
         <servlet-name>CollectBrandServlet</servlet-name>
         <url-pattern>/CollectBrandServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TopProductDpg</servlet-name>
+        <url-pattern>/TopProductDpg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TopProductIso</servlet-name>
+        <url-pattern>/TopProductIso</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TopProductFps</servlet-name>
+        <url-pattern>/TopProductFps</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

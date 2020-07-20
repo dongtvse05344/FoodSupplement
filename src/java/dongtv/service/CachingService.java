@@ -12,6 +12,7 @@ import dongtv.dto.BrandsDTO;
 import dongtv.dto.ProductDTO;
 import dongtv.dto.ProductsDTO;
 import dongtv.util.XMLUtils;
+import java.time.LocalDate;
 import java.util.List;
 import javax.servlet.ServletContext;
 
@@ -28,13 +29,17 @@ public class CachingService {
     private static final String TOPPRODUCTDPG = "TOPPRODUCTDPG";
     private static final String TOPPRODUCTISO = "TOPPRODUCTISO";
     private static final String TOPPRODUCTFPS = "TOPPRODUCTFPS";
+    private static final String TIME = "TIME";
 
     private static final String BRANDS = "BRANDS";
+    private String current;
 
     public CachingService(ServletContext servletContext) {
         this.servletContext = servletContext;
         this.productDao = ProductDao.getInstance();
         this.brandDao = BrandDao.getInstance();
+        LocalDate ld = LocalDate.now(); // Create a date object
+        current = ld.toString().replace("-", "");
     }
 
     private String getTopProductFromDb() throws Exception {
@@ -43,7 +48,7 @@ public class CachingService {
         productsDTO.setProductDTOs(products);
         String product_XML = XMLUtils.marrsallMatchToString(productsDTO);
         servletContext.setAttribute(TOPPRODUCT, product_XML);
-        // store time
+        servletContext.setAttribute(TOPPRODUCT + TIME, current);
         return product_XML;
     }
 
@@ -51,8 +56,12 @@ public class CachingService {
         String res;
         if (servletContext.getAttribute(TOPPRODUCT) != null) {
             try {
-                //check time
-                res = (String) servletContext.getAttribute(TOPPRODUCT);
+                String storeTime = (String) servletContext.getAttribute(TOPPRODUCT + TIME);
+                if (current.compareTo(storeTime) > 0) {
+                    res = getTopProductFromDb();
+                } else {
+                    res = (String) servletContext.getAttribute(TOPPRODUCT);
+                }
             } catch (Exception e) {
                 res = getTopProductFromDb();
             }
@@ -68,16 +77,21 @@ public class CachingService {
         productsDTO.setProductDTOs(products);
         String product_XML = XMLUtils.marrsallMatchToString(productsDTO);
         servletContext.setAttribute(TOPPRODUCTDPG, product_XML);
+        servletContext.setAttribute(TOPPRODUCTDPG + TIME, current);
+
         return product_XML;
-        // store time
     }
 
     public String getTopProductDpg() throws Exception {
         String res;
         if (servletContext.getAttribute(TOPPRODUCTDPG) != null) {
             try {
-                //check time
-                res = (String) servletContext.getAttribute(TOPPRODUCTDPG);
+                String storeTime = (String) servletContext.getAttribute(TOPPRODUCTDPG + TIME);
+                if (current.compareTo(storeTime) > 0) {
+                    res = getTopProductDpgFromDb();
+                } else {
+                    res = (String) servletContext.getAttribute(TOPPRODUCTDPG);
+                }
             } catch (Exception e) {
                 res = getTopProductDpgFromDb();
             }
@@ -93,6 +107,7 @@ public class CachingService {
         productsDTO.setProductDTOs(products);
         String product_XML = XMLUtils.marrsallMatchToString(productsDTO);
         servletContext.setAttribute(TOPPRODUCTISO, product_XML);
+        servletContext.setAttribute(TOPPRODUCTISO + TIME, current);
         return product_XML;
         // store time
     }
@@ -101,8 +116,12 @@ public class CachingService {
         String res;
         if (servletContext.getAttribute(TOPPRODUCTISO) != null) {
             try {
-                //check time
-                res = (String) servletContext.getAttribute(TOPPRODUCTISO);
+                String storeTime = (String) servletContext.getAttribute(TOPPRODUCTISO + TIME);
+                if (current.compareTo(storeTime) > 0) {
+                    res = getTopProductIsoFromDb();
+                } else {
+                    res = (String) servletContext.getAttribute(TOPPRODUCTISO);
+                }
             } catch (Exception e) {
                 res = getTopProductIsoFromDb();
             }
@@ -118,16 +137,21 @@ public class CachingService {
         productsDTO.setProductDTOs(products);
         String product_XML = XMLUtils.marrsallMatchToString(productsDTO);
         servletContext.setAttribute(TOPPRODUCTFPS, product_XML);
+        servletContext.setAttribute(TOPPRODUCTFPS + TIME, current);
+
         return product_XML;
-        // store time
     }
 
     public String getTopProductFps() throws Exception {
         String res;
         if (servletContext.getAttribute(TOPPRODUCTFPS) != null) {
             try {
-                //check time
-                res = (String) servletContext.getAttribute(TOPPRODUCTFPS);
+                String storeTime = (String) servletContext.getAttribute(TOPPRODUCTFPS + TIME);
+                if (current.compareTo(storeTime) > 0) {
+                    res = getTopProductFpsFromDb();
+                } else {
+                    res = (String) servletContext.getAttribute(TOPPRODUCTFPS);
+                }
             } catch (Exception e) {
                 res = getTopProductFpsFromDb();
             }
@@ -138,13 +162,12 @@ public class CachingService {
     }
 
     private String getBrandFromDb() throws Exception {
-        BrandDao brandDao = BrandDao.getInstance();
         List<BrandDTO> brands = brandDao.getAll("BrandDTO.findAll");
         BrandsDTO brandsDto = new BrandsDTO();
         brandsDto.setBrandDTO(brands);
         String brands_XML = XMLUtils.marrsallMatchToString(brandsDto);
         servletContext.setAttribute(BRANDS, brands_XML);
-        // store time
+        servletContext.setAttribute(BRANDS + TIME, current);
         return brands_XML;
     }
 
@@ -152,8 +175,12 @@ public class CachingService {
         String res;
         if (servletContext.getAttribute(BRANDS) != null) {
             try {
-                //check time
-                res = (String) servletContext.getAttribute(BRANDS);
+                String storeTime = (String) servletContext.getAttribute(BRANDS + TIME);
+                if (current.compareTo(storeTime) > 0) {
+                    res = getBrandFromDb();
+                } else {
+                    res = (String) servletContext.getAttribute(BRANDS);
+                }
             } catch (Exception e) {
                 res = getBrandFromDb();
             }
