@@ -7,6 +7,7 @@ package dongtv.crawler;
 
 import dongtv.contanst.ConstantsCrawler;
 import dongtv.dto.raw.ProductRawDTO;
+import dongtv.pageconfig.XProducts;
 import dongtv.util.HTMLUtilities;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
@@ -30,10 +31,13 @@ import org.w3c.dom.NodeList;
  */
 public class MayanhjpProductsCrawler extends BaseCrawler {
 
-    private static final String[] IGNORE_TEXTS = {"</br>", "color=[a-z]{1,6}", "<font >Th"};
+//    private static final String[] IGNORE_TEXTS = {"</br>", "color=[a-z]{1,6}", "<font >Th"};
+    private final XProducts xProducts;
 
-    public MayanhjpProductsCrawler(ServletContext context) {
+    public MayanhjpProductsCrawler(ServletContext context, XProducts xProducts) {
         super(context);
+        this.xProducts = xProducts;
+
     }
 
     public Map<String, ProductRawDTO> getProducts(String url) {
@@ -41,12 +45,14 @@ public class MayanhjpProductsCrawler extends BaseCrawler {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<table id=\"ctl00_ContentPlaceHolder1_CT_SanPham1_dtlProducts\" class=\"CT_SanPham_dtlProducts\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\">";
-            String tag = "table";
+//            String beginTag = "<table id=\"ctl00_ContentPlaceHolder1_CT_SanPham1_dtlProducts\" class=\"CT_SanPham_dtlProducts\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;\">";
+//            String tag = "table";
             isDebug = false;
 
-            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
-            if(url.equals("http://www.mayanhjp.com/canon-ixus---ixy---sd_7z11.aspx")) {
+//            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+            String document = getDocument(reader, xProducts.getBeginTag().trim(), xProducts.getTag().trim(), xProducts.getReplace());
+
+            if (url.equals("http://www.mayanhjp.com/canon-ixus---ixy---sd_7z11.aspx")) {
                 document = document.replace("<font color=\"red\">        ", "");
             }
             return DOMHandler(document);
@@ -77,31 +83,37 @@ public class MayanhjpProductsCrawler extends BaseCrawler {
             return products;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = "table/tr";
+//        String expression = "table/tr";
+        String expression = xProducts.getXproducts().trim();
+
         NodeList nodes = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i).cloneNode(true);
 
-            expression = ".//img/@src";
+//            expression = ".//img/@src";
+            expression = xProducts.getXimage().trim();
             String image = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             image = image.replace(" ", "%20");
-            expression = ".//a[@class='LinkSanpham']/@href";
+//            expression = ".//a[@class='LinkSanpham']/@href";
+            expression = xProducts.getXlink().trim();
             String link = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//a[@class='LinkSanpham']";
+//            expression = ".//a[@class='LinkSanpham']";
+            expression = xProducts.getXname().trim();
             String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//span[contains(.,'₫')]";
+//            expression = ".//span[contains(.,'₫')]";
+            expression = xProducts.getXprice().trim();
             String price = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//td[@class='CT_SanPham_table4_1td2']";
+//            expression = ".//td[@class='CT_SanPham_table4_1td2']";
+            expression = xProducts.getXdescription().trim();
             String description = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            System.out.println(image);
 
             Integer priceI = -1;
             try {
                 String priceregex = HTMLUtilities.getAllMatches(price, "[0-9]{1,3}[.,]{0,1}[0-9]{1,3}[.,]{0,1}[0-9]{1,3}").get(0)
                         .replace(".", "").replace(",", "");
                 priceI = Integer.parseInt(priceregex);
-            } catch (NumberFormatException e) {
-            } 
+            } catch (Exception e) {
+            }
             ProductRawDTO productRawDTO = new ProductRawDTO(name.trim(), ConstantsCrawler.MAYANHJP + image.trim(), link.trim(), priceI, description);
             products.put(link, productRawDTO);
         }

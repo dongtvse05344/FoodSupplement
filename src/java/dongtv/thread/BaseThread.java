@@ -53,7 +53,7 @@ public class BaseThread extends Thread{
             ImageUtils.saveImage(product.getImage(), realPath + filename);
             product.setImage(filename);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }   
     }
 }

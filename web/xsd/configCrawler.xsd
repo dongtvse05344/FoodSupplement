@@ -1,0 +1,79 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://xml.dongtv.vn/schema/configCrawler"
+           xmlns="http://xml.dongtv.vn/schema/configCrawler"
+           elementFormDefault="qualified">
+    
+    <xs:element name="PageConfigs">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="url" type="xs:string"/>
+                <xs:element name="urlroot" type="xs:string"/>
+                <xs:element name="PageConfig" type="PageConfig" maxOccurs="4"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:complexType name="PageConfig">
+        <xs:all>
+            <xs:element name="XCategories" type="XCategories" />
+            <xs:element name="XPage" type="XPage" minOccurs="0" />
+            <xs:element name="XProducts" type="XProducts" />
+            <xs:element name="XProduct" type="XProduct" minOccurs="0" />
+        </xs:all>
+    </xs:complexType>
+
+    
+    <xs:complexType name="XCategories">
+        <xs:sequence>
+            <xs:element name="beginTag" type="xs:string"/>
+            <xs:element name="tag" type="xs:string"/>
+            <xs:element name="replace" type="replace"  minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="xcategories" type="xs:string"/>
+            <xs:element name="xlink" type="xs:string"/>
+            <xs:element name="xname" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="XPage">
+        <xs:sequence>
+            <xs:element name="beginTag" type="xs:string"/>
+            <xs:element name="tag" type="xs:string"/>
+            <xs:element name="replace" type="replace"  minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="xpage" type="xs:string"/>
+            <xs:element name="xlink" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="XProducts">
+        <xs:sequence>
+            <xs:element name="beginTag" type="xs:string"/>
+            <xs:element name="tag" type="xs:string"/>
+            <xs:element name="replace" type="replace"  minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="xproducts" type="xs:string"/>
+            <xs:element name="ximage" type="xs:string"/>
+            <xs:element name="xlink" type="xs:string"/>
+            <xs:element name="xname" type="xs:string"/>
+            <xs:element name="xprice" type="xs:string"/>
+            <xs:element name="xdescription" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="XProduct">
+        <xs:sequence>
+            <xs:element name="beginTag" type="xs:string"/>
+            <xs:element name="tag" type="xs:string"/>
+            <xs:element name="replace" type="replace"  minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="xdescription" type="xs:string"/>
+            <xs:element name="xname" type="xs:string"/>
+            <xs:element name="xparam" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="replace">
+        <xs:all>
+            <xs:element name="from"  type="xs:string"/>
+            <xs:element name="to"  type="xs:string"/>
+        </xs:all>
+    </xs:complexType>
+</xs:schema>

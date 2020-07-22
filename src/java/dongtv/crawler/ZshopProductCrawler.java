@@ -5,6 +5,7 @@
  */
 package dongtv.crawler;
 
+import dongtv.pageconfig.XProduct;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,20 +26,23 @@ import org.w3c.dom.Document;
  */
 public class ZshopProductCrawler extends BaseCrawler {
 
-    private static final String[] IGNORE_TEXTS = {};
+//    private static final String[] IGNORE_TEXTS = {};
+    private final XProduct xProduct;
 
-    public ZshopProductCrawler(ServletContext context) {
+    public ZshopProductCrawler(ServletContext context, XProduct xProduct) {
         super(context);
+        this.xProduct = xProduct;
+
     }
 
     public Map<String, String> getProduct(String url) {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<div class=\"ty-product-block__description\">";
-            String tag = "div";
+//            String beginTag = "<div class=\"ty-product-block__description\">";
+//            String tag = "div";
 
-            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+            String document = getDocument(reader, xProduct.getBeginTag(), xProduct.getTag(), xProduct.getReplace());
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(ZshopProductCrawler.class.getName()).log(Level.SEVERE, null, ex);
@@ -68,7 +72,7 @@ public class ZshopProductCrawler extends BaseCrawler {
             return product;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = ".";
+        String expression = xProduct.getXdescription();
         String description = xpath.evaluate(expression, document, XPathConstants.STRING).toString();
         product.put("DES", description);
         return product;

@@ -6,6 +6,8 @@
 package dongtv.crawler;
 
 import dongtv.dto.raw.ProductRawDTO;
+import dongtv.pageconfig.XPage;
+import dongtv.pageconfig.XProducts;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,20 +30,26 @@ import org.w3c.dom.NodeList;
  */
 public class Mayanh24hProductsCrawler extends BaseCrawler {
 
-    private static final String[] IGNORE_TEXTS = {};
+//    private static final String[] IGNORE_TEXTS = {};
+    private final XProducts xProducts;
+    private final XPage xPage;
 
-    public Mayanh24hProductsCrawler(ServletContext context) {
+    public Mayanh24hProductsCrawler(ServletContext context, XProducts xProducts, XPage xPage) {
         super(context);
+        this.xProducts = xProducts;
+        this.xPage = xPage;
     }
 
+//    private static final String beginTag = "<div class=\"list-product\">";
+//    private static final String tag = "div";
     public Map<String, ProductRawDTO> getProducts(String url) {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<div class=\"list-product\">";
-            String tag = "div";
 
-            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+//            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+            String document = getDocument(reader, xProducts.getBeginTag(), xProducts.getTag(), xProducts.getReplace());
+
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(Mayanh24hProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
@@ -71,18 +79,23 @@ public class Mayanh24hProductsCrawler extends BaseCrawler {
             return products;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = "//div[contains(@class, 'product-layout')]";
+//        String expression = "//div[contains(@class, 'product-layout')]";
+        String expression = xProducts.getXproducts();
         NodeList nodes = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i).cloneNode(true);
 
-            expression = ".//img/@src";
+//            expression = ".//img/@src";
+            expression = xProducts.getXimage();
             String image = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//h4/a/@href";
+//            expression = ".//h4/a/@href";
+            expression = xProducts.getXlink();
             String link = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//h4/a";
+//            expression = ".//h4/a";
+            expression = xProducts.getXname();
             String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//span[@class='price-new']";
+//            expression = ".//span[@class='price-new']";
+            expression = xProducts.getXprice();
             String price = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             Integer priceI = -1;
             try {
@@ -100,11 +113,12 @@ public class Mayanh24hProductsCrawler extends BaseCrawler {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<ul class=\"pagination\">";
-            String tag = "ul";
+//            String beginTag = "<ul class=\"pagination\">";
+//            String tag = "ul";
+//            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+            String document = getDocument(reader, xPage.getBeginTag().trim(), xPage.getTag().trim(), xPage.getReplace());
 
-            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
-            document = document.replaceAll("></a>", "></img></a>");
+//            document = document.replaceAll("></a>", "></img></a>");
             return DOMHandlerPages(document);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(Mayanh24hProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
@@ -133,16 +147,16 @@ public class Mayanh24hProductsCrawler extends BaseCrawler {
             return categories;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = "//a";
+//        String expression = "//a";
+        String expression = xPage.getXpage();
+
         NodeList nodes = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i).cloneNode(true);
-
-            expression = "@href";
+//            expression = "@href";
+            expression = xPage.getXlink();
             String href = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = "a";
-            String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            categories.put(href, name);
+            categories.put(href, "x");
         }
         return categories;
     }

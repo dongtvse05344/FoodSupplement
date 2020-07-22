@@ -6,6 +6,8 @@
 package dongtv.crawler;
 
 import dongtv.dto.raw.ProductRawDTO;
+import dongtv.pageconfig.XPage;
+import dongtv.pageconfig.XProducts;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,20 +30,25 @@ import org.w3c.dom.NodeList;
  */
 public class ZshopProductsCrawler extends BaseCrawler {
 
-    private static final String[] IGNORE_TEXTS = {"class=pagingSpace"};
+//    private static final String[] IGNORE_TEXTS = {"class=pagingSpace"};
+    private final XProducts xProducts;
+    private final XPage xPage;
 
-    public ZshopProductsCrawler(ServletContext context) {
+    public ZshopProductsCrawler(ServletContext context, XProducts xProducts, XPage xPage) {
         super(context);
+        this.xProducts = xProducts;
+        this.xPage = xPage;
     }
 
     public Map<String, ProductRawDTO> getProducts(String url) {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<div class=\"grid-list\">";
-            String tag = "div";
+//            String beginTag = "<div class=\"grid-list\">";
+//            String tag = "div";
             isDebug = false;
-            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+//            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+            String document = getDocument(reader, xProducts.getBeginTag(), xProducts.getTag(), xProducts.getReplace());
             document = document.replace("</ul> </ul>", "</ul>");
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
@@ -71,18 +78,18 @@ public class ZshopProductsCrawler extends BaseCrawler {
             return products;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = "div/div[@class='ty-column4']";
+        String expression = xProducts.getXproducts();
         NodeList nodes = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i).cloneNode(true);
 
-            expression = ".//img/@src";
+            expression = xProducts.getXimage();
             String image = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//a/@href";
+            expression = xProducts.getXlink();
             String link = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//div[@class='ty-grid-list__item-name']/a";
+            expression = xProducts.getXname();
             String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//span[@class='ty-price-num']";
+            expression = xProducts.getXprice();
             String price = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             Integer priceI = -1;
             try {
@@ -90,7 +97,7 @@ public class ZshopProductsCrawler extends BaseCrawler {
                 priceI = Integer.parseInt(price);
             } catch (Exception e) {
             }
-            ProductRawDTO productRawDTO = new ProductRawDTO(name.trim(),image.trim(),link.trim(), priceI);
+            ProductRawDTO productRawDTO = new ProductRawDTO(name.trim(), image.trim(), link.trim(), priceI);
             products.put(link, productRawDTO);
         }
         return products;
@@ -100,10 +107,11 @@ public class ZshopProductsCrawler extends BaseCrawler {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<div class=\"ty-pagination__items\">";
-            String tag = "div";
+//            String beginTag = "<div class=\"ty-pagination__items\">";
+//            String tag = "div";
+            String document = getDocument(reader, xPage.getBeginTag().trim(), xPage.getTag().trim(), xPage.getReplace());
 
-            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+//            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
             return DOMHandlerPages(document);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(ZshopProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
@@ -132,18 +140,16 @@ public class ZshopProductsCrawler extends BaseCrawler {
             return categories;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = "//a";
+        String expression = xPage.getXpage();
         NodeList nodes = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i).cloneNode(true);
-            expression = "@href";
+            expression = xPage.getXlink();
             String href = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".";
-            String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             if (href == null || href.length() == 0) {
                 continue;
             }
-            categories.put(href, name);
+            categories.put(href, "x");
         }
         return categories;
     }

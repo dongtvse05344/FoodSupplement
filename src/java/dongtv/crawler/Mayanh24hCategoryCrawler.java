@@ -5,6 +5,7 @@
  */
 package dongtv.crawler;
 
+import dongtv.pageconfig.XCategories;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,19 +29,21 @@ import org.w3c.dom.NodeList;
 public class Mayanh24hCategoryCrawler extends BaseCrawler {
 
     private static final String[] IGNORE_TEXTS = {};
+//    private static final String beginTag = "<ul class=\"list-category\">";
+//    private static final String tag = "ul";
+    private final XCategories xcategories;
 
-    public Mayanh24hCategoryCrawler(ServletContext context) {
+    public Mayanh24hCategoryCrawler(ServletContext context, XCategories xcategories) {
         super(context);
+        this.xcategories = xcategories;
     }
 
     public Map<String, String> getCategories(String url) {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<ul class=\"list-category\">";
-            String tag = "ul";
-
-            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+//            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+            String document = getDocument(reader, xcategories.getBeginTag().trim(), xcategories.getTag().trim(), xcategories.getReplace());
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(Mayanh24hCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,6 +64,9 @@ public class Mayanh24hCategoryCrawler extends BaseCrawler {
         return null;
     }
 
+//    private static final String Xcategories = "//li";
+//    private static final String Xhref = "a/@href";
+//    private static final String Xname = "a";
     public Map<String, String> DOMHandler(String documentString) throws XPathExpressionException, Exception {
         Map<String, String> categories = new HashMap<String, String>();
         Document document = XMLUtils.parseStringtoDom(documentString);
@@ -70,14 +76,17 @@ public class Mayanh24hCategoryCrawler extends BaseCrawler {
             return categories;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = "//li";
+//        String expression = Xcategories;
+        String expression = xcategories.getXcategories().trim();
         NodeList nodes = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i).cloneNode(true);
 
-            expression = "a/@href";
+//            expression = Xhref;
+            expression = xcategories.getXlink().trim();
             String href = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = "a";
+//            expression = Xname;
+            expression = xcategories.getXname().trim();
             String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             categories.put(href, name);
         }

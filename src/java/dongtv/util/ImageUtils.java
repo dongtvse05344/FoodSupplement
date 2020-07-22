@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.net.URLConnection;
 
 /**
  *
@@ -22,9 +23,11 @@ public class ImageUtils {
         OutputStream os = null;
         try {
             URL url = new URL(imageUrl);
+            URLConnection urlConnection = url.openConnection();
+            urlConnection.addRequestProperty("User-Agent", "Mozilla");
+            
             String destName = filePath;
-
-            is = url.openStream();
+            is = urlConnection.getInputStream();
             os = new FileOutputStream(destName);
 
             byte[] b = new byte[2048];

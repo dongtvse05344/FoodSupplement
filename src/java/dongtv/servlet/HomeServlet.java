@@ -6,15 +6,9 @@
 package dongtv.servlet;
 
 import dongtv.contanst.Routing;
-import dongtv.dao.BrandDao;
 import dongtv.dao.CategoryDao;
-import dongtv.dao.ProductDao;
-import dongtv.dto.BrandDTO;
-import dongtv.dto.BrandsDTO;
 import dongtv.dto.raw.CategoriesDTO;
 import dongtv.dto.raw.CategoryDTO;
-import dongtv.dto.ProductDTO;
-import dongtv.dto.ProductsDTO;
 import dongtv.service.CachingService;
 import dongtv.util.XMLUtils;
 import java.io.IOException;

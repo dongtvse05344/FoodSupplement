@@ -6,11 +6,12 @@ import dongtv.crawler.MayanhvnProductCrawler;
 import dongtv.crawler.MayanhvnProductsCrawler;
 import dongtv.dto.raw.CategoryDTO;
 import dongtv.dto.raw.ProductRawDTO;
+import dongtv.pageconfig.PageConfig;
 import dongtv.service.CrawlService;
-import dongtv.util.HTMLUtilities;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 
 /*
@@ -23,15 +24,20 @@ import javax.servlet.ServletContext;
  * @author Tran Dong
  */
 public class MayanhvnThread extends BaseThread {
+
     private final String IMAGE_PATH = "images/mayanhvn/";
     private final ServletContext context;
-    private MayanhvnCategoryCrawler mayanhvnCategoryCrawler;
-    private MayanhvnProductsCrawler mayanhvnProductsCrawler;
-    private MayanhvnProductCrawler mayanhvnProductCrawler;
-    private CrawlService crawlService;
-    public MayanhvnThread(ServletContext context) {
+    private final MayanhvnCategoryCrawler mayanhvnCategoryCrawler;
+    private final MayanhvnProductsCrawler mayanhvnProductsCrawler;
+    private final MayanhvnProductCrawler mayanhvnProductCrawler;
+    private final CrawlService crawlService;
+
+    public MayanhvnThread(ServletContext context, PageConfig pageConfig) {
         this.context = context;
         this.crawlService = new CrawlService();
+        mayanhvnCategoryCrawler = new MayanhvnCategoryCrawler(context, pageConfig.getXCategories());
+        mayanhvnProductsCrawler = new MayanhvnProductsCrawler(context, pageConfig.getXProducts(), pageConfig.getXPage());
+        mayanhvnProductCrawler = new MayanhvnProductCrawler(context, pageConfig.getXProduct());
     }
     private int count = 1;
 
@@ -41,23 +47,20 @@ public class MayanhvnThread extends BaseThread {
         Map<String, String> product = mayanhvnProductCrawler.getProduct(dto.getOriginalLink());
         this.crawlService.getParamtoProduct(dto, product.get("DES"));
         dto.setDescription(product.get("DES"));
-        crawlService.createProduct(dto); 
+        crawlService.createProduct(dto);
     }
 
     @Override
     public void run() {
         try {
 
-            mayanhvnCategoryCrawler = new MayanhvnCategoryCrawler(context);
-            mayanhvnProductsCrawler = new MayanhvnProductsCrawler(context);
-            mayanhvnProductCrawler = new MayanhvnProductCrawler(context);
             Map<String, String> categories = mayanhvnCategoryCrawler.getCategories(ConstantsCrawler.MAYANHVN);
             for (Map.Entry<String, String> categoryEntry : categories.entrySet()) {
                 if (categoryEntry.getValue().contains("Ống")) {
                     continue;
                 }
-                CategoryDTO categoryDb = 
-//                        null;
+                CategoryDTO categoryDb
+                        = //                        null;
                         crawlService.createCategory(categoryEntry.getValue());
                 Map<String, String> pages = mayanhvnProductsCrawler.getPages(categoryEntry.getKey());
                 if (pages == null) {
@@ -83,8 +86,8 @@ public class MayanhvnThread extends BaseThread {
                     BaseThread.getInstance().wait();
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(MayanhvnThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

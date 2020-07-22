@@ -7,6 +7,8 @@ package dongtv.crawler;
 
 import dongtv.contanst.ConstantsCrawler;
 import dongtv.dto.raw.ProductRawDTO;
+import dongtv.pageconfig.XPage;
+import dongtv.pageconfig.XProducts;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,20 +31,25 @@ import org.w3c.dom.NodeList;
  */
 public class MayanhvnProductsCrawler extends BaseCrawler {
 
-    private static final String[] IGNORE_TEXTS = {"class=pagingSpace"};
+//    private static final String[] IGNORE_TEXTS = {"class=pagingSpace"};
+    private final XProducts xProducts;
+    private final XPage xPage;
 
-    public MayanhvnProductsCrawler(ServletContext context) {
+    public MayanhvnProductsCrawler(ServletContext context, XProducts xProducts, XPage xPage) {
         super(context);
+        this.xProducts = xProducts;
+        this.xPage = xPage;
     }
 
     public Map<String, ProductRawDTO> getProducts(String url) {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<div class=\"product-list\">";
-            String tag = "div";
+//            String beginTag = "<div class=\"product-list\">";
+//            String tag = "div";
+//            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
 
-            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+            String document = getDocument(reader, xProducts.getBeginTag(), xProducts.getTag(), xProducts.getReplace());
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,18 +79,18 @@ public class MayanhvnProductsCrawler extends BaseCrawler {
             return products;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = "//li[contains(@class, 'item')]";
+        String expression = xProducts.getXproducts();
         NodeList nodes = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i).cloneNode(true);
 
-            expression = ".//img/@src";
+            expression = xProducts.getXimage();
             String image = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//a[@class='p-name']/@href";
+            expression = xProducts.getXlink();
             String link = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//a[@class='p-name']";
+            expression = xProducts.getXname();
             String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = ".//span[@class='p-price']";
+            expression = xProducts.getXprice();
             String price = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             Integer priceI = -1;
             try {
@@ -101,10 +108,11 @@ public class MayanhvnProductsCrawler extends BaseCrawler {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<div class=\"paging\">";
-            String tag = "div";
+//            String beginTag = "<div class=\"paging\">";
+//            String tag = "div";
+//            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
 
-            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+            String document = getDocument(reader, xPage.getBeginTag(), xPage.getTag(), xPage.getReplace());
             return DOMHandlerPages(document);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(MayanhvnProductsCrawler.class.getName()).log(Level.SEVERE, null, ex);
@@ -134,18 +142,16 @@ public class MayanhvnProductsCrawler extends BaseCrawler {
             return categories;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = "//a";
+        String expression = xPage.getXpage();
         NodeList nodes = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i).cloneNode(true);
-            expression = "@href";
+            expression = xPage.getXlink();
             String href = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = "a";
-            String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
             if (href == null || href.length() == 0) {
                 continue;
             }
-            categories.put(ConstantsCrawler.MAYANHVN_ROOT + href, name);
+            categories.put(ConstantsCrawler.MAYANHVN_ROOT + href, "x");
         }
         return categories;
     }

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PageConfigs xmlns="http://xml.dongtv.vn/schema/configCrawler">
+    <!--mayanh24h-->
+    <PageConfig>
+        <url>https://mayanh24h.com/may-anh-dslr.html</url>
+        <urlroot>https://mayanh24h.com/</urlroot>
+        <XCategories>
+            <beginTag><![CDATA[<ul class="list-category">]]></beginTag>
+            <tag>ul</tag>
+            <xcategories>//li</xcategories>
+            <xlink>a/@href</xlink>
+            <xname>a</xname>
+        </XCategories>
+        <XPage>
+            <beginTag><![CDATA[<ul class="pagination">]]></beginTag>
+            <tag>ul</tag>
+            <xpage>//a</xpage>
+            <xlink>@href</xlink>
+        </XPage>
+        <XProducts>
+            <beginTag><![CDATA[<div class="list-product">]]></beginTag>
+            <tag>div</tag>
+            <xproducts>//div[contains(@class, 'product-layout')]</xproducts>
+            <ximage>.//img/@src</ximage>
+            <xlink>.//h4/a/@href</xlink>
+            <xname>.//h4/a</xname>
+            <xprice>.//span[@class='price-new']</xprice>
+        </XProducts>
+        <XProduct>
+            <beginTag><![CDATA[<div class="col-sm-7">]]></beginTag>
+            <tag>div</tag>
+            <replace>
+                <from><![CDATA[<hr>]]></from>
+                <to></to>
+            </replace>
+            <replace>
+                <from><![CDATA[<img.*jpg">]]></from>
+                <to></to>
+            </replace>
+            <xdescription>.//table[@class='table-description']</xdescription>
+            <xname>.//h3[@class='product-name']</xname>
+            <xparam>.//tr[last()]/td[last()]</xparam>
+        </XProduct>
+    </PageConfig>
+    <!--mayanhvn-->
+    <PageConfig>
+        <url>https://mayanhvn.com/may-anh-ong-kinh/c144.html</url>
+        <urlroot>https://mayanhvn.com</urlroot>
+        <XCategories>
+            <beginTag><![CDATA[<ul class="ul list-filter">]]></beginTag>
+            <tag>ul</tag>
+            <xcategories>//li</xcategories>
+            <xlink>a/@href</xlink>
+            <xname>a</xname>
+        </XCategories>
+        <XPage>
+            <beginTag><![CDATA[<div class="paging">]]></beginTag>
+            <tag>div</tag>
+            <replace>
+                <from><![CDATA[class=pagingSpace]]></from>
+                <to></to>
+            </replace>
+            <xpage>//a</xpage>
+            <xlink>@href</xlink>
+        </XPage>
+        <XProducts>
+            <beginTag><![CDATA[<div class="product-list">]]></beginTag>
+            <tag>div</tag>
+            <replace>
+                <from><![CDATA[class=pagingSpace]]></from>
+                <to></to>
+            </replace>
+            <xproducts>//li[contains(@class, 'item')]</xproducts>
+            <ximage>.//img/@src</ximage>
+            <xlink>.//a[@class='p-name']/@href</xlink>
+            <xname>.//a[@class='p-name']</xname>
+            <xprice>.//span[@class='p-price']</xprice>
+        </XProducts>
+        <XProduct>
+            <beginTag><![CDATA[<div class="detail-summary">]]></beginTag>
+            <tag>div</tag>
+            <xdescription>.</xdescription>
+            <xname></xname>
+            <xparam></xparam>
+        </XProduct>
+    </PageConfig>
+    <!--mayanhjp-->
+    <PageConfig>
+        <url>http://www.mayanhjp.com</url>
+        <urlroot>http://www.mayanhjp.com</urlroot>
+        <XCategories>
+            <beginTag><![CDATA[<ul id="menu" class="slide_mn">]]></beginTag>
+            <tag>ul</tag>
+            <xcategories>//li[contains(a/span,'MÁY ẢNH')]//li[not(@class)]</xcategories>
+            <xlink>a/@href</xlink>
+            <xname>a</xname>
+        </XCategories>
+        <XProducts>
+            <beginTag><![CDATA[<table id="ctl00_ContentPlaceHolder1_CT_SanPham1_dtlProducts" class="CT_SanPham_dtlProducts" cellspacing="0" border="0" style="border-collapse:collapse;">]]></beginTag>
+            <tag>table</tag>
+            <replace>
+                <from><![CDATA[</br>]]></from>
+                <to></to>
+            </replace>
+             <replace>
+                <from><![CDATA[color=[a-z]{1,6}]]></from>
+                <to></to>
+            </replace>
+             <replace>
+                <from><![CDATA[<font >Th]]></from>
+                <to></to>
+            </replace>
+            <xproducts>table/tr</xproducts>
+            <ximage>.//img/@src</ximage>
+            <xlink>.//a[@class='LinkSanpham']/@href</xlink>
+            <xname>.//a[@class='LinkSanpham']</xname>
+            <xprice>.//span[contains(.,'₫')]</xprice>
+            <xdescription>.//td[@class='CT_SanPham_table4_1td2']</xdescription>
+        </XProducts>
+    </PageConfig>
+    <!--zshop-->
+    <PageConfig>
+        <url>https://zshop.vn/may-anh</url>
+        <urlroot>https://zshop.vn</urlroot>
+        <XCategories>
+            <beginTag><![CDATA[<ul id="vmenu_243" class="ty-menu__items cm-responsive-menu">]]></beginTag>
+            <tag>ul</tag>
+            <xcategories>ul/li</xcategories>
+            <xlink>.//a/@href</xlink>
+            <xname>.//a</xname>
+        </XCategories>
+        <XPage>
+            <beginTag><![CDATA[<div class="ty-pagination__items">]]></beginTag>
+            <tag>div</tag>
+            <xpage>//a</xpage>
+            <xlink>@href</xlink>
+        </XPage>
+        <XProducts>
+            <beginTag><![CDATA[<div class="grid-list">]]></beginTag>
+            <tag>div</tag>
+            <replace>
+                <from><![CDATA[class=pagingSpace]]></from>
+                <to></to>
+            </replace>
+            <replace>
+                <from><![CDATA[</ul> </ul>]]></from>
+                <to><![CDATA[</ul>]]></to>
+            </replace>
+            <xproducts>div/div[@class='ty-column4']</xproducts>
+            <ximage>.//img/@src</ximage>
+            <xlink>.//a/@href</xlink>
+            <xname>.//div[@class='ty-grid-list__item-name']/a</xname>
+            <xprice>.//span[@class='ty-price-num']</xprice>
+        </XProducts>
+        <XProduct>
+            <beginTag><![CDATA[<div class="ty-product-block__description">]]></beginTag>
+            <tag>div</tag>
+            <xdescription>.</xdescription>
+            <xname></xname>
+            <xparam></xparam>
+        </XProduct>
+    </PageConfig>
+</PageConfigs>

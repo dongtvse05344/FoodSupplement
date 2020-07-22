@@ -9,10 +9,14 @@ import dongtv.contanst.ConstantsCrawler;
 import dongtv.crawler.Mayanh24hCategoryCrawler;
 import dongtv.crawler.Mayanh24hProductCrawler;
 import dongtv.crawler.Mayanh24hProductsCrawler;
+import dongtv.crawler.ZshopProductsCrawler;
 import dongtv.dto.raw.CategoryDTO;
 import dongtv.dto.raw.ProductRawDTO;
+import dongtv.pageconfig.PageConfig;
 import dongtv.service.CrawlService;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 
 /**
@@ -23,13 +27,19 @@ public class Mayanh24hThread extends BaseThread {
 
     private final String IMAGE_PATH = "images/mayanh24h/";
     private final ServletContext context;
-    private Mayanh24hProductCrawler productCrawler;
+    private final Mayanh24hProductsCrawler productsCrawler;
+    private final Mayanh24hCategoryCrawler categoryCrawler;
+    private final Mayanh24hProductCrawler productCrawler;
     private int count = 1;
     private CrawlService crawlService;
 
-    public Mayanh24hThread(ServletContext context) {
+    public Mayanh24hThread(ServletContext context, PageConfig pageConfig) {
         this.context = context;
         this.crawlService = new CrawlService();
+
+        categoryCrawler = new Mayanh24hCategoryCrawler(context, pageConfig.getXCategories());
+        productsCrawler = new Mayanh24hProductsCrawler(context, pageConfig.getXProducts(), pageConfig.getXPage());
+        productCrawler = new Mayanh24hProductCrawler(context, pageConfig.getXProduct());
     }
 
     private void getProduct(ProductRawDTO dto) {
@@ -47,16 +57,11 @@ public class Mayanh24hThread extends BaseThread {
 
     @Override
     public void run() {
-
         try {
-            Mayanh24hCategoryCrawler categoryCrawler = new Mayanh24hCategoryCrawler(context);
-            Mayanh24hProductsCrawler productsCrawler = new Mayanh24hProductsCrawler(context);
-            productCrawler = new Mayanh24hProductCrawler(context);
-
             Map<String, String> categories = categoryCrawler.getCategories(ConstantsCrawler.MAYANH24H);
             for (Map.Entry<String, String> categoryEntry : categories.entrySet()) {
-                CategoryDTO categoryDb =
-//                        null;
+                CategoryDTO categoryDb
+                        = //                        null;
                         crawlService.createCategory(categoryEntry.getValue());
                 Map<String, String> pages = productsCrawler.getPages(categoryEntry.getKey());
                 pages.put(categoryEntry.getKey(), "w");
@@ -80,8 +85,8 @@ public class Mayanh24hThread extends BaseThread {
                     BaseThread.getInstance().wait();
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(Mayanh24hThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

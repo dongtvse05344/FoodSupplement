@@ -17,6 +17,7 @@ import java.util.NoSuchElementException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -78,5 +79,12 @@ public class XMLUtils implements Serializable {
         XMLInputFactory inputFactory = XMLInputFactory.newInstance();
         XMLEventReader reader = inputFactory.createXMLEventReader(inputStream);
         return reader;
+    }
+    
+    public static Object unmarshalFromFile(Class obj, String filename) throws JAXBException {
+        JAXBContext jc = JAXBContext.newInstance(obj);
+        Unmarshaller um = jc.createUnmarshaller();
+        File f = new File(filename);
+        return  um.unmarshal(f);
     }
 }

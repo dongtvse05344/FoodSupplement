@@ -11,6 +11,7 @@ import dongtv.crawler.ZshopProductCrawler;
 import dongtv.crawler.ZshopProductsCrawler;
 import dongtv.dto.raw.CategoryDTO;
 import dongtv.dto.raw.ProductRawDTO;
+import dongtv.pageconfig.PageConfig;
 import dongtv.service.CrawlService;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,18 +27,18 @@ public class ZshopThread extends BaseThread {
 
     private final String IMAGE_PATH = "images/zshop/";
     private final ServletContext context;
-    private CrawlService crawlService;
+    private final CrawlService crawlService;
 
-    private ZshopCategoryCrawler zshopCategoryCrawler;
-    private ZshopProductsCrawler zshopProductsCrawler;
-    private ZshopProductCrawler zshopProductCrawler;
-
-    public ZshopThread(ServletContext context) {
+    private final ZshopCategoryCrawler zshopCategoryCrawler;
+    private final ZshopProductsCrawler zshopProductsCrawler;
+    private final ZshopProductCrawler zshopProductCrawler;
+    
+    public ZshopThread(ServletContext context, PageConfig pageConfig) {
         this.context = context;
         this.crawlService = new CrawlService();
-        zshopCategoryCrawler = new ZshopCategoryCrawler(context);
-        zshopProductsCrawler = new ZshopProductsCrawler(context);
-        zshopProductCrawler = new ZshopProductCrawler(context);
+        zshopCategoryCrawler = new ZshopCategoryCrawler(context, pageConfig.getXCategories());
+        zshopProductsCrawler = new ZshopProductsCrawler(context, pageConfig.getXProducts(), pageConfig.getXPage());
+        zshopProductCrawler = new ZshopProductCrawler(context, pageConfig.getXProduct());
     }
 
     @Override
@@ -86,7 +87,10 @@ public class ZshopThread extends BaseThread {
 
     private void getProduct(ProductRawDTO dto) {
         System.out.println(count++ + dto.getOriginalLink());
-        this.imageHande(dto, IMAGE_PATH, context);
+        String imageUrl = dto.getImage();
+        imageUrl = imageUrl.split("\\?")[0];
+        dto.setImage(imageUrl);
+        this.imageHande(dto, IMAGE_PATH, context); 
         Map<String, String> product = zshopProductCrawler.getProduct(dto.getOriginalLink());
         if (product != null && product.get("DES") !=null) {
             dto.setDescription(product.get("DES"));

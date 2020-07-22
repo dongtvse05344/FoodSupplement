@@ -6,6 +6,7 @@
 package dongtv.crawler;
 
 import dongtv.contanst.ConstantsCrawler;
+import dongtv.pageconfig.XCategories;
 import dongtv.util.XMLUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,20 +29,25 @@ import org.w3c.dom.NodeList;
  */
 public class MayanhjpCategoryCrawler extends BaseCrawler {
 
-    private static final String[] IGNORE_TEXTS = {};
+//    private static final String[] IGNORE_TEXTS = {};
+    private final XCategories xcategories;
 
-    public MayanhjpCategoryCrawler(ServletContext context) {
+    public MayanhjpCategoryCrawler(ServletContext context, XCategories xcategories) {
         super(context);
+        this.xcategories = xcategories;
+
     }
 
     public Map<String, String> getCategories(String url) {
         BufferedReader reader = null;
         try {
             reader = getBufferedReaderForURL(url);
-            String beginTag = "<ul id=\"menu\" class=\"slide_mn\">";
-            String tag = "ul";
- 
-            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+//            String beginTag = "<ul id=\"menu\" class=\"slide_mn\">";
+//            String tag = "ul";
+//
+//            String document = getDocument(reader, beginTag, tag, IGNORE_TEXTS);
+            String document = getDocument(reader, xcategories.getBeginTag(), xcategories.getTag(), xcategories.getReplace());
+
             return DOMHandler(document);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(MayanhjpCategoryCrawler.class.getName()).log(Level.SEVERE, null, ex);
@@ -71,17 +77,21 @@ public class MayanhjpCategoryCrawler extends BaseCrawler {
             return categories;
         }
         XPath xpath = XMLUtils.createXPath();
-        String expression = "//li[contains(a/span,'MÁY ẢNH')]//li[not(@class)]";
+//        String expression = "//li[contains(a/span,'MÁY ẢNH')]//li[not(@class)]";
+        String expression = xcategories.getXcategories();
+
         NodeList nodes = (NodeList) xpath.evaluate(expression, document, XPathConstants.NODESET);
-       
+
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i).cloneNode(true);
 
-            expression = "a/@href";
+//            expression = "a/@href";
+            expression = xcategories.getXlink();
             String href = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            expression = "a";
+//            expression = "a";
+            expression = xcategories.getXname();
             String name = xpath.evaluate(expression, node, XPathConstants.STRING).toString();
-            categories.put(ConstantsCrawler.MAYANHJP + "/"+ href, name);
+            categories.put(ConstantsCrawler.MAYANHJP + "/" + href, name);
         }
         return categories;
     }

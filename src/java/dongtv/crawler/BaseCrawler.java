@@ -5,6 +5,7 @@
  */
 package dongtv.crawler;
 
+import dongtv.pageconfig.Replace;
 import dongtv.util.HTMLUtilities;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -14,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import javax.servlet.ServletContext;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -36,7 +38,7 @@ public class BaseCrawler {
         return context;
     }
 
-    public String getDocument(BufferedReader reader, String beginSignal, String tag, String[] IGNORE_TEXTS) throws IOException {
+    public String getDocument(BufferedReader reader, String beginSignal, String tag, List<Replace> Replaces) throws IOException {
         String devide = " ";
         if (isDebug) {
             devide = "\n";
@@ -57,16 +59,16 @@ public class BaseCrawler {
             if (tagCount > 0 && line.contains("</" + tag + ">")) {
                 tagCount = tagCount - HTMLUtilities.getAllMatches(line, "</" + tag + ">").size();
                 if (tagCount == 0) {
-                    for (String ignore_text : IGNORE_TEXTS) {
-                        line = line.replaceAll(ignore_text, "");
+                    for (Replace ignore_text : Replaces) {
+                        line = line.replaceAll(ignore_text.getFrom(), ignore_text.getTo());
                     }
                     document += line.trim() + devide;
                     isFound = false;
                 }
             }
             if (isFound) {
-                for (String ignore_text : IGNORE_TEXTS) {
-                    line = line.replaceAll(ignore_text, "");
+                for (Replace ignore_text : Replaces) {
+                    line = line.replaceAll(ignore_text.getFrom(), ignore_text.getTo());
                 }
                 document += line.trim() + devide;
             }

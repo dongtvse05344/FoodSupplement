@@ -10,8 +10,11 @@ import dongtv.crawler.MayanhjpCategoryCrawler;
 import dongtv.crawler.MayanhjpProductsCrawler;
 import dongtv.dto.raw.CategoryDTO;
 import dongtv.dto.raw.ProductRawDTO;
+import dongtv.pageconfig.PageConfig;
 import dongtv.service.CrawlService;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 
 /**
@@ -22,13 +25,15 @@ public class MayanhjpThread extends BaseThread {
 
     private final String IMAGE_PATH = "images/mayanhjp/";
     private final ServletContext context;
-    private CrawlService crawlService;
-    private MayanhjpCategoryCrawler mayanhjpCategoryCrawler;
-    private MayanhjpProductsCrawler mayanhjpProductsCrawler;
+    private final CrawlService crawlService;
+    private final MayanhjpCategoryCrawler mayanhjpCategoryCrawler;
+    private final MayanhjpProductsCrawler mayanhjpProductsCrawler;
 
-    public MayanhjpThread(ServletContext context) {
+    public MayanhjpThread(ServletContext context, PageConfig pageConfig) {
         this.context = context;
         this.crawlService = new CrawlService();
+        mayanhjpCategoryCrawler = new MayanhjpCategoryCrawler(context, pageConfig.getXCategories());
+        mayanhjpProductsCrawler = new MayanhjpProductsCrawler(context, pageConfig.getXProducts());
     }
 
     private int count = 1;
@@ -36,8 +41,7 @@ public class MayanhjpThread extends BaseThread {
     @Override
     public void run() {
         try {
-            mayanhjpCategoryCrawler = new MayanhjpCategoryCrawler(context);
-            mayanhjpProductsCrawler = new MayanhjpProductsCrawler(context);
+
             Map<String, String> categories = mayanhjpCategoryCrawler.getCategories(ConstantsCrawler.MAYANHJP);
             for (Map.Entry<String, String> cateEntry : categories.entrySet()) {
                 CategoryDTO cateDto = crawlService.createCategory(cateEntry.getValue());
@@ -60,8 +64,8 @@ public class MayanhjpThread extends BaseThread {
                     MayanhjpThread.getInstance().wait();
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(MayanhjpThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

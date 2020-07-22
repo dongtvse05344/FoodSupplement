@@ -5,9 +5,13 @@
  */
 package dongtv.listener;
 
+import dongtv.util.XMLUtils;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.xml.bind.JAXBException;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
@@ -25,13 +29,14 @@ public class XslListener implements ServletContextListener {
     private final String XSL_CATE_ITEM = "xsl/category_item.xsl";
     private final String XSL_BRAND = "xsl/brand_item.xsl";
     private final String XSL_COMPARISON = "xsl/comparison.xsl";
+    
+    
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         final ServletContext context = sce.getServletContext();
         String realPath = context.getRealPath("/");
-        
-        
+ 
         Source xslInput = new StreamSource(realPath + XSL_PRODUCT_ITEM_DETAIL);
         context.setAttribute("XSL_PRODUCT_ITEM_DETAIL", xslInput);
 
@@ -46,12 +51,12 @@ public class XslListener implements ServletContextListener {
 
         xslInput = new StreamSource(realPath + XSL_CATE_ITEM);
         context.setAttribute("XSL_CATE_ITEM", xslInput);
-        
+
         xslInput = new StreamSource(realPath + XSL_BRAND);
-        context.setAttribute("XSL_BRAND", xslInput); 
-        
+        context.setAttribute("XSL_BRAND", xslInput);
+
         xslInput = new StreamSource(realPath + XSL_COMPARISON);
-        context.setAttribute("XSL_COMPARISON", xslInput); 
+        context.setAttribute("XSL_COMPARISON", xslInput);
     }
 
     @Override
